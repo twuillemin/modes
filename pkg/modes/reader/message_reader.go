@@ -7,7 +7,7 @@ import (
 	"github.com/twuillemin/modes/pkg/modes/messages"
 )
 
-func ReadMessage(message []uint8) (messages.Message, error) {
+func ReadMessage(message []uint8) (messages.MessageModeS, error) {
 
 	if len(message) < 4 {
 		return nil, errors.New("a message can not be shorted than 4 bytes")

@@ -53,7 +53,7 @@ func ParseDF4(message common.MessageData) (*MessageDF4, error) {
 }
 
 func (message *MessageDF4) PrettyPrint() {
-	fmt.Printf("Message: %v\n", message.GetName())
+	fmt.Printf("MessageModeS: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
 	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
 	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())

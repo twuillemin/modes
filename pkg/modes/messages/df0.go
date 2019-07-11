@@ -56,7 +56,7 @@ func ParseDF0(message common.MessageData) (*MessageDF0, error) {
 }
 
 func (message *MessageDF0) PrettyPrint() {
-	fmt.Printf("Message: %v\n", message.GetName())
+	fmt.Printf("MessageModeS: %v\n", message.GetName())
 	fmt.Printf("Downlink format:     %v\n", message.GetDownLinkFormat())
 	fmt.Printf("VerticalStatus:      %v\n", message.VerticalStatus.PrettyPrint())
 	fmt.Printf("CrossLinkCapability: %v\n", message.CrossLinkCapability.PrettyPrint())

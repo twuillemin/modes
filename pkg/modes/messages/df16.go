@@ -55,7 +55,7 @@ func ParseDF16(message common.MessageData) (*MessageDF16, error) {
 }
 
 func (message *MessageDF16) PrettyPrint() {
-	fmt.Printf("Message: %v\n", message.GetName())
+	fmt.Printf("MessageModeS: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
 	fmt.Printf("VerticalStatus:    %v\n", message.VerticalStatus.PrettyPrint())
 	fmt.Printf("SensitivityLevel:  %v\n", message.SensitivityLevel.PrettyPrint())

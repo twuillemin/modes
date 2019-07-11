@@ -55,7 +55,7 @@ func ParseDF21(message common.MessageData) (*MessageDF21, error) {
 }
 
 func (message *MessageDF21) PrettyPrint() {
-	fmt.Printf("Message: %v\n", message.GetName())
+	fmt.Printf("MessageModeS: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
 	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
 	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())
