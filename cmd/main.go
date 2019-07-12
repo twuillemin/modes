@@ -7,56 +7,57 @@ import (
 )
 
 func main() {
-/*
-	msg1 := []uint8{0x02, 0xE1, 0x95, 0x30, 0x1A, 0xD7, 0xB8}
+	/*
+		msg1 := []uint8{0x02, 0xE1, 0x95, 0x30, 0x1A, 0xD7, 0xB8}
 
-	message1, err := reader.ReadMessage(msg1)
-	if err != nil {
-		log.Fatal(err)
-	}
-	bytes1, err := json.Marshal(message1)
-	if err != nil {
-		log.Fatalf("Can't serialize due to %v", err)
-	}
-	fmt.Printf("Message 1: %v\n", string(bytes1))
+		message1, err := reader.ReadMessage(msg1)
+		if err != nil {
+			log.Fatal(err)
+		}
+		bytes1, err := json.Marshal(message1)
+		if err != nil {
+			log.Fatalf("Can't serialize due to %v", err)
+		}
+		fmt.Printf("Message 1: %v\n", string(bytes1))
 
-	msg2 := []uint8{0x5F, 0x46, 0x90, 0xF9, 0x76, 0xF4, 0xE9}
+		msg2 := []uint8{0x5F, 0x46, 0x90, 0xF9, 0x76, 0xF4, 0xE9}
 
-	message2, err := reader.ReadMessage(msg2)
-	if err != nil {
-		log.Fatal(err)
-	}
-	bytes2, err := json.Marshal(message2)
-	if err != nil {
-		log.Fatalf("Can't serialize due to %v", err)
-	}
-	fmt.Printf("Message 2: %v\n", string(bytes2))
+		message2, err := reader.ReadMessage(msg2)
+		if err != nil {
+			log.Fatal(err)
+		}
+		bytes2, err := json.Marshal(message2)
+		if err != nil {
+			log.Fatalf("Can't serialize due to %v", err)
+		}
+		fmt.Printf("Message 2: %v\n", string(bytes2))
 
-	fmt.Println()
-	message1.PrettyPrint()
-	fmt.Println()
-	message2.PrettyPrint()
-	fmt.Println()
+		fmt.Println()
+		message1.PrettyPrint()
+		fmt.Println()
+		message2.PrettyPrint()
+		fmt.Println()
 	*/
 
-	for _, str := range dummyData(){
+	for _, str := range dummyData() {
 		spymsg, err := adsbspy.ReadLine(str)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		modesmsg, err := reader.ReadMessage(spymsg.Message)
+		modesmsg, icao, err := reader.ReadMessage(spymsg.Message, false)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
+
+		fmt.Printf("From %X %X %X:\n", icao[0], icao[1], icao[2])
 		modesmsg.PrettyPrint()
 		fmt.Println()
 	}
 }
 
-
-func dummyData()[]string{
+func dummyData() []string {
 	return []string{
 		"*8D4BAB4558AB031C446849B72535;1D5D32D0;0A;32AB;",
 		"*8D4BAB45990812BA38044D6A8670;1D67DF8D;0A;37BB;",
