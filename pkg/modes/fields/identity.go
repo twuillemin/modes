@@ -65,7 +65,7 @@ func ReadIdentity(message common.MessageData) Identity {
 	b2 := (identity & 0x0008) >> 3
 	d2 := (identity & 0x0004) >> 2
 	b4 := (identity & 0x0002) >> 1
-	d4 := (identity & 0x0021)
+	d4 := identity & 0x0001
 
 	// Defined at 3.1.1.6
 	a := a4<<2 | a2<<1 | a1
