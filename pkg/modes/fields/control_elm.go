@@ -42,8 +42,3 @@ func (controlELM ControlELM) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", controlELM)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (controlELM ControlELM) ToExtendedString() string {
-	return controlELM.ToString()
-}

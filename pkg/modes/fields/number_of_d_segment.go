@@ -26,8 +26,3 @@ func ReadNumberOfDSegment(message common.MessageData) NumberOfDSegment {
 func (numberOfDSegment NumberOfDSegment) ToString() string {
 	return strconv.Itoa(int(numberOfDSegment))
 }
-
-// ToExtendedString returns a complete representation of the field
-func (numberOfDSegment NumberOfDSegment) ToExtendedString() string {
-	return numberOfDSegment.ToString()
-}

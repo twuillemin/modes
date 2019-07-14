@@ -49,7 +49,7 @@ func ReadCapability(message common.MessageData) Capability {
 func (capability Capability) ToString() string {
 	switch capability {
 	case CapabilityLevel1Transponder:
-		return "0 - Level 1 Transponder"
+		return "0 - Level 1 Transponder (surveillance only)"
 	case CapabilityReserved1:
 		return "1 - Reserved"
 	case CapabilityReserved2:
@@ -61,33 +61,9 @@ func (capability Capability) ToString() string {
 	case CapabilityLevel2Airborne:
 		return "5 - Level 2 Airborne"
 	case CapabilityLevel2OnTheGroundOrAirborne:
-		return "6 - Level 2 On The Ground Or Airborne"
+		return "6 - Level 2 On The Ground or Airborne"
 	case CapabilityFSOrDR:
-		return "7 - FS Or DR"
-	default:
-		return fmt.Sprintf("%v - Unknown code", capability)
-	}
-}
-
-// ToExtendedString returns a complete representation of the field
-func (capability Capability) ToExtendedString() string {
-	switch capability {
-	case CapabilityLevel1Transponder:
-		return "0 - Level 1 Transponder: level 1 transponder (surveillance only), and no ability to set CA code 7"
-	case CapabilityReserved1:
-		return "1 - Reserved"
-	case CapabilityReserved2:
-		return "2 - Reserved"
-	case CapabilityReserved3:
-		return "3 - Reserved"
-	case CapabilityLevel2OnTheGround:
-		return "4 - Level 2 On The Ground: level 2 or above transponder and ability to set CA code 7 and on the ground"
-	case CapabilityLevel2Airborne:
-		return "5 - Level 2 Airborne: level 2 or above transponder and ability to set CA code 7 and airborne"
-	case CapabilityLevel2OnTheGroundOrAirborne:
-		return "6 - Level 2 On The Ground Or Airborne: level 2 or above transponder and ability to set CA code 7, either airborne or on the ground"
-	case CapabilityFSOrDR:
-		return "7 - FS Or DR: downlink request (DR != 0) or flight status with alert (FS = 2, 3, 4 or 5)"
+		return "7 - Flight Status (FS) with alert rr downlink request (DR)"
 	default:
 		return fmt.Sprintf("%v - Unknown code", capability)
 	}

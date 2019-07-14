@@ -45,9 +45,9 @@ func ReadControlField(message common.MessageData) ControlField {
 func (controlField ControlField) ToString() string {
 	switch controlField {
 	case ControlFieldADSB:
-		return "0 - ADSB"
+		return "0 - ADSB (ADS-B ES/NT devices that report the ICAO 24-bit address in the AA field)"
 	case ControlFieldADSBReserved:
-		return "1 - ADSB Reserved"
+		return "1 - ADSB Reserved (reserved for ADS-B for ES/NT devices that use other addressing techniques in the AA field)"
 	case ControlFieldTISBFineFormat:
 		return "2 - TISB Fine Format"
 	case ControlFieldTISBCoarseFormat:
@@ -57,31 +57,7 @@ func (controlField ControlField) ToString() string {
 	case ControlFieldTISBRelayADSB:
 		return "5 - TISB Relay ADSB"
 	case ControlFieldADSBRebroadcast:
-		return "6 - ADSB Rebroadcast"
-	case ControlFieldReserved:
-		return "7 - Reserved"
-	default:
-		return fmt.Sprintf("%v - Unknown code", controlField)
-	}
-}
-
-// ToExtendedString returns a complete representation of the field
-func (controlField ControlField) ToExtendedString() string {
-	switch controlField {
-	case ControlFieldADSB:
-		return "0 - ADSB: ADS-B ES/NT devices that report the ICAO 24-bit address in the AA field"
-	case ControlFieldADSBReserved:
-		return "1 - ADSB Reserved: reserved for ADS-B for ES/NT devices that use other addressing techniques in the AA field"
-	case ControlFieldTISBFineFormat:
-		return "2 - TISB Fine Format: fine format TIS-B message"
-	case ControlFieldTISBCoarseFormat:
-		return "3 - TISB Coarse Format: coarse format TIS-B message"
-	case ControlFieldTISBReservedManagement:
-		return "4 - TISB Reserved Management: reserved for TIS-B management messages"
-	case ControlFieldTISBRelayADSB:
-		return "5 - TISB Relay ADSB: TIS-B messages that relay ADS-B messages"
-	case ControlFieldADSBRebroadcast:
-		return "6 - ADSB Rebroadcast: ADS-B rebroadcast using the same type codes and message formats as defined for DF = 17 ADS-B messages"
+		return "6 - ADSB Rebroadcast (ADS-B rebroadcast using the same type codes and message formats as defined for DF = 17 ADS-B messages)"
 	case ControlFieldReserved:
 		return "7 - Reserved"
 	default:

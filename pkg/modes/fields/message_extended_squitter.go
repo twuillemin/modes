@@ -39,8 +39,3 @@ func (messageExtendedSquitter MessageExtendedSquitter) ToString() string {
 		messageExtendedSquitter.Data[5],
 		messageExtendedSquitter.Data[6])
 }
-
-// ToExtendedString returns a complete representation of the field
-func (messageExtendedSquitter MessageExtendedSquitter) ToExtendedString() string {
-	return messageExtendedSquitter.ToString()
-}

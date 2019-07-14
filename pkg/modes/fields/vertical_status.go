@@ -42,8 +42,3 @@ func (verticalStatus VerticalStatus) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", verticalStatus)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (verticalStatus VerticalStatus) ToExtendedString() string {
-	return verticalStatus.ToString()
-}

@@ -4,8 +4,6 @@ package fields
 type Field interface {
 	// ToString returns a basic, but readable, representation of the field
 	ToString() string
-	// ToExtendedString returns a complete representation of the field
-	ToExtendedString() string
 }
 
 // -----------------------------------------------------------------------------------------

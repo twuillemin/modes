@@ -64,8 +64,3 @@ func (flightStatus FlightStatus) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", flightStatus)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (flightStatus FlightStatus) ToExtendedString() string {
-	return flightStatus.ToString()
-}

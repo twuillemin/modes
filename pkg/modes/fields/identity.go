@@ -94,20 +94,3 @@ func (identity Identity) ToString() string {
 	}
 	return identity.Identity + special
 }
-
-// ToExtendedString returns a complete representation of the field
-func (identity Identity) ToExtendedString() string {
-
-	special := ""
-
-	if identity.IsSpecialEmergency() {
-		special = " [Emergency: aircraft in emergency]"
-	} else if identity.IsSpecialInstructionNotReceived() {
-		special = " [Instruction Not Received: instructions from air traffic control units to operate the transponder not received]"
-	} else if identity.IsSpecialRadiocommunicationFailure() {
-		special = " [Radiocommunication Failure: aircraft with radiocommunication failure]"
-	} else if identity.IsSpecialUnlawfulInterference() {
-		special = " [Unlawful Interference: aircraft subjected to unlawful interference]"
-	}
-	return identity.Identity + special
-}

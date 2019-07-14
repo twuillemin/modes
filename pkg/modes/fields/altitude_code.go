@@ -145,28 +145,7 @@ func (altitudeReportMethod AltitudeCodeReportMethod) ToString() string {
 	}
 }
 
-// ToExtendedString returns a complete representation of the field
-func (altitudeReportMethod AltitudeCodeReportMethod) ToExtendedString() string {
-	switch altitudeReportMethod {
-	case AltitudeCodeReportNotAvailable:
-		return "1 - Not Available: altitude information is not available or that the altitude has been determined invalid"
-	case AltitudeCodeReportMetricUnits:
-		return "2 - Metric Units: altitude reported in metric units"
-	case AltitudeCodeReport100FootIncrements:
-		return "3 - 100 Foot Increments: altitude reported in 100-foot increments"
-	case AltitudeCodeReport25FootIncrements:
-		return "4 - 25 Foot Increments: altitude reported in 25-foot increments"
-	default:
-		return fmt.Sprintf("%v - Unknown code", altitudeReportMethod)
-	}
-}
-
 // ToString returns a basic, but readable, representation of the field
 func (altitudeCode AltitudeCode) ToString() string {
 	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ToString())
-}
-
-// ToExtendedString returns a complete representation of the field
-func (altitudeCode AltitudeCode) ToExtendedString() string {
-	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ToExtendedString())
 }

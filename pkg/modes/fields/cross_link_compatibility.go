@@ -44,15 +44,3 @@ func (crossLinkCompatibility CrossLinkCompatibility) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", crossLinkCompatibility)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (crossLinkCompatibility CrossLinkCompatibility) ToExtendedString() string {
-	switch crossLinkCompatibility {
-	case CrossLinkCompatibilityNotSupported:
-		return "0 - Not Supported: the transponder cannot support the cross-link capability"
-	case CrossLinkCompatibilitySupported:
-		return "1 - Supported: the transponder supports the cross-link capability"
-	default:
-		return fmt.Sprintf("%v - Unknown code", crossLinkCompatibility)
-	}
-}

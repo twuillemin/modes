@@ -64,8 +64,3 @@ func (applicationField ApplicationField) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", applicationField)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (applicationField ApplicationField) ToExtendedString() string {
-	return applicationField.ToString()
-}

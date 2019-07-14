@@ -68,27 +68,3 @@ func (sensitivityLevelReport SensitivityLevelReport) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", sensitivityLevelReport)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (sensitivityLevelReport SensitivityLevelReport) ToExtendedString() string {
-	switch sensitivityLevelReport {
-	case SensitivityLevelACASInoperative:
-		return "0 - ACAS Inoperative"
-	case SensitivityLevel1:
-		return "1 - Level 1: ACAS is operating at sensitivity level 1"
-	case SensitivityLevel2:
-		return "2 - Level 2: ACAS is operating at sensitivity level 2"
-	case SensitivityLevel3:
-		return "3 - Level 3: ACAS is operating at sensitivity level 3"
-	case SensitivityLevel4:
-		return "4 - Level 4: ACAS is operating at sensitivity level 4"
-	case SensitivityLevel5:
-		return "5 - Level 5: ACAS is operating at sensitivity level 5"
-	case SensitivityLevel6:
-		return "6 - Level 6: ACAS is operating at sensitivity level 6"
-	case SensitivityLevel7:
-		return "7 - Level 7: ACAS is operating at sensitivity level 7"
-	default:
-		return fmt.Sprintf("%v - Unknown code", sensitivityLevelReport)
-	}
-}

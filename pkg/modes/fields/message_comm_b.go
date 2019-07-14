@@ -37,8 +37,3 @@ func (messageCommB MessageCommB) ToString() string {
 		messageCommB.Data[5],
 		messageCommB.Data[6])
 }
-
-// ToExtendedString returns a complete representation of the field
-func (messageCommB MessageCommB) ToExtendedString() string {
-	return messageCommB.ToString()
-}

@@ -160,8 +160,3 @@ func (downlinkRequest DownlinkRequest) ToString() string {
 		return fmt.Sprintf("%v - Unknown code", downlinkRequest)
 	}
 }
-
-// ToExtendedString returns a complete representation of the field
-func (downlinkRequest DownlinkRequest) ToExtendedString() string {
-	return downlinkRequest.ToString()
-}

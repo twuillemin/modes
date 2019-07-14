@@ -67,17 +67,7 @@ func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) ToS
 	}
 }
 
-// ToExtendedString returns a complete representation of the field
-func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) ToExtendedString() string {
-	return utilityMessageIdentifierDesignator.ToString()
-}
-
 // ToString returns a basic, but readable, representation of the field
 func (utilityMessage UtilityMessage) ToString() string {
 	return fmt.Sprintf("InterrogatorIdentifier: %v, Reservation: %v", utilityMessage.InterrogatorIdentifier, utilityMessage.IdentifierDesignator.ToString())
-}
-
-// ToExtendedString returns a complete representation of the field
-func (utilityMessage UtilityMessage) ToExtendedString() string {
-	return fmt.Sprintf("InterrogatorIdentifier: %v, Reservation: %v", utilityMessage.InterrogatorIdentifier, utilityMessage.IdentifierDesignator.ToExtendedString())
 }

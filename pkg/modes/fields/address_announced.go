@@ -34,8 +34,3 @@ func (addressAnnounced AddressAnnounced) ToString() string {
 		uint8((addressAnnounced.Address&0x0000FF00)>>8),
 		uint8(addressAnnounced.Address&0x000000FF))
 }
-
-// ToExtendedString returns a complete representation of the field
-func (addressAnnounced AddressAnnounced) ToExtendedString() string {
-	return addressAnnounced.ToString()
-}
