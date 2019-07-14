@@ -64,7 +64,7 @@ func (message *MessageDF16) ToString() string {
 		"SensitivityLevel: %v\n"+
 		"ReplyInformation: %v\n"+
 		"AltitudeCode:     %v\n"+
-		"MessageACAS:      %v",
+		"Message ACAS:\n%v",
 		message.GetName(),
 		message.GetDownLinkFormat(),
 		message.VerticalStatus.ToString(),

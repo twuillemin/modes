@@ -27,27 +27,28 @@ type MessageACAS struct {
 func ReadMessageACAS(message common.MessageData) MessageACAS {
 
 	// Format of the message is as follow:
-	//
-	//  VDS1     VDS2  |       ARA       |   ARA       RAC | RAC RAT MTE Res | Reserved
-	// v v v v v v v v | a a a a a a a a | a a a a a a c c | c c t m _ _ _ _ | 18 bits
+	//        0               1                   2                 3                 4                  5               6           7, 8, 9
+	//   SL  _ _   RI  |RI _ _     AC    |        AC       | <---------------------------------------- MV ----------------------------------> |
+	//                 |                 |                 |  VDS1     VDS2  |       ARA       |   ARA       RAC | RAC RAT MTE Res | Reserved |
+	// x x x _ _ x x x | x _ _ x x x x x | x x x x x x x x | v v v v v v v v | a a a a a a a a | a a a a a a c c | c c t m _ _ _ _ | 18 bits  |
 
 	// Extract the easy values first
-	vds1 := message.Payload[4] >> 4
-	vds2 := message.Payload[4] & 0x0F
+	vds1 := message.Payload[3] >> 4
+	vds2 := message.Payload[3] & 0x0F
 
-	rac := (message.Payload[6]&0x03)<<2 + (message.Payload[7])>>6
+	rac := (message.Payload[5]&0x03)<<2 + (message.Payload[6])>>6
 	doNotPassBelow := (rac & 0x80) != 0
 	doNotPassAbove := (rac & 0x40) != 0
 	doNotTurnLeft := (rac & 0x20) != 0
 	doNotTurnRight := (rac & 0x10) != 0
 
 	rat := RATCurrent
-	if (message.Payload[7] & 0x20) != 0 {
+	if (message.Payload[6] & 0x20) != 0 {
 		rat = RATTerminated
 	}
 
 	mte := MTEOneOrZero
-	if (message.Payload[7] & 0x10) != 0 {
+	if (message.Payload[6] & 0x10) != 0 {
 		mte = MTETwoOrMore
 	}
 
@@ -82,7 +83,7 @@ func ReadMessageACAS(message common.MessageData) MessageACAS {
 		}
 
 		verticalSpeedLimitOrPositive := ActiveRAVerticalSpeedLimit
-		if (message.Payload[4] & 0x20) != 0 {
+		if (message.Payload[4] & 0x02) != 0 {
 			verticalSpeedLimitOrPositive = ActiveRAPositive
 		}
 
@@ -155,12 +156,12 @@ func ReadMessageACAS(message common.MessageData) MessageACAS {
 
 // ToString returns a basic, but readable, representation of the field
 func (messageACAS MessageACAS) ToString() string {
-	return fmt.Sprintf("Message ACAS VDS 1: %X\n"+
-		"Message ACAS VDS 2: %X\n"+
-		"Message ACAS Active Resolution Advisory :\n %v\n"+
-		"Message ACAS Active Resolution Advisory Complement: %v\n"+
-		"Message ACAS Active Resolution Advisory Terminated Indicator: %v\n"+
-		"Message ACAS Active Multiple Threat Encounter: %v",
+	return fmt.Sprintf("  VDS 1: %X\n"+
+		"  VDS 2: %X\n"+
+		"  Active Resolution Advisory:\n%v\n"+
+		"  Active Resolution Advisory Complement: \n%v\n"+
+		"  Active Resolution Advisory Terminated Indicator: %v\n"+
+		"  Multiple Threat Encounter: %v",
 		messageACAS.VDS1,
 		messageACAS.VDS2,
 		messageACAS.ActiveRA.ToString(),
@@ -274,19 +275,19 @@ func (oneThreatOrSameSeparation ActiveRAOneThreatOrSameSeparation) GetType() RAT
 
 // ToString returns a basic, but readable, representation of the field
 func (oneThreatOrSameSeparation ActiveRAOneThreatOrSameSeparation) ToString() string {
-	return fmt.Sprintf("Resolution Advisory type: One threat or multiple threats with separation in same direction\n"+
-		"Resolution Advisory Preventive/Corrective: %v\n"+
-		"Resolution Advisory sense generated: %v\n"+
-		"Resolution Advisory is increased rate: %v\n"+
-		"Resolution Advisory is sense reversal: %v\n"+
-		"Resolution Advisory is altitude crossing: %v\n"+
-		"Resolution Advisory Vertical Speed Limit/Positive: %v",
-		oneThreatOrSameSeparation.PreventiveCorrective,
-		oneThreatOrSameSeparation.Sense,
+	return fmt.Sprintf("    Type: One threat or multiple threats with separation in same direction\n"+
+		"    Preventive/Corrective: %v\n"+
+		"    Sense generated: %v\n"+
+		"    Is increased rate: %v\n"+
+		"    Is sense reversal: %v\n"+
+		"    Is altitude crossing: %v\n"+
+		"    Vertical Speed Limit/Positive: %v",
+		oneThreatOrSameSeparation.PreventiveCorrective.ToString(),
+		oneThreatOrSameSeparation.Sense.ToString(),
 		oneThreatOrSameSeparation.IsIncreasedRate,
 		oneThreatOrSameSeparation.IsSenseReversal,
 		oneThreatOrSameSeparation.IsAltitudeCrossing,
-		oneThreatOrSameSeparation.VerticalSpeedLimitOrPositive)
+		oneThreatOrSameSeparation.VerticalSpeedLimitOrPositive.ToString())
 }
 
 // ActiveRAMultipleThreatsDifferentSeparation is one of the possible resolution advisory contained in a MV field
@@ -306,13 +307,13 @@ func (multipleThreatsDifferentSeparation ActiveRAMultipleThreatsDifferentSeparat
 
 // ToString returns a basic, but readable, representation of the field
 func (multipleThreatsDifferentSeparation ActiveRAMultipleThreatsDifferentSeparation) ToString() string {
-	return fmt.Sprintf("Resolution Advisory type: Multiple threats with separation in different directions\n"+
-		"Resolution Advisory require a correction in the upward sense: %v\n"+
-		"Resolution Advisory requires a positive climb: %v\n"+
-		"Resolution Advisory requires a correction in the downward sense: %v\n"+
-		"Resolution Advisory requires a positive descend: %v\n"+
-		"Resolution Advisory requires a crossing: %v\n"+
-		"Resolution Advisory is a sense reversal: %v",
+	return fmt.Sprintf("    Type: Multiple threats with separation in different directions\n"+
+		"    Require a correction in the upward sense: %v\n"+
+		"    Requires a positive climb: %v\n"+
+		"    Requires a correction in the downward sense: %v\n"+
+		"    Requires a positive descend: %v\n"+
+		"    Requires a crossing: %v\n"+
+		"    Is a sense reversal: %v",
 		multipleThreatsDifferentSeparation.RequiresCorrectionUpwardSense,
 		multipleThreatsDifferentSeparation.RequiresPositiveClimb,
 		multipleThreatsDifferentSeparation.RequiresCorrectionDownwardSense,
@@ -331,7 +332,7 @@ func (noVerticalRAGenerated ActiveRANoVerticalRAGenerated) GetType() RAType {
 
 // ToString returns a basic, but readable, representation of the field
 func (noVerticalRAGenerated ActiveRANoVerticalRAGenerated) ToString() string {
-	return fmt.Sprintf("Resolution Advisory type: no Resolution Advisory has been generated")
+	return fmt.Sprintf("    Type: no Resolution Advisory has been generated")
 }
 
 // RAComplement indicates all the currently active RACs, if any, received from other ACAS aircraft.
@@ -348,10 +349,10 @@ type RAComplement struct {
 
 // ToString returns a basic, but readable, representation of the field
 func (complement RAComplement) ToString() string {
-	return fmt.Sprintf("Resolution Advisory Complement: Do not pass below: %v\n"+
-		"Resolution Advisory Complement: Do not pass above: %v\n"+
-		"Resolution Advisory Complement: Do not turn left: %v\n"+
-		"Resolution Advisory Complement: Do not turn right: %v",
+	return fmt.Sprintf("    Do not pass below: %v\n"+
+		"    Do not pass above: %v\n"+
+		"    Do not turn left: %v\n"+
+		"    Do not turn right: %v",
 		complement.DoNotPassBelow,
 		complement.DoNotPassAbove,
 		complement.DoNotTurnLeft,
@@ -395,9 +396,9 @@ const (
 func (multipleThreatEncounter MultipleThreatEncounter) ToString() string {
 	switch multipleThreatEncounter {
 	case MTEOneOrZero:
-		return "ACAS is currently generating the RA"
+		return "One or no threat is currently being processed by the ACAS"
 	case MTETwoOrMore:
-		return "the RA indicated has been terminated"
+		return "Two or more threats are currently being processed by the ACAS"
 	default:
 		return fmt.Sprintf("%v - Unknown code", multipleThreatEncounter)
 	}
