@@ -69,8 +69,7 @@ func main() {
 		} else {
 			fmt.Printf("From: %v:\n", address.ToString())
 		}
-		modesmsg.ToString()
-		fmt.Println()
+		fmt.Printf("%v\n\n", modesmsg.ToString())
 	}
 }
 

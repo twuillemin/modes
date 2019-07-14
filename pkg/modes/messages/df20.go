@@ -57,12 +57,19 @@ func ParseDF20(message common.MessageData) (*MessageDF20, error) {
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (message *MessageDF20) ToString() {
-	fmt.Printf("Message: %v\n", message.GetName())
-	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
-	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.ToString())
-	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.ToString())
-	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.ToString())
-	fmt.Printf("AltitudeCode:     %v\n", message.AltitudeCode.ToString())
-	fmt.Printf("MessageCommB:     %v\n", message.MessageCommB.ToString())
+func (message *MessageDF20) ToString() string {
+	return fmt.Sprintf("Message: %v\n"+
+		"Downlink format:  %v\n"+
+		"FlightStatus:     %v\n"+
+		"DownlinkRequest:  %v\n"+
+		"UtilityMessage:   %v\n"+
+		"AltitudeCode:     %v\n"+
+		"MessageCommB:     %v",
+		message.GetName(),
+		message.GetDownLinkFormat(),
+		message.FlightStatus.ToString(),
+		message.DownlinkRequest.ToString(),
+		message.UtilityMessage.ToString(),
+		message.AltitudeCode.ToString(),
+		message.MessageCommB.ToString())
 }

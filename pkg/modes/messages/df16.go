@@ -57,12 +57,19 @@ func ParseDF16(message common.MessageData) (*MessageDF16, error) {
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (message *MessageDF16) ToString() {
-	fmt.Printf("Message: %v\n", message.GetName())
-	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
-	fmt.Printf("VerticalStatus:    %v\n", message.VerticalStatus.ToString())
-	fmt.Printf("SensitivityLevel:  %v\n", message.SensitivityLevel.ToString())
-	fmt.Printf("ReplyInformation:  %v\n", message.ReplyInformation.ToString())
-	fmt.Printf("AltitudeCode:      %v\n", message.AltitudeCode.ToString())
-	fmt.Printf("MessageACAS:       %v\n", message.MessageACAS.ToString())
+func (message *MessageDF16) ToString() string {
+	return fmt.Sprintf("Message: %v\n"+
+		"Downlink format:  %v\n"+
+		"VerticalStatus:   %v\n"+
+		"SensitivityLevel: %v\n"+
+		"ReplyInformation: %v\n"+
+		"AltitudeCode:     %v\n"+
+		"MessageACAS:      %v",
+		message.GetName(),
+		message.GetDownLinkFormat(),
+		message.VerticalStatus.ToString(),
+		message.SensitivityLevel.ToString(),
+		message.ReplyInformation.ToString(),
+		message.AltitudeCode.ToString(),
+		message.MessageACAS.ToString())
 }

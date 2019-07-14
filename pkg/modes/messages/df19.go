@@ -49,8 +49,11 @@ func ParseDF19(message common.MessageData) (*MessageDF19, error) {
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (message *MessageDF19) ToString() {
-	fmt.Printf("Message: %v\n", message.GetName())
-	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
-	fmt.Printf("ApplicationField:  %v\n", message.ApplicationField.ToString())
+func (message *MessageDF19) ToString() string {
+	return fmt.Sprintf("Message: %v\n"+
+		"Downlink format:         %v\n"+
+		"ApplicationField:        %v",
+		message.GetName(),
+		message.GetDownLinkFormat(),
+		message.ApplicationField.ToString())
 }

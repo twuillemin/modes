@@ -55,11 +55,17 @@ func ParseDF5(message common.MessageData) (*MessageDF5, error) {
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (message *MessageDF5) ToString() {
-	fmt.Printf("Message: %v\n", message.GetName())
-	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
-	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.ToString())
-	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.ToString())
-	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.ToString())
-	fmt.Printf("Identity:         %v\n", message.Identity.ToString())
+func (message *MessageDF5) ToString() string {
+	return fmt.Sprintf("Message: %v\n"+
+		"Downlink format:  %v\n"+
+		"FlightStatus:     %v\n"+
+		"DownlinkRequest:  %v\n"+
+		"UtilityMessage:   %v\n"+
+		"Identity:         %v",
+		message.GetName(),
+		message.GetDownLinkFormat(),
+		message.FlightStatus.ToString(),
+		message.DownlinkRequest.ToString(),
+		message.UtilityMessage.ToString(),
+		message.Identity.ToString())
 }
