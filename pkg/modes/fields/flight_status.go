@@ -35,13 +35,14 @@ const (
 	FlightStatusNotAssigned FlightStatus = 7
 )
 
-// readFlightStatus reads the FS field from a message
+// ReadFlightStatus reads the FS field from a message
 func ReadFlightStatus(message common.MessageData) FlightStatus {
 
 	return FlightStatus(message.FirstField)
 }
 
-func (flightStatus FlightStatus) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (flightStatus FlightStatus) ToString() string {
 	switch flightStatus {
 	case FlightStatusNoAlertNoSPIAirborne:
 		return "0 - No Alert, No SPI, Airborne"
@@ -64,6 +65,7 @@ func (flightStatus FlightStatus) PrettyPrint() string {
 	}
 }
 
-func (flightStatus FlightStatus) ExtendedPrettyPrint() string {
-	return flightStatus.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (flightStatus FlightStatus) ToExtendedString() string {
+	return flightStatus.ToString()
 }

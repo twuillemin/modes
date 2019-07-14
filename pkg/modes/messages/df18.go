@@ -19,10 +19,12 @@ type MessageDF18 struct {
 	MessageExtendedSquitter fields.MessageExtendedSquitter
 }
 
+// GetName returns the name of the message
 func (message *MessageDF18) GetName() string {
 	return "Extended squitter/non transponder"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF18) GetDownLinkFormat() int {
 	return 18
 }
@@ -50,10 +52,11 @@ func ParseDF18(message common.MessageData) (*MessageDF18, error) {
 	}, nil
 }
 
-func (message *MessageDF18) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF18) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:          %v\n", message.GetDownLinkFormat())
-	fmt.Printf("ControlField:             %v\n", message.ControlField.PrettyPrint())
-	fmt.Printf("AddressAnnounced:         %v\n", message.AddressAnnounced.PrettyPrint())
-	fmt.Printf("MessageExtendedSquitter:  %v\n", message.MessageExtendedSquitter.PrettyPrint())
+	fmt.Printf("ControlField:             %v\n", message.ControlField.ToString())
+	fmt.Printf("AddressAnnounced:         %v\n", message.AddressAnnounced.ToString())
+	fmt.Printf("MessageExtendedSquitter:  %v\n", message.MessageExtendedSquitter.ToString())
 }

@@ -35,13 +35,14 @@ const (
 	ApplicationFieldReserved7 ApplicationField = 7
 )
 
-// readApplicationField reads the AF field from a message
+// ReadApplicationField reads the AF field from a message
 func ReadApplicationField(message common.MessageData) ApplicationField {
 
 	return ApplicationField(message.FirstField)
 }
 
-func (applicationField ApplicationField) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (applicationField ApplicationField) ToString() string {
 	switch applicationField {
 	case ApplicationFieldReserved0:
 		return "0 - Reserved"
@@ -64,6 +65,7 @@ func (applicationField ApplicationField) PrettyPrint() string {
 	}
 }
 
-func (applicationField ApplicationField) ExtendedPrettyPrint() string {
-	return applicationField.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (applicationField ApplicationField) ToExtendedString() string {
+	return applicationField.ToString()
 }

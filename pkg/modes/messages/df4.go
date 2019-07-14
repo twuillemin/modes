@@ -20,10 +20,12 @@ type MessageDF4 struct {
 	AltitudeCode    fields.AltitudeCode
 }
 
+// GetName returns the name of the message
 func (message *MessageDF4) GetName() string {
 	return "Surveillance, altitude reply"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF4) GetDownLinkFormat() int {
 	return 4
 }
@@ -52,11 +54,12 @@ func ParseDF4(message common.MessageData) (*MessageDF4, error) {
 	}, nil
 }
 
-func (message *MessageDF4) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF4) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
-	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
-	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())
-	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.PrettyPrint())
-	fmt.Printf("AltitudeCode:     %v\n", message.AltitudeCode.PrettyPrint())
+	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.ToString())
+	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.ToString())
+	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.ToString())
+	fmt.Printf("AltitudeCode:     %v\n", message.AltitudeCode.ToString())
 }

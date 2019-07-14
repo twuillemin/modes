@@ -21,10 +21,12 @@ type MessageDF16 struct {
 	MessageACAS      fields.MessageACAS
 }
 
+// GetName returns the name of the message
 func (message *MessageDF16) GetName() string {
 	return "Long air-air surveillance (ACAS)"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF16) GetDownLinkFormat() int {
 	return 16
 }
@@ -54,12 +56,13 @@ func ParseDF16(message common.MessageData) (*MessageDF16, error) {
 	}, nil
 }
 
-func (message *MessageDF16) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF16) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
-	fmt.Printf("VerticalStatus:    %v\n", message.VerticalStatus.PrettyPrint())
-	fmt.Printf("SensitivityLevel:  %v\n", message.SensitivityLevel.PrettyPrint())
-	fmt.Printf("ReplyInformation:  %v\n", message.ReplyInformation.PrettyPrint())
-	fmt.Printf("AltitudeCode:      %v\n", message.AltitudeCode.PrettyPrint())
-	fmt.Printf("MessageACAS:       %v\n", message.MessageACAS.PrettyPrint())
+	fmt.Printf("VerticalStatus:    %v\n", message.VerticalStatus.ToString())
+	fmt.Printf("SensitivityLevel:  %v\n", message.SensitivityLevel.ToString())
+	fmt.Printf("ReplyInformation:  %v\n", message.ReplyInformation.ToString())
+	fmt.Printf("AltitudeCode:      %v\n", message.AltitudeCode.ToString())
+	fmt.Printf("MessageACAS:       %v\n", message.MessageACAS.ToString())
 }

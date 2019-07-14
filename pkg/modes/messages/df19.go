@@ -17,10 +17,12 @@ type MessageDF19 struct {
 	ApplicationField fields.ApplicationField
 }
 
+// GetName returns the name of the message
 func (message *MessageDF19) GetName() string {
 	return "Military extended squitter"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF19) GetDownLinkFormat() int {
 	return 19
 }
@@ -46,8 +48,9 @@ func ParseDF19(message common.MessageData) (*MessageDF19, error) {
 	}, nil
 }
 
-func (message *MessageDF19) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF19) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
-	fmt.Printf("ApplicationField:  %v\n", message.ApplicationField.PrettyPrint())
+	fmt.Printf("ApplicationField:  %v\n", message.ApplicationField.ToString())
 }

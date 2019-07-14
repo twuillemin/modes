@@ -19,7 +19,7 @@ type MessageACAS struct {
 	Data []byte
 }
 
-// readMessageACAS reads the MV field from a message
+// ReadMessageACAS reads the MV field from a message
 func ReadMessageACAS(message common.MessageData) MessageACAS {
 
 	return MessageACAS{
@@ -27,7 +27,8 @@ func ReadMessageACAS(message common.MessageData) MessageACAS {
 	}
 }
 
-func (messageACAS MessageACAS) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (messageACAS MessageACAS) ToString() string {
 	return fmt.Sprintf("%X %X %X %X %X %X %X",
 		messageACAS.Data[0],
 		messageACAS.Data[1],
@@ -38,6 +39,7 @@ func (messageACAS MessageACAS) PrettyPrint() string {
 		messageACAS.Data[6])
 }
 
-func (messageACAS MessageACAS) ExtendedPrettyPrint() string {
-	return messageACAS.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (messageACAS MessageACAS) ToExtendedString() string {
+	return messageACAS.ToString()
 }

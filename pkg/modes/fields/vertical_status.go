@@ -23,7 +23,7 @@ const (
 	VerticalStatusOnTheGround VerticalStatus = 1
 )
 
-// readVerticalStatus reads the VS field from a message
+// ReadVerticalStatus reads the VS field from a message
 func ReadVerticalStatus(message common.MessageData) VerticalStatus {
 	if message.FirstField&0x04 != 0 {
 		return VerticalStatusOnTheGround
@@ -31,7 +31,8 @@ func ReadVerticalStatus(message common.MessageData) VerticalStatus {
 	return VerticalStatusAirborne
 }
 
-func (verticalStatus VerticalStatus) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (verticalStatus VerticalStatus) ToString() string {
 	switch verticalStatus {
 	case VerticalStatusAirborne:
 		return "0 - Airborne"
@@ -42,6 +43,7 @@ func (verticalStatus VerticalStatus) PrettyPrint() string {
 	}
 }
 
-func (verticalStatus VerticalStatus) ExtendedPrettyPrint() string {
-	return verticalStatus.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (verticalStatus VerticalStatus) ToExtendedString() string {
+	return verticalStatus.ToString()
 }

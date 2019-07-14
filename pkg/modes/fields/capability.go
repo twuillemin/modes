@@ -39,13 +39,14 @@ const (
 	CapabilityFSOrDR Capability = 7
 )
 
-// readFlightStatus reads the FS field from a message
+// ReadCapability reads the CA field from a message
 func ReadCapability(message common.MessageData) Capability {
 
 	return Capability(message.FirstField)
 }
 
-func (capability Capability) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (capability Capability) ToString() string {
 	switch capability {
 	case CapabilityLevel1Transponder:
 		return "0 - Level 1 Transponder"
@@ -68,7 +69,8 @@ func (capability Capability) PrettyPrint() string {
 	}
 }
 
-func (capability Capability) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (capability Capability) ToExtendedString() string {
 	switch capability {
 	case CapabilityLevel1Transponder:
 		return "0 - Level 1 Transponder: level 1 transponder (surveillance only), and no ability to set CA code 7"

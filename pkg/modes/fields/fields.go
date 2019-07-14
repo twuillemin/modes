@@ -1,8 +1,11 @@
 package fields
 
+// Field is the basic interface that Mode S messages fields are expected to implement
 type Field interface {
-	PrettyPrint() string
-	ExtendedPrettyPrint() string
+	// ToString returns a basic, but readable, representation of the field
+	ToString() string
+	// ToExtendedString returns a complete representation of the field
+	ToExtendedString() string
 }
 
 // -----------------------------------------------------------------------------------------

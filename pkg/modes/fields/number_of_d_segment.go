@@ -16,16 +16,18 @@ import (
 // Defined at 3.1.2.7.3.2
 type NumberOfDSegment uint8
 
-// readNumberOfDSegment reads the ND field from a message
+// ReadNumberOfDSegment reads the ND field from a message
 func ReadNumberOfDSegment(message common.MessageData) NumberOfDSegment {
 
 	return NumberOfDSegment((message.DownLinkFormat&0x01)<<3 | message.FirstField)
 }
 
-func (numberOfDSegment NumberOfDSegment) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (numberOfDSegment NumberOfDSegment) ToString() string {
 	return strconv.Itoa(int(numberOfDSegment))
 }
 
-func (numberOfDSegment NumberOfDSegment) ExtendedPrettyPrint() string {
-	return numberOfDSegment.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (numberOfDSegment NumberOfDSegment) ToExtendedString() string {
+	return numberOfDSegment.ToString()
 }

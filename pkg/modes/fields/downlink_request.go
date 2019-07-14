@@ -83,13 +83,14 @@ const (
 	DownlinkRequestELMAvailable16Segments DownlinkRequest = 31
 )
 
-// readSensitivityLevelReport reads the DR field from a message
+// ReadDownlinkRequest reads the DR field from a message
 func ReadDownlinkRequest(message common.MessageData) DownlinkRequest {
 
 	return DownlinkRequest(message.Payload[0] >> 3)
 }
 
-func (downlinkRequest DownlinkRequest) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (downlinkRequest DownlinkRequest) ToString() string {
 	switch downlinkRequest {
 	case DownlinkRequestNoDownlinkRequest:
 		return "0 - No Downlink Request"
@@ -160,6 +161,7 @@ func (downlinkRequest DownlinkRequest) PrettyPrint() string {
 	}
 }
 
-func (downlinkRequest DownlinkRequest) ExtendedPrettyPrint() string {
-	return downlinkRequest.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (downlinkRequest DownlinkRequest) ToExtendedString() string {
+	return downlinkRequest.ToString()
 }

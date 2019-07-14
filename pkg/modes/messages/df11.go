@@ -18,10 +18,12 @@ type MessageDF11 struct {
 	AddressAnnounced fields.AddressAnnounced
 }
 
+// GetName returns the name of the message
 func (message *MessageDF11) GetName() string {
 	return "All-call reply"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF11) GetDownLinkFormat() int {
 	return 11
 }
@@ -48,9 +50,10 @@ func ParseDF11(message common.MessageData) (*MessageDF11, error) {
 	}, nil
 }
 
-func (message *MessageDF11) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF11) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
-	fmt.Printf("Capability:        %v\n", message.Capability.PrettyPrint())
-	fmt.Printf("AddressAnnounced:  %v\n", message.AddressAnnounced.PrettyPrint())
+	fmt.Printf("Capability:        %v\n", message.Capability.ToString())
+	fmt.Printf("AddressAnnounced:  %v\n", message.AddressAnnounced.ToString())
 }

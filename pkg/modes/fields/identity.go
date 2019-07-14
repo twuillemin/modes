@@ -43,7 +43,7 @@ func (identity Identity) IsSpecialInstructionNotReceived() bool {
 	return identity.Identity == "2000"
 }
 
-// readIdentity reads the identity from a message
+// ReadIdentity reads the identity from a message
 func ReadIdentity(message common.MessageData) Identity {
 
 	// Identity is a 13 bits fields, so read a uint16
@@ -78,7 +78,8 @@ func ReadIdentity(message common.MessageData) Identity {
 	}
 }
 
-func (identity Identity) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (identity Identity) ToString() string {
 
 	special := ""
 
@@ -94,7 +95,8 @@ func (identity Identity) PrettyPrint() string {
 	return identity.Identity + special
 }
 
-func (identity Identity) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (identity Identity) ToExtendedString() string {
 
 	special := ""
 

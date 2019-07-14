@@ -36,7 +36,7 @@ const (
 	SensitivityLevel7 SensitivityLevelReport = 7
 )
 
-// readSensitivityLevelReport reads the SL field from a message
+// ReadSensitivityLevelReport reads the SL field from a message
 func ReadSensitivityLevelReport(message common.MessageData) SensitivityLevelReport {
 
 	// The 3 first bits of the message
@@ -45,7 +45,8 @@ func ReadSensitivityLevelReport(message common.MessageData) SensitivityLevelRepo
 	return SensitivityLevelReport(sensitivity)
 }
 
-func (sensitivityLevelReport SensitivityLevelReport) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (sensitivityLevelReport SensitivityLevelReport) ToString() string {
 	switch sensitivityLevelReport {
 	case SensitivityLevelACASInoperative:
 		return "0 - ACAS Inoperative"
@@ -68,7 +69,8 @@ func (sensitivityLevelReport SensitivityLevelReport) PrettyPrint() string {
 	}
 }
 
-func (sensitivityLevelReport SensitivityLevelReport) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (sensitivityLevelReport SensitivityLevelReport) ToExtendedString() string {
 	switch sensitivityLevelReport {
 	case SensitivityLevelACASInoperative:
 		return "0 - ACAS Inoperative"

@@ -25,7 +25,7 @@ const (
 	CrossLinkCompatibilitySupported CrossLinkCompatibility = 1
 )
 
-// readCrossLinkCompatibility reads the CC field from a message
+// ReadCrossLinkCompatibility reads the CC field from a message
 func ReadCrossLinkCompatibility(message common.MessageData) CrossLinkCompatibility {
 	if message.FirstField&0x02 != 0 {
 		return CrossLinkCompatibilitySupported
@@ -33,7 +33,8 @@ func ReadCrossLinkCompatibility(message common.MessageData) CrossLinkCompatibili
 	return CrossLinkCompatibilityNotSupported
 }
 
-func (crossLinkCompatibility CrossLinkCompatibility) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (crossLinkCompatibility CrossLinkCompatibility) ToString() string {
 	switch crossLinkCompatibility {
 	case CrossLinkCompatibilityNotSupported:
 		return "0 - Not Supported"
@@ -44,7 +45,8 @@ func (crossLinkCompatibility CrossLinkCompatibility) PrettyPrint() string {
 	}
 }
 
-func (crossLinkCompatibility CrossLinkCompatibility) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (crossLinkCompatibility CrossLinkCompatibility) ToExtendedString() string {
 	switch crossLinkCompatibility {
 	case CrossLinkCompatibilityNotSupported:
 		return "0 - Not Supported: the transponder cannot support the cross-link capability"

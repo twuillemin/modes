@@ -42,7 +42,7 @@ type AltitudeCode struct {
 	AltitudeInFeet int
 }
 
-// readAltitudeCode reads the altitude code from a message
+// ReadAltitudeCode reads the altitude code from a message
 func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 
 	// Altitude code is a 13 bits fields, so read a uint16
@@ -129,7 +129,8 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	}
 }
 
-func (altitudeReportMethod AltitudeCodeReportMethod) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (altitudeReportMethod AltitudeCodeReportMethod) ToString() string {
 	switch altitudeReportMethod {
 	case AltitudeCodeReportNotAvailable:
 		return "1 - Not Available"
@@ -144,7 +145,8 @@ func (altitudeReportMethod AltitudeCodeReportMethod) PrettyPrint() string {
 	}
 }
 
-func (altitudeReportMethod AltitudeCodeReportMethod) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (altitudeReportMethod AltitudeCodeReportMethod) ToExtendedString() string {
 	switch altitudeReportMethod {
 	case AltitudeCodeReportNotAvailable:
 		return "1 - Not Available: altitude information is not available or that the altitude has been determined invalid"
@@ -159,10 +161,12 @@ func (altitudeReportMethod AltitudeCodeReportMethod) ExtendedPrettyPrint() strin
 	}
 }
 
-func (altitudeCode AltitudeCode) PrettyPrint() string {
-	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.PrettyPrint())
+// ToString returns a basic, but readable, representation of the field
+func (altitudeCode AltitudeCode) ToString() string {
+	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ToString())
 }
 
-func (altitudeCode AltitudeCode) ExtendedPrettyPrint() string {
-	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ExtendedPrettyPrint())
+// ToExtendedString returns a complete representation of the field
+func (altitudeCode AltitudeCode) ToExtendedString() string {
+	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ToExtendedString())
 }

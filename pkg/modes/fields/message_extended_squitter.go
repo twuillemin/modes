@@ -20,7 +20,7 @@ type MessageExtendedSquitter struct {
 	Data []byte
 }
 
-// readAddressAnnounced reads the AA field from a message
+// ReadMessageExtendedSquitter reads the ME field from a message
 func ReadMessageExtendedSquitter(message common.MessageData) MessageExtendedSquitter {
 
 	return MessageExtendedSquitter{
@@ -28,7 +28,8 @@ func ReadMessageExtendedSquitter(message common.MessageData) MessageExtendedSqui
 	}
 }
 
-func (messageExtendedSquitter MessageExtendedSquitter) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (messageExtendedSquitter MessageExtendedSquitter) ToString() string {
 	return fmt.Sprintf("%X %X %X %X %X %X %X",
 		messageExtendedSquitter.Data[0],
 		messageExtendedSquitter.Data[1],
@@ -39,6 +40,7 @@ func (messageExtendedSquitter MessageExtendedSquitter) PrettyPrint() string {
 		messageExtendedSquitter.Data[6])
 }
 
-func (messageExtendedSquitter MessageExtendedSquitter) ExtendedPrettyPrint() string {
-	return messageExtendedSquitter.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (messageExtendedSquitter MessageExtendedSquitter) ToExtendedString() string {
+	return messageExtendedSquitter.ToString()
 }

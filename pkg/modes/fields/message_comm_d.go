@@ -20,7 +20,7 @@ type MessageCommD struct {
 	Data []byte
 }
 
-// readMessageCommD reads the MB field from a message
+// ReadMessageCommD reads the MB field from a message
 func ReadMessageCommD(message common.MessageData) MessageCommD {
 
 	return MessageCommD{
@@ -28,7 +28,8 @@ func ReadMessageCommD(message common.MessageData) MessageCommD {
 	}
 }
 
-func (messageCommD MessageCommD) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (messageCommD MessageCommD) ToString() string {
 	return fmt.Sprintf("%X %X %X %X %X %X %X %X %X %X",
 		messageCommD.Data[0],
 		messageCommD.Data[1],
@@ -42,6 +43,7 @@ func (messageCommD MessageCommD) PrettyPrint() string {
 		messageCommD.Data[9])
 }
 
-func (messageCommD MessageCommD) ExtendedPrettyPrint() string {
-	return messageCommD.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (messageCommD MessageCommD) ToExtendedString() string {
+	return messageCommD.ToString()
 }

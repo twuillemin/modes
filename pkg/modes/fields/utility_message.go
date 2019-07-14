@@ -16,7 +16,7 @@ import (
 // Defined at 3.1.2.6.5.3
 type UtilityMessage struct {
 	// InterrogatorIdentifier subfield reports the identifier of the interrogator that is reserved for
-	// multisite communications.
+	// multi site communications.
 	InterrogatorIdentifier uint8
 	// IdentifierDesignator subfield reports the type of reservation made by the interrogator identified in IIS
 	IdentifierDesignator UtilityMessageIdentifierDesignator
@@ -39,7 +39,7 @@ const (
 	UtilityMessageIdentifierDesignatorCommD UtilityMessageIdentifierDesignator = 3
 )
 
-// readUtilityMessage reads the UM field from a message
+// ReadUtilityMessage reads the UM field from a message
 func ReadUtilityMessage(message common.MessageData) UtilityMessage {
 
 	ii := ((message.Payload[0] & 0x07) << 1) | ((message.Payload[1] & 0x80) >> 7)
@@ -51,7 +51,8 @@ func ReadUtilityMessage(message common.MessageData) UtilityMessage {
 	}
 }
 
-func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) ToString() string {
 	switch utilityMessageIdentifierDesignator {
 	case UtilityMessageIdentifierDesignatorNoInformation:
 		return "0 - No Information"
@@ -66,14 +67,17 @@ func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) Pre
 	}
 }
 
-func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) ExtendedPrettyPrint() string {
-	return utilityMessageIdentifierDesignator.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (utilityMessageIdentifierDesignator UtilityMessageIdentifierDesignator) ToExtendedString() string {
+	return utilityMessageIdentifierDesignator.ToString()
 }
 
-func (utilityMessage UtilityMessage) PrettyPrint() string {
-	return fmt.Sprintf("InterrogatorIdentifier: %v, Reservation: %v", utilityMessage.InterrogatorIdentifier, utilityMessage.IdentifierDesignator.PrettyPrint())
+// ToString returns a basic, but readable, representation of the field
+func (utilityMessage UtilityMessage) ToString() string {
+	return fmt.Sprintf("InterrogatorIdentifier: %v, Reservation: %v", utilityMessage.InterrogatorIdentifier, utilityMessage.IdentifierDesignator.ToString())
 }
 
-func (utilityMessage UtilityMessage) ExtendedPrettyPrint() string {
-	return fmt.Sprintf("InterrogatorIdentifier: %v, Reservation: %v", utilityMessage.InterrogatorIdentifier, utilityMessage.IdentifierDesignator.ExtendedPrettyPrint())
+// ToExtendedString returns a complete representation of the field
+func (utilityMessage UtilityMessage) ToExtendedString() string {
+	return fmt.Sprintf("InterrogatorIdentifier: %v, Reservation: %v", utilityMessage.InterrogatorIdentifier, utilityMessage.IdentifierDesignator.ToExtendedString())
 }

@@ -24,19 +24,19 @@ type ReplyInformationAirAir int
 const (
 	// ReplyInformationNoOperatingACAS signifies no operating ACAS.
 	ReplyInformationNoOperatingACAS ReplyInformationAirAir = 0
-	// ReplyInformationNReservedACAS1 is reserved for ACAS (1).
+	// ReplyInformationReservedACAS1 is reserved for ACAS (1).
 	ReplyInformationReservedACAS1 ReplyInformationAirAir = 1
-	// ReplyInformationNReservedACAS2 is reserved for ACAS (2).
+	// ReplyInformationReservedACAS2 is reserved for ACAS (2).
 	ReplyInformationReservedACAS2 ReplyInformationAirAir = 2
-	// ReplyInformationNReservedACAS3 is reserved for ACAS (3).
+	// ReplyInformationReservedACAS3 is reserved for ACAS (3).
 	ReplyInformationReservedACAS3 ReplyInformationAirAir = 3
-	// ReplyInformationNReservedACAS4 is reserved for ACAS (4).
+	// ReplyInformationReservedACAS4 is reserved for ACAS (4).
 	ReplyInformationReservedACAS4 ReplyInformationAirAir = 4
-	// ReplyInformationNReservedACAS5 is reserved for ACAS (5).
+	// ReplyInformationReservedACAS5 is reserved for ACAS (5).
 	ReplyInformationReservedACAS5 ReplyInformationAirAir = 5
-	// ReplyInformationNReservedACAS6 is reserved for ACAS (6).
+	// ReplyInformationReservedACAS6 is reserved for ACAS (6).
 	ReplyInformationReservedACAS6 ReplyInformationAirAir = 6
-	// ReplyInformationNReservedACAS7 is reserved for ACAS (7).
+	// ReplyInformationReservedACAS7 is reserved for ACAS (7).
 	ReplyInformationReservedACAS7 ReplyInformationAirAir = 7
 	// ReplyInformationMaximumAirSpeedNotAvailable signifies no maximum airspeed data available
 	ReplyInformationMaximumAirSpeedNotAvailable ReplyInformationAirAir = 8
@@ -60,6 +60,7 @@ const (
 	ReplyInformationNotAssigned ReplyInformationAirAir = 15
 )
 
+// ReadReplyInformationAirAir reads the RI field from a message
 func ReadReplyInformationAirAir(message common.MessageData) ReplyInformationAirAir {
 
 	replyInformation := ((message.Payload[0] & 0x03) << 2) | ((message.Payload[1] & 0x080) >> 7)
@@ -67,7 +68,8 @@ func ReadReplyInformationAirAir(message common.MessageData) ReplyInformationAirA
 	return ReplyInformationAirAir(replyInformation)
 }
 
-func (replyInformationAirAir ReplyInformationAirAir) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (replyInformationAirAir ReplyInformationAirAir) ToString() string {
 	switch replyInformationAirAir {
 	case ReplyInformationNoOperatingACAS:
 		return "0 - No Operating ACAS"
@@ -106,7 +108,8 @@ func (replyInformationAirAir ReplyInformationAirAir) PrettyPrint() string {
 	}
 }
 
-func (replyInformationAirAir ReplyInformationAirAir) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (replyInformationAirAir ReplyInformationAirAir) ToExtendedString() string {
 	switch replyInformationAirAir {
 	case ReplyInformationNoOperatingACAS:
 		return "0 - No Operating ACAS"

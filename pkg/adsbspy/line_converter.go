@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Message is the decomposed parts of a line of data coming from ADSBSpy
 type Message struct {
 	Message          []uint8
 	Timestamp        uint32
@@ -14,6 +15,12 @@ type Message struct {
 	RSSI             uint16
 }
 
+// ReadLine reads a line coming from ADSBSpy and spit in its corresponding parts
+//
+// params:
+//    - line: The line to parse
+//
+// Returns the line parts or an error
 func ReadLine(line string) (*Message, error) {
 
 	if len(line) == 0 {

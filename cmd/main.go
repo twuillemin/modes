@@ -33,9 +33,9 @@ func main() {
 		fmt.Printf("Message 2: %v\n", string(bytes2))
 
 		fmt.Println()
-		message1.PrettyPrint()
+		message1.ToString()
 		fmt.Println()
-		message2.PrettyPrint()
+		message2.ToString()
 		fmt.Println()
 	*/
 
@@ -69,7 +69,7 @@ func main() {
 		} else {
 			fmt.Printf("From: %v:\n", address.ToString())
 		}
-		modesmsg.PrettyPrint()
+		modesmsg.ToString()
 		fmt.Println()
 	}
 }

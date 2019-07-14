@@ -23,7 +23,7 @@ const (
 	UplinkELMAcknowledgement ControlELM = 1
 )
 
-// readControlELM reads the KE field from a message
+// ReadControlELM reads the KE field from a message
 func ReadControlELM(message common.MessageData) ControlELM {
 	if message.DownLinkFormat&0x02 != 0 {
 		return UplinkELMAcknowledgement
@@ -31,7 +31,8 @@ func ReadControlELM(message common.MessageData) ControlELM {
 	return DownlinkELMTransmission
 }
 
-func (controlELM ControlELM) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (controlELM ControlELM) ToString() string {
 	switch controlELM {
 	case DownlinkELMTransmission:
 		return "0 - Downlink ELM Transmission"
@@ -42,6 +43,7 @@ func (controlELM ControlELM) PrettyPrint() string {
 	}
 }
 
-func (controlELM ControlELM) ExtendedPrettyPrint() string {
-	return controlELM.PrettyPrint()
+// ToExtendedString returns a complete representation of the field
+func (controlELM ControlELM) ToExtendedString() string {
+	return controlELM.ToString()
 }

@@ -35,13 +35,14 @@ const (
 	ControlFieldReserved ControlField = 7
 )
 
-// readControlField reads the CF field from a message
+// ReadControlField reads the CF field from a message
 func ReadControlField(message common.MessageData) ControlField {
 
 	return ControlField(message.FirstField)
 }
 
-func (controlField ControlField) PrettyPrint() string {
+// ToString returns a basic, but readable, representation of the field
+func (controlField ControlField) ToString() string {
 	switch controlField {
 	case ControlFieldADSB:
 		return "0 - ADSB"
@@ -64,7 +65,8 @@ func (controlField ControlField) PrettyPrint() string {
 	}
 }
 
-func (controlField ControlField) ExtendedPrettyPrint() string {
+// ToExtendedString returns a complete representation of the field
+func (controlField ControlField) ToExtendedString() string {
 	switch controlField {
 	case ControlFieldADSB:
 		return "0 - ADSB: ADS-B ES/NT devices that report the ICAO 24-bit address in the AA field"

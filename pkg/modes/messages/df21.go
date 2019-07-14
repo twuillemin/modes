@@ -21,10 +21,12 @@ type MessageDF21 struct {
 	MessageCommB    fields.MessageCommB
 }
 
+// GetName returns the name of the message
 func (message *MessageDF21) GetName() string {
 	return "Comm-B identify reply"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF21) GetDownLinkFormat() int {
 	return 21
 }
@@ -54,12 +56,13 @@ func ParseDF21(message common.MessageData) (*MessageDF21, error) {
 	}, nil
 }
 
-func (message *MessageDF21) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF21) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
-	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
-	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())
-	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.PrettyPrint())
-	fmt.Printf("Identity:         %v\n", message.Identity.PrettyPrint())
-	fmt.Printf("MessageCommB:     %v\n", message.MessageCommB.PrettyPrint())
+	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.ToString())
+	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.ToString())
+	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.ToString())
+	fmt.Printf("Identity:         %v\n", message.Identity.ToString())
+	fmt.Printf("MessageCommB:     %v\n", message.MessageCommB.ToString())
 }

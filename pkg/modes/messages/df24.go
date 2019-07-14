@@ -19,10 +19,12 @@ type MessageDF24 struct {
 	MessageCommD     fields.MessageCommD
 }
 
+// GetName returns the name of the message
 func (message *MessageDF24) GetName() string {
 	return "Comm-D (ELM)"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF24) GetDownLinkFormat() int {
 	return 24
 }
@@ -50,10 +52,11 @@ func ParseDF24(message common.MessageData) (*MessageDF24, error) {
 	}, nil
 }
 
-func (message *MessageDF24) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF24) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
-	fmt.Printf("ControlELM:        %v\n", message.ControlELM.PrettyPrint())
-	fmt.Printf("NumberOfDSegment:  %v\n", message.NumberOfDSegment.PrettyPrint())
-	fmt.Printf("MessageCommD:      %v\n", message.MessageCommD.PrettyPrint())
+	fmt.Printf("ControlELM:        %v\n", message.ControlELM.ToString())
+	fmt.Printf("NumberOfDSegment:  %v\n", message.NumberOfDSegment.ToString())
+	fmt.Printf("MessageCommD:      %v\n", message.MessageCommD.ToString())
 }

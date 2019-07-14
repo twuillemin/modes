@@ -21,10 +21,12 @@ type MessageDF0 struct {
 	AltitudeCode        fields.AltitudeCode
 }
 
+// GetName returns the name of the message
 func (message *MessageDF0) GetName() string {
 	return "Short air-air surveillance (ACAS)"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF0) GetDownLinkFormat() int {
 	return 0
 }
@@ -55,12 +57,13 @@ func ParseDF0(message common.MessageData) (*MessageDF0, error) {
 	}, nil
 }
 
-func (message *MessageDF0) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF0) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:     %v\n", message.GetDownLinkFormat())
-	fmt.Printf("VerticalStatus:      %v\n", message.VerticalStatus.PrettyPrint())
-	fmt.Printf("CrossLinkCapability: %v\n", message.CrossLinkCapability.PrettyPrint())
-	fmt.Printf("SensitivityLevel:    %v\n", message.SensitivityLevel.PrettyPrint())
-	fmt.Printf("ReplyInformation:    %v\n", message.ReplyInformation.PrettyPrint())
-	fmt.Printf("AltitudeCode:        %v\n", message.AltitudeCode.PrettyPrint())
+	fmt.Printf("VerticalStatus:      %v\n", message.VerticalStatus.ToString())
+	fmt.Printf("CrossLinkCapability: %v\n", message.CrossLinkCapability.ToString())
+	fmt.Printf("SensitivityLevel:    %v\n", message.SensitivityLevel.ToString())
+	fmt.Printf("ReplyInformation:    %v\n", message.ReplyInformation.ToString())
+	fmt.Printf("AltitudeCode:        %v\n", message.AltitudeCode.ToString())
 }

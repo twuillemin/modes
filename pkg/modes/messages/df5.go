@@ -20,10 +20,12 @@ type MessageDF5 struct {
 	Identity        fields.Identity
 }
 
+// GetName returns the name of the message
 func (message *MessageDF5) GetName() string {
 	return "Surveillance, identify reply"
 }
 
+// GetDownLinkFormat returns the downlink format of the message
 func (message *MessageDF5) GetDownLinkFormat() int {
 	return 5
 }
@@ -52,11 +54,12 @@ func ParseDF5(message common.MessageData) (*MessageDF5, error) {
 	}, nil
 }
 
-func (message *MessageDF5) PrettyPrint() {
+// ToString returns a basic, but readable, representation of the field
+func (message *MessageDF5) ToString() {
 	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
-	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
-	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())
-	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.PrettyPrint())
-	fmt.Printf("Identity:         %v\n", message.Identity.PrettyPrint())
+	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.ToString())
+	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.ToString())
+	fmt.Printf("UtilityMessage:   %v\n", message.UtilityMessage.ToString())
+	fmt.Printf("Identity:         %v\n", message.Identity.ToString())
 }
