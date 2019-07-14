@@ -22,7 +22,7 @@ type MessageDF20 struct {
 }
 
 func (message *MessageDF20) GetName() string {
-	return "Comm. B Altitude, IDENT Reply"
+	return "Comm-B altitude reply"
 }
 
 func (message *MessageDF20) GetDownLinkFormat() int {
@@ -55,7 +55,7 @@ func ParseDF20(message common.MessageData) (*MessageDF20, error) {
 }
 
 func (message *MessageDF20) PrettyPrint() {
-	fmt.Printf("MessageModeS: %v\n", message.GetName())
+	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
 	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
 	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())

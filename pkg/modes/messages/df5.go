@@ -21,7 +21,7 @@ type MessageDF5 struct {
 }
 
 func (message *MessageDF5) GetName() string {
-	return "Surveillance (roll call) IDENT Reply"
+	return "Surveillance, identify reply"
 }
 
 func (message *MessageDF5) GetDownLinkFormat() int {
@@ -53,7 +53,7 @@ func ParseDF5(message common.MessageData) (*MessageDF5, error) {
 }
 
 func (message *MessageDF5) PrettyPrint() {
-	fmt.Printf("MessageModeS: %v\n", message.GetName())
+	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:  %v\n", message.GetDownLinkFormat())
 	fmt.Printf("FlightStatus:     %v\n", message.FlightStatus.PrettyPrint())
 	fmt.Printf("DownlinkRequest:  %v\n", message.DownlinkRequest.PrettyPrint())

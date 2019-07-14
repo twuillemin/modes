@@ -19,7 +19,7 @@ type MessageDF11 struct {
 }
 
 func (message *MessageDF11) GetName() string {
-	return "Mode S Only All-Call Reply (Acq. Squitter if II=0)"
+	return "All-call reply"
 }
 
 func (message *MessageDF11) GetDownLinkFormat() int {
@@ -49,7 +49,7 @@ func ParseDF11(message common.MessageData) (*MessageDF11, error) {
 }
 
 func (message *MessageDF11) PrettyPrint() {
-	fmt.Printf("MessageModeS: %v\n", message.GetName())
+	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
 	fmt.Printf("Capability:        %v\n", message.Capability.PrettyPrint())
 	fmt.Printf("AddressAnnounced:  %v\n", message.AddressAnnounced.PrettyPrint())

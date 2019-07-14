@@ -40,18 +40,35 @@ func main() {
 	*/
 
 	for _, str := range dummyData() {
+
+		fmt.Printf("Reading: %s\n", str)
+
+		// Read the line
 		spymsg, err := adsbspy.ReadLine(str)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
-		modesmsg, icao, err := reader.ReadMessage(spymsg.Message, false)
+
+		// Convert to a message if possible
+		modesmsg, err := reader.ReadMessage(spymsg.Message)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		fmt.Printf("From %X %X %X:\n", icao[0], icao[1], icao[2])
+		// Check the CRC and get the Address or the Interrogator Identifier
+		address, err := reader.CheckCRC(modesmsg, spymsg.Message, nil, nil)
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+
+		if modesmsg.GetDownLinkFormat() == 11 {
+			fmt.Printf("In reply to interrogator: %v:\n", address.ToString())
+		} else {
+			fmt.Printf("From: %v:\n", address.ToString())
+		}
 		modesmsg.PrettyPrint()
 		fmt.Println()
 	}

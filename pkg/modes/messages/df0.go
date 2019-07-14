@@ -22,7 +22,7 @@ type MessageDF0 struct {
 }
 
 func (message *MessageDF0) GetName() string {
-	return "Short Air to Air ACAS"
+	return "Short air-air surveillance (ACAS)"
 }
 
 func (message *MessageDF0) GetDownLinkFormat() int {
@@ -56,7 +56,7 @@ func ParseDF0(message common.MessageData) (*MessageDF0, error) {
 }
 
 func (message *MessageDF0) PrettyPrint() {
-	fmt.Printf("MessageModeS: %v\n", message.GetName())
+	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:     %v\n", message.GetDownLinkFormat())
 	fmt.Printf("VerticalStatus:      %v\n", message.VerticalStatus.PrettyPrint())
 	fmt.Printf("CrossLinkCapability: %v\n", message.CrossLinkCapability.PrettyPrint())

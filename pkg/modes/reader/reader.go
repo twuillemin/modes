@@ -7,18 +7,16 @@ import (
 	"github.com/twuillemin/modes/pkg/modes/messages"
 )
 
-// ReadMessage reads and parse a Mode S message
+// ReadMessage reads and parse a Mode S message. The CRC is not verified at this point.
 //
 // params:
 //    - message: The body of the message. The message must be 7 or 14 bytes long
-//    - noCRC: indicates whether the CRC has been already subtracted from the parity field. In this case
-//             the parity part of the the message is directly the ICAO 24 address
 //
-// Return the parsed message and its ICAO address (on 3 bytes) or an error
-func ReadMessage(message []byte, noCRC bool) (messages.MessageModeS, []byte, error) {
+// Return the parsed message or an error
+func ReadMessage(message []byte) (messages.Message, error) {
 
 	if len(message) != 7 && len(message) != 14 {
-		return nil, nil, errors.New("a Mode S message must be 7 or 14 bytes long")
+		return nil, errors.New("a Mode S message must be 7 or 14 bytes long")
 	}
 
 	messageData := common.MessageData{
@@ -28,7 +26,7 @@ func ReadMessage(message []byte, noCRC bool) (messages.MessageModeS, []byte, err
 		Parity:         message[len(message)-3:],
 	}
 
-	var modeS messages.MessageModeS
+	var modeS messages.Message
 	var err error
 
 	// Extract the content of the message
@@ -53,41 +51,17 @@ func ReadMessage(message []byte, noCRC bool) (messages.MessageModeS, []byte, err
 		modeS, err = messages.ParseDF20(messageData)
 	case 21:
 		modeS, err = messages.ParseDF21(messageData)
-	case 24:
+	case 24, 25, 26, 27, 28, 29, 30, 31:
+		// For DF24, only the first two bits of the generally used 5 bits
+		// are possible. So use all combinations 24->31
 		modeS, err = messages.ParseDF24(messageData)
 	default:
 		err = fmt.Errorf("the downlink format %v is not supported", messageData.DownLinkFormat)
 	}
 
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	var icao24 []byte
-
-	// For DF11 and DF17, special case
-	if messageData.DownLinkFormat == 11 || messageData.DownLinkFormat == 17 {
-		icao24 = []byte{
-			messageData.Payload[0],
-			messageData.Payload[1],
-			messageData.Payload[2],
-		}
-	} else {
-		// If the CRC was already removed
-		if noCRC {
-			// Use directly the parity
-			icao24 = []byte{
-				messageData.Parity[0],
-				messageData.Parity[1],
-				messageData.Parity[2],
-			}
-		} else {
-
-			// Compute parity on the whole message, except the 3 last bytes
-			parity := computeParity(message[:len(message)-3])
-			icao24 = xorArrays(parity, messageData.Parity)
-		}
-	}
-
-	return modeS, icao24, nil
+	return modeS, nil
 }

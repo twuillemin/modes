@@ -1,5 +1,106 @@
 package reader
 
+import (
+	"fmt"
+	"github.com/twuillemin/modes/pkg/modes/messages"
+)
+
+// CheckCRC checks that the CRC of a message is valid and/or return the ICAO address / Interrogator Identifier of the
+// message. As the message parity is a XOR of the CRC and the Address or Interrogator Identifier (except for DF17 and
+// DF18), it is not possible to ensure that a message is correct without previously known valid Address or Interrogator
+// Identifier. Only the messages DF18 and DF17 always give a valid Address.
+//
+// Params:
+//    - message: The message to check
+//    - data: The raw data of the message
+//    - allowedAddresses: For the messages that have uncertainty when computing the Address, allows to reject the
+//                        messages having an unknown Address. Leave to nil to ignore.
+//    - allowedInterrogatorIdentifiers: For the messages that have uncertainty when computing Interrogator Identifiers,
+//                                      allows to reject the messages having an unknown Interrogator Identifier.
+//
+// Notes:
+//    - the allowedAddresses is not used for messages DF17 and DF18 are always giving a valid address.
+//
+// Returns the ICAO Interrogator Identifiers for messages DF11 and Address for all other.
+func CheckCRC(
+	message messages.Message,
+	data []byte,
+	allowedAddresses map[ICAOAddress]bool,
+	allowedInterrogatorIdentifiers map[ICAOAddress]bool) (ICAOAddress, error) {
+
+	switch message.GetDownLinkFormat() {
+	case 11:
+		return checkCRCDF11(data, allowedInterrogatorIdentifiers)
+	case 17, 18:
+		return checkCRCDF17And18(data)
+	default:
+		return checkCRCOther(data, allowedAddresses)
+	}
+}
+
+func checkCRCDF11(
+	data []byte,
+	allowedInterrogatorIdentifiers map[ICAOAddress]bool) (ICAOAddress, error) {
+
+	// For DF11, the ICAO code is not returned (as it is the base of the message). Instead the interrogator id (II)
+	// is used to XOR the parity. So, an interrogator can detect if a message is a reply to its interrogation.
+	contentParity := computeParity(data[:4])
+	messageParity := uint32(data[4])<<16 + uint32(data[5])<<8 + uint32(data[6])
+
+	interrogatorIdentifier := ICAOAddress(contentParity ^ messageParity)
+
+	// If the interrogator is not valid
+	if len(allowedInterrogatorIdentifiers) > 0 {
+		if _, ok := allowedInterrogatorIdentifiers[interrogatorIdentifier]; !ok {
+			return 0, fmt.Errorf("the message parity resolves to an unknown Interrogator Identifier")
+		}
+	}
+
+	return interrogatorIdentifier, nil
+}
+
+func checkCRCDF17And18(
+	data []byte) (ICAOAddress, error) {
+
+	// For DF17 and DF18 (extended squitter), the ICAO address is returned as the first 3 bytes of the payload.
+	messageICAO := ICAOAddress(uint32(data[1])<<16 + uint32(data[2])<<8 + uint32(data[3]))
+
+	// The parity is XORed against an an Interrogator Id equals to 0
+	contentParity := computeParity(data[:11])
+	messageParity := uint32(data[11])<<16 + uint32(data[12])<<8 + uint32(data[13])
+
+	if contentParity != messageParity {
+		return 0, fmt.Errorf("the message does not have a valid CRC")
+	}
+
+	return messageICAO, nil
+}
+
+func checkCRCOther(
+	data []byte,
+	allowedAddresses map[ICAOAddress]bool) (ICAOAddress, error) {
+
+	messageLength := len(data)
+
+	// Compute parity on the whole message, except the 3 last bytes
+	contentParity := computeParity(data[:messageLength-3])
+
+	messageParity := uint32(data[messageLength-3])<<16 +
+		uint32(data[messageLength-2])<<8 +
+		uint32(data[messageLength-1])
+
+	address := ICAOAddress(contentParity ^ messageParity)
+
+	// If the address is not valid
+	if len(allowedAddresses) > 0 {
+		if _, ok := allowedAddresses[address]; !ok {
+			return 0, fmt.Errorf("the message parity resolves to an unknown Address")
+		}
+	}
+
+	return address, nil
+}
+
 // 	crcPolynomial is the polynomial for the CRC redundancy check
 //  Note: we assume that the degree of the polynomial is divisible by 8 (holds for Mode S) and the msb is left out
 //
@@ -13,7 +114,7 @@ var crcPolynomial = []uint8{0xFF, 0xF4, 0x09}
 //    - data: The data for which to compute parity
 //
 // Returns the CRC (3 bytes)
-func computeParity(data []byte) []byte {
+func computeParity(data []byte) uint32 {
 
 	crcLength := len(crcPolynomial)
 
@@ -51,31 +152,5 @@ func computeParity(data []byte) []byte {
 		}
 	}
 
-	return crc
-
-}
-
-// xor applies a xor operation between two arrays. If the size of the two array is different, the operation is only
-// using the smallest size
-//
-// params:
-//    - array1: The first array
-//    - array2: The second array
-//
-// Return the result of the xor
-func xorArrays(array1 []uint8, array2 []uint8) []uint8 {
-
-	// Get the smallest size
-	size := len(array1)
-	if sizeArray2 := len(array2); sizeArray2 < size {
-		size = sizeArray2
-	}
-
-	result := make([]uint8, size)
-
-	for i := 0; i < size; i++ {
-		result[i] = array1[i] ^ array2[i]
-	}
-
-	return result
+	return uint32(crc[0])<<16 + uint32(crc[1])<<8 + uint32(crc[2])
 }

@@ -22,7 +22,7 @@ type MessageDF16 struct {
 }
 
 func (message *MessageDF16) GetName() string {
-	return "Long Air to Air ACAS"
+	return "Long air-air surveillance (ACAS)"
 }
 
 func (message *MessageDF16) GetDownLinkFormat() int {
@@ -55,7 +55,7 @@ func ParseDF16(message common.MessageData) (*MessageDF16, error) {
 }
 
 func (message *MessageDF16) PrettyPrint() {
-	fmt.Printf("MessageModeS: %v\n", message.GetName())
+	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
 	fmt.Printf("VerticalStatus:    %v\n", message.VerticalStatus.PrettyPrint())
 	fmt.Printf("SensitivityLevel:  %v\n", message.SensitivityLevel.PrettyPrint())

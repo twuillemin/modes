@@ -1,6 +1,6 @@
 package messages
 
-type MessageModeS interface {
+type Message interface {
 	GetName() string
 	GetDownLinkFormat() int
 	PrettyPrint()

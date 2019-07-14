@@ -20,7 +20,7 @@ type MessageDF24 struct {
 }
 
 func (message *MessageDF24) GetName() string {
-	return "Comm. D Extended Length MessageModeS (ELM)"
+	return "Comm-D (ELM)"
 }
 
 func (message *MessageDF24) GetDownLinkFormat() int {
@@ -33,7 +33,7 @@ func ParseDF24(message common.MessageData) (*MessageDF24, error) {
 	// Format of the message is as follow:
 	//
 	//  DF _ KE   ND   |  Comm-B |   AP
-	// 1 0 _ k n n n n | 80 bits | 24bits
+	// 1 1 _ k n n n n | 80 bits | 24bits
 
 	if message.DownLinkFormat&0x18 == 0x18 {
 		return nil, errors.New("DF24 message must have a DownLinkFormat of 24")
@@ -51,7 +51,7 @@ func ParseDF24(message common.MessageData) (*MessageDF24, error) {
 }
 
 func (message *MessageDF24) PrettyPrint() {
-	fmt.Printf("MessageModeS: %v\n", message.GetName())
+	fmt.Printf("Message: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
 	fmt.Printf("ControlELM:        %v\n", message.ControlELM.PrettyPrint())
 	fmt.Printf("NumberOfDSegment:  %v\n", message.NumberOfDSegment.PrettyPrint())
