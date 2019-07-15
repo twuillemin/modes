@@ -44,9 +44,9 @@ func (messageACAS ACASUnknown) GetVDS2() byte {
 
 // ToString returns a basic, but readable, representation of the field
 func (messageACAS ACASUnknown) ToString() string {
-	return fmt.Sprintf("  VDS 1:   %X\n"+
-		"  VDS 2:   %X\n"+
-		"  Content: %v",
+	return fmt.Sprintf("VDS 1:   %X\n"+
+		"VDS 2:   %X\n"+
+		"Content: %v",
 		messageACAS.VDS1,
 		messageACAS.VDS2,
 		messageACAS.Data)

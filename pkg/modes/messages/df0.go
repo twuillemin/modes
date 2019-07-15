@@ -59,15 +59,14 @@ func ParseDF0(message common.MessageData) (*MessageDF0, error) {
 
 // ToString returns a basic, but readable, representation of the field
 func (message *MessageDF0) ToString() string {
-	return fmt.Sprintf("ModeSMessage: %v\n"+
-		"Downlink format:     %v\n"+
+	return fmt.Sprintf("Downlink format:     %v - %v\n"+
 		"VerticalStatus:      %v\n"+
 		"CrossLinkCapability: %v\n"+
 		"SensitivityLevel:    %v\n"+
 		"ReplyInformation:    %v\n"+
 		"AltitudeCode:        %v",
-		message.GetName(),
 		message.GetDownLinkFormat(),
+		message.GetName(),
 		message.VerticalStatus.ToString(),
 		message.CrossLinkCapability.ToString(),
 		message.SensitivityLevel.ToString(),

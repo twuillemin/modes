@@ -56,14 +56,13 @@ func ParseDF4(message common.MessageData) (*MessageDF4, error) {
 
 // ToString returns a basic, but readable, representation of the field
 func (message *MessageDF4) ToString() string {
-	return fmt.Sprintf("ModeSMessage: %v\n"+
-		"Downlink format:  %v\n"+
+	return fmt.Sprintf("Downlink format:  %v - %v\n"+
 		"FlightStatus:     %v\n"+
 		"DownlinkRequest:  %v\n"+
 		"UtilityMessage:   %v\n"+
 		"AltitudeCode:     %v",
-		message.GetName(),
 		message.GetDownLinkFormat(),
+		message.GetName(),
 		message.FlightStatus.ToString(),
 		message.DownlinkRequest.ToString(),
 		message.UtilityMessage.ToString(),

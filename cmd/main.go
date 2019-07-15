@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	acasReader "github.com/twuillemin/modes/pkg/acas/reader"
+	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
 	"github.com/twuillemin/modes/pkg/adsbspy"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
 	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
@@ -67,10 +68,11 @@ func main() {
 		}
 
 		// For message 11 (Reply to all call) the address is the address of the caller
+		fmt.Printf(" -- Mode-S Information --\n")
 		if messageModeS.GetDownLinkFormat() == 11 {
-			fmt.Printf("In reply to interrogator: %v:\n", address.ToString())
+			fmt.Printf("In reply to interrogator: %v\n", address.ToString())
 		} else {
-			fmt.Printf("From: %v:\n", address.ToString())
+			fmt.Printf("From: %v\n", address.ToString())
 		}
 
 		// Print the content of the mode S message
@@ -80,15 +82,38 @@ func main() {
 		switch messageModeS.GetDownLinkFormat() {
 		case 16:
 
-			fmt.Printf("ACAS Information:\n")
 			// Convert to a message if possible
 			messageDF16 := messageModeS.(*modeSMessages.MessageDF16)
-			messageACAS, err := acasReader.ReadMessage(messageDF16.MessageACAS)
-			if err != nil {
+			messageACAS, errACAS := acasReader.ReadMessage(messageDF16.MessageACAS)
+			if errACAS != nil {
 				fmt.Println(err)
 				continue
 			}
+
+			fmt.Printf(" -- ACAS Information --\n")
 			fmt.Printf("%v\n", messageACAS.ToString())
+
+		case 17, 18:
+			// Get the squitter data
+			var squitter []byte
+			if messageModeS.GetDownLinkFormat() == 17 {
+				messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
+				squitter = messageDF17.MessageExtendedSquitter.Data
+			} else {
+				messageDF18 := messageModeS.(*modeSMessages.MessageDF18)
+				squitter = messageDF18.MessageExtendedSquitter.Data
+			}
+
+			// Get the content
+			messageADSB, errADSB := adsbReader.ReadMessage(squitter)
+			if errADSB != nil {
+				fmt.Println(err)
+				continue
+			}
+			if messageADSB != nil {
+				fmt.Printf(" -- ADSB Information --\n")
+				fmt.Printf("%v\n", messageADSB.ToString())
+			}
 		}
 
 		fmt.Printf("\n")
