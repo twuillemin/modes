@@ -54,13 +54,13 @@ func ParseDF24(message common.MessageData) (*MessageDF24, error) {
 
 // ToString returns a basic, but readable, representation of the field
 func (message *MessageDF24) ToString() string {
-	fmt.Printf("Message: %v\n", message.GetName())
+	fmt.Printf("ModeSMessage: %v\n", message.GetName())
 	fmt.Printf("Downlink format:   %v\n", message.GetDownLinkFormat())
 	fmt.Printf("ControlELM:        %v\n", message.ControlELM.ToString())
 	fmt.Printf("NumberOfDSegment:  %v\n", message.NumberOfDSegment.ToString())
 	fmt.Printf("MessageCommD:      %v\n", message.MessageCommD.ToString())
 
-	return fmt.Sprintf("Message: %v\n"+
+	return fmt.Sprintf("ModeSMessage: %v\n"+
 		"Downlink format:  %v\n"+
 		"ControlELM:       %v\n"+
 		"NumberOfDSegment: %v\n"+

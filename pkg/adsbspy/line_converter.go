@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-// Message is the decomposed parts of a line of data coming from ADSBSpy
-type Message struct {
+// ADSBSpyMessage is the decomposed parts of a line of data coming from ADSBSpy
+type ADSBSpyMessage struct {
 	Message          []uint8
 	Timestamp        uint32
 	TimingResolution uint8
@@ -21,7 +21,7 @@ type Message struct {
 //    - line: The line to parse
 //
 // Returns the line parts or an error
-func ReadLine(line string) (*Message, error) {
+func ReadLine(line string) (*ADSBSpyMessage, error) {
 
 	if len(line) == 0 {
 		return nil, errors.New("line is empty")
@@ -61,7 +61,7 @@ func ReadLine(line string) (*Message, error) {
 
 	rssi := uint16(decodedPart3[0])<<8 + uint16(decodedPart3[1])
 
-	return &Message{
+	return &ADSBSpyMessage{
 		Message:          decodedPart0,
 		Timestamp:        timestamp,
 		TimingResolution: decodedPart2[0],

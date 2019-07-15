@@ -1,0 +1,23 @@
+package fields
+
+// RAType defines the type of the Resolution Advisory
+type RAType int
+
+const (
+	// OneThreatOrSameSeparation indicates that the Resolution Advisory is for single threat or multiple threats with
+	// the same separation
+	OneThreatOrSameSeparation RAType = 0
+	// MultipleThreatDifferentSeparation indicates that the Resolution Advisory is for multiple threats with
+	// different separation
+	MultipleThreatDifferentSeparation RAType = 1
+	// NoVerticalRAGenerated indicates that no Resolution Advisory was generated
+	NoVerticalRAGenerated RAType = 2
+)
+
+// ActiveResolutionAdvisory is the base type that all Resolution Advisory should implement
+type ActiveResolutionAdvisory interface {
+	// GetType returns the type of Resolution Advisory
+	GetType() RAType
+	// ToString returns a basic, but readable, representation of the field
+	ToString() string
+}

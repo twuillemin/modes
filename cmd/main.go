@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	acasReader "github.com/twuillemin/modes/pkg/acas/reader"
 	"github.com/twuillemin/modes/pkg/adsbspy"
-	"github.com/twuillemin/modes/pkg/modes/reader"
+	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
+	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
 )
 
 func main() {
@@ -18,7 +20,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Can't serialize due to %v", err)
 		}
-		fmt.Printf("Message 1: %v\n", string(bytes1))
+		fmt.Printf("ADSBSpyMessage 1: %v\n", string(bytes1))
 
 		msg2 := []uint8{0x5F, 0x46, 0x90, 0xF9, 0x76, 0xF4, 0xE9}
 
@@ -30,7 +32,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Can't serialize due to %v", err)
 		}
-		fmt.Printf("Message 2: %v\n", string(bytes2))
+		fmt.Printf("ADSBSpyMessage 2: %v\n", string(bytes2))
 
 		fmt.Println()
 		message1.ToString()
@@ -44,32 +46,52 @@ func main() {
 		fmt.Printf("Reading: %s\n", str)
 
 		// Read the line
-		spymsg, err := adsbspy.ReadLine(str)
+		messageADSBSpy, err := adsbspy.ReadLine(str)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
 		// Convert to a message if possible
-		modesmsg, err := reader.ReadMessage(spymsg.Message)
+		messageModeS, err := modeSReader.ReadMessage(messageADSBSpy.Message)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
 		// Check the CRC and get the Address or the Interrogator Identifier
-		address, err := reader.CheckCRC(modesmsg, spymsg.Message, nil, nil)
+		address, err := modeSReader.CheckCRC(messageModeS, messageADSBSpy.Message, nil, nil)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		if modesmsg.GetDownLinkFormat() == 11 {
+		// For message 11 (Reply to all call) the address is the address of the caller
+		if messageModeS.GetDownLinkFormat() == 11 {
 			fmt.Printf("In reply to interrogator: %v:\n", address.ToString())
 		} else {
 			fmt.Printf("From: %v:\n", address.ToString())
 		}
-		fmt.Printf("%v\n\n", modesmsg.ToString())
+
+		// Print the content of the mode S message
+		fmt.Printf("%v\n", messageModeS.ToString())
+
+		// For message with additional content
+		switch messageModeS.GetDownLinkFormat() {
+		case 16:
+
+			fmt.Printf("ACAS Information:\n")
+			// Convert to a message if possible
+			messageDF16 := messageModeS.(*modeSMessages.MessageDF16)
+			messageACAS, err := acasReader.ReadMessage(messageDF16.MessageACAS)
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			fmt.Printf("%v\n", messageACAS.ToString())
+		}
+
+		fmt.Printf("\n")
 	}
 }
 

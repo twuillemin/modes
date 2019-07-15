@@ -54,7 +54,7 @@ func ParseDF18(message common.MessageData) (*MessageDF18, error) {
 
 // ToString returns a basic, but readable, representation of the field
 func (message *MessageDF18) ToString() string {
-	return fmt.Sprintf("Message: %v\n"+
+	return fmt.Sprintf("ModeSMessage: %v\n"+
 		"Downlink format:         %v\n"+
 		"ControlField:            %v\n"+
 		"AddressAnnounced:        %v\n"+

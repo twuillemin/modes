@@ -1,7 +1,7 @@
 package messages
 
-// Message is the basic interface that Mode S messages are expected to implement
-type Message interface {
+// ModeSMessage is the basic interface that Mode S messages are expected to implement
+type ModeSMessage interface {
 	// GetName returns the name of the message
 	GetName() string
 	// GetDownLinkFormat returns the downlink format of the message

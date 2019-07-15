@@ -13,7 +13,7 @@ import (
 //    - message: The body of the message. The message must be 7 or 14 bytes long
 //
 // Return the parsed message or an error
-func ReadMessage(message []byte) (messages.Message, error) {
+func ReadMessage(message []byte) (messages.ModeSMessage, error) {
 
 	if len(message) != 7 && len(message) != 14 {
 		return nil, errors.New("a Mode S message must be 7 or 14 bytes long")
@@ -26,7 +26,7 @@ func ReadMessage(message []byte) (messages.Message, error) {
 		Parity:         message[len(message)-3:],
 	}
 
-	var modeS messages.Message
+	var modeS messages.ModeSMessage
 	var err error
 
 	// Extract the content of the message

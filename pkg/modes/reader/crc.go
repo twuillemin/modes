@@ -23,7 +23,7 @@ import (
 //
 // Returns the ICAO Interrogator Identifiers for messages DF11 and Address for all other.
 func CheckCRC(
-	message messages.Message,
+	message messages.ModeSMessage,
 	data []byte,
 	allowedAddresses map[ICAOAddress]bool,
 	allowedInterrogatorIdentifiers map[ICAOAddress]bool) (ICAOAddress, error) {
