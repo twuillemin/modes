@@ -2,6 +2,7 @@ package fields
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bitutils"
 	"github.com/twuillemin/modes/pkg/modes/common"
 )
 
@@ -96,7 +97,6 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	}
 
 	// Otherwise, altitude is reported in 100 foot increment
-
 	// The altitude shall be coded according to the pattern for Mode C replies of 3.1.1.7.12.2.3.
 	// Starting with bit 20 the sequence shall be C1, A1, C2, A2, C4, A4, ZERO, B1, ZERO, B2, D2, B4, D4.
 	c1 := (altitudeCode & 0x1000) != 0
@@ -111,9 +111,9 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	b4 := (altitudeCode & 0x0002) != 0
 	d4 := (altitudeCode & 0x0001) != 0
 
-	increment500 := grayToBinary(d2, d4, a1, a2, a4, b1, b2, b4)
+	increment500 := bitutils.GrayToBinary(d2, d4, a1, a2, a4, b1, b2, b4)
 	// subIncrement is given from 1 to 5 (so there is always one bit in c1,c2,c4), but it is from 0 to 4
-	subIncrement := grayToBinary(false, false, false, false, false, c1, c2, c4)
+	subIncrement := bitutils.GrayToBinary(false, false, false, false, false, c1, c2, c4)
 	increment100 := subIncrement - 1
 	// And increment is reversed alternatively
 	if increment500%2 != 0 {

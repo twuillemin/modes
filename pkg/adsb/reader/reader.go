@@ -5,10 +5,10 @@ import (
 	"github.com/twuillemin/modes/pkg/adsb/messages"
 )
 
-// ReadMessage reads and parse a Mode S message. The CRC is not verified at this point.
+// ReadMessage reads and parse an ADSB message.
 //
 // params:
-//    - message: The body of the message. The message must be 7 or 14 bytes long
+//    - message: The body of the message. The message must be 7 bytes long
 //
 // Return the parsed message or an error
 func ReadMessage(data []byte) (messages.ADSBMessage, error) {
@@ -23,6 +23,8 @@ func ReadMessage(data []byte) (messages.ADSBMessage, error) {
 	switch formatTypeCode {
 	case 1, 2, 3, 4:
 		return messages.ReadBDS08(data)
+	case 9, 10, 11, 12, 13, 14, 15, 16, 17, 18:
+		return messages.ReadBDS05(data)
 	}
 
 	return nil, nil
