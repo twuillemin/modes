@@ -17,7 +17,7 @@ func ReadMessage(message []byte) (messages.ACASMessage, error) {
 		return nil, errors.New("unable to parse an empty message")
 	}
 
-	vds1 := message[0] >> 4
+	vds1 := (message[0] & 0xF0) >> 4
 	vds2 := message[0] & 0x0F
 
 	if vds1 == 3 && vds2 == 0 {

@@ -2,6 +2,7 @@ package reader
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bitutils"
 	"github.com/twuillemin/modes/pkg/modes/messages"
 )
 
@@ -45,7 +46,7 @@ func checkCRCDF11(
 	// For DF11, the ICAO code is not returned (as it is the base of the message). Instead the interrogator id (II)
 	// is used to XOR the parity. So, an interrogator can detect if a message is a reply to its interrogation.
 	contentParity := computeParity(data[:4])
-	messageParity := uint32(data[4])<<16 + uint32(data[5])<<8 + uint32(data[6])
+	messageParity := bitutils.Pack3Bytes(data[4], data[5], data[6])
 
 	interrogatorIdentifier := ICAOAddress(contentParity ^ messageParity)
 
@@ -59,15 +60,14 @@ func checkCRCDF11(
 	return interrogatorIdentifier, nil
 }
 
-func checkCRCDF17And18(
-	data []byte) (ICAOAddress, error) {
+func checkCRCDF17And18(data []byte) (ICAOAddress, error) {
 
 	// For DF17 and DF18 (extended squitter), the ICAO address is returned as the first 3 bytes of the payload.
-	messageICAO := ICAOAddress(uint32(data[1])<<16 + uint32(data[2])<<8 + uint32(data[3]))
+	messageICAO := ICAOAddress(bitutils.Pack3Bytes(data[1], data[2], data[3]))
 
 	// The parity is XORed against an an Interrogator Id equals to 0
 	contentParity := computeParity(data[:11])
-	messageParity := uint32(data[11])<<16 + uint32(data[12])<<8 + uint32(data[13])
+	messageParity := bitutils.Pack3Bytes(data[11], data[12], data[13])
 
 	if contentParity != messageParity {
 		return 0, fmt.Errorf("the message does not have a valid CRC")
@@ -84,10 +84,7 @@ func checkCRCOther(
 
 	// Compute parity on the whole message, except the 3 last bytes
 	contentParity := computeParity(data[:messageLength-3])
-
-	messageParity := uint32(data[messageLength-3])<<16 +
-		uint32(data[messageLength-2])<<8 +
-		uint32(data[messageLength-1])
+	messageParity := bitutils.Pack3Bytes(data[messageLength-3], data[messageLength-2], data[messageLength-1])
 
 	address := ICAOAddress(contentParity ^ messageParity)
 
@@ -152,5 +149,5 @@ func computeParity(data []byte) uint32 {
 		}
 	}
 
-	return uint32(crc[0])<<16 + uint32(crc[1])<<8 + uint32(crc[2])
+	return bitutils.Pack3Bytes(crc[0], crc[1], crc[2])
 }

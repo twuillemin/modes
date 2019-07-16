@@ -20,7 +20,7 @@ func ReadMessage(message []byte) (messages.ModeSMessage, error) {
 	}
 
 	messageData := common.MessageData{
-		DownLinkFormat: message[0] >> 3,
+		DownLinkFormat: (message[0] & 0xF8) >> 3,
 		FirstField:     message[0] & 0x07,
 		Payload:        message[1 : len(message)-3],
 		Parity:         message[len(message)-3:],

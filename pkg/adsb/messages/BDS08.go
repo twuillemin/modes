@@ -44,7 +44,7 @@ func (message *MessageBDS08) ToString() string {
 // ReadBDS08 reads a message at the format BDS 0,8
 func ReadBDS08(data []byte) (*MessageBDS08, error) {
 
-	formatTypeCode := data[0] >> 3
+	formatTypeCode := (data[0] & 0xF8) >> 3
 
 	var category fields.AircraftCategory
 

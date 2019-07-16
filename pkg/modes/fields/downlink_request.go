@@ -86,7 +86,7 @@ const (
 // ReadDownlinkRequest reads the DR field from a message
 func ReadDownlinkRequest(message common.MessageData) DownlinkRequest {
 
-	return DownlinkRequest(message.Payload[0] >> 3)
+	return DownlinkRequest((message.Payload[0] & 0xF8) >> 3)
 }
 
 // ToString returns a basic, but readable, representation of the field

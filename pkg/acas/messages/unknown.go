@@ -17,7 +17,7 @@ type ACASUnknown struct {
 // Returns an ACASUnknown message
 func ReadMessageACASUnknown(message []byte) ACASMessage {
 
-	vds1 := message[0] >> 4
+	vds1 := (message[0] & 0xF0) >> 4
 	vds2 := message[0] & 0x0F
 
 	return ACASUnknown{

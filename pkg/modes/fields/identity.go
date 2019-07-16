@@ -2,6 +2,7 @@ package fields
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bitutils"
 	"github.com/twuillemin/modes/pkg/modes/common"
 )
 
@@ -51,7 +52,7 @@ func ReadIdentity(message common.MessageData) Identity {
 	// id bits     |_  _  _  C1 A1 C2 A2 C4|A4 0  B1 D1  B2 D2 B4 D4
 
 	// Get the raw identity code
-	identity := (uint16(message.Payload[1])<<8 | uint16(message.Payload[2])) & 0x1fff
+	identity := bitutils.Pack2Bytes(message.Payload[1]&0x1f, message.Payload[2])
 
 	// Starting with bit 20 the sequence shall be C1, A1, C2, A2, C4, A4, ZERO, B1, D1, B2, D2, B4, D4.
 	c1 := (identity & 0x1000) >> 12

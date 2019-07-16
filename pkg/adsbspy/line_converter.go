@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bitutils"
 	"strings"
 )
 
@@ -57,9 +58,9 @@ func ReadLine(line string) (*ADSBSpyMessage, error) {
 		return nil, fmt.Errorf("unable to read fourth part of the line due to: %v", err)
 	}
 
-	timestamp := uint32(decodedPart1[0])<<24 + uint32(decodedPart1[1])<<16 + uint32(decodedPart1[2])<<8 + uint32(decodedPart1[3])
+	timestamp := bitutils.Pack4Bytes(decodedPart1[0], decodedPart1[1], decodedPart1[2], decodedPart1[3])
 
-	rssi := uint16(decodedPart3[0])<<8 + uint16(decodedPart3[1])
+	rssi := bitutils.Pack2Bytes(decodedPart3[0], decodedPart3[1])
 
 	return &ADSBSpyMessage{
 		Message:          decodedPart0,

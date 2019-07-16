@@ -51,7 +51,7 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	// 100 foot    |_  _  _  C1 A1 C2 A2 C4|A4 0  B1 0  B2 D2 B4 D4
 
 	// Get the raw altitude code
-	altitudeCode := (uint16(message.Payload[1])<<8 | uint16(message.Payload[2])) & 0x1fff
+	altitudeCode := uint16(message.Payload[1]&0x1f)<<8 + uint16(message.Payload[2])
 
 	if altitudeCode == 0 {
 		return AltitudeCode{

@@ -2,6 +2,7 @@ package fields
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bitutils"
 	"github.com/twuillemin/modes/pkg/modes/common"
 )
 
@@ -23,7 +24,7 @@ type AddressAnnounced struct {
 func ReadAddressAnnounced(message common.MessageData) AddressAnnounced {
 
 	return AddressAnnounced{
-		Address: uint32(message.Payload[0])<<16 | uint32(message.Payload[1])<<8 | uint32(message.Payload[2]),
+		Address: bitutils.Pack3Bytes(message.Payload[0], message.Payload[0], message.Payload[2]),
 	}
 }
 

@@ -32,11 +32,20 @@ func ReadMessageACAS30(message []byte) ACASMessage {
 	// 0 0 1 1 0 0 0 0 | a a a a a a a a | a a a a a a c c | c c t m _ _ _ _ | 18 bits  |
 
 	// Extract the raw values
-	vds1 := message[0] >> 4
+	vds1 := (message[0] & 0xF0) >> 4
 	vds2 := message[0] & 0x0F
-	ara := uint16(message[1])<<6 + uint16(message[2])>>2
-	rac := (message[2]&0x03)<<2 + (message[3])>>6
+
+	ara1 := (message[1] & 0xFC) >> 2
+	ara2 := (message[1] & 0x03) << 6
+	ara3 := (message[2] & 0xFC) >> 2
+	ara := uint16(ara1)<<8 + uint16(ara2) + uint16(ara3)
+
+	rac1 := (message[2] & 0x03) << 2
+	rac2 := (message[3] & 0xC0) >> 6
+	rac := rac1 + rac2
+
 	rat := (message[3] & 0x20) >> 5
+
 	mte := (message[3] & 0x10) >> 4
 
 	araFirstBit := (message[1] & 0x80) >> 7

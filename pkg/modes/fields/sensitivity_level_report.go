@@ -40,7 +40,7 @@ const (
 func ReadSensitivityLevelReport(message common.MessageData) SensitivityLevelReport {
 
 	// The 3 first bits of the message
-	sensitivity := message.Payload[0] >> 5
+	sensitivity := (message.Payload[0] & 0xE0) >> 5
 
 	return SensitivityLevelReport(sensitivity)
 }

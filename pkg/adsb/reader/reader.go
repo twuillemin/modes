@@ -18,7 +18,7 @@ func ReadMessage(data []byte) (messages.ADSBMessage, error) {
 	}
 
 	// Get the type
-	formatTypeCode := data[0] >> 3
+	formatTypeCode := (data[0] & 0xF8) >> 3
 
 	switch formatTypeCode {
 	case 1, 2, 3, 4:
