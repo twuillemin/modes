@@ -56,9 +56,9 @@ func (hpl HPLSurface) ToString() string {
 	case HPLSLowerThan25M:
 		return "HPL < 25 m"
 	case HPLSLowerThan185Point2M:
-		return "HPL < 185.2 m"
+		return "HPL < 185.2 m (0.1 NM)"
 	case HPLSGreaterThan185Point2M:
-		return "185.2 m ≤ HPL"
+		return "185.2 m (0.1 NM) ≤ HPL"
 	default:
 		return fmt.Sprintf("%v - Unknown code", hpl)
 	}

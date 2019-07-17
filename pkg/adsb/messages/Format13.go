@@ -76,8 +76,8 @@ func (message *Format13) GetHorizontalProtectionLimit() fields.HPL {
 }
 
 // GetContainmentRadius returns the ContainmentRadius
-func (message *Format13) GetContainmentRadius() fields.ContainmentRadiusAirborne {
-	return fields.CRABetween185Dot2MAnd463M
+func (message *Format13) GetContainmentRadius() fields.ContainmentRadius {
+	return fields.CRABBetween185Dot2MAnd463M
 }
 
 // ReadFormat13 reads a message at the format BDS 0,5

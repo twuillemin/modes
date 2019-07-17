@@ -16,7 +16,7 @@ type MessageBDS05 interface {
 	GetEncodedLatitude() fields.EncodedLatitude
 	GetEncodedLongitude() fields.EncodedLongitude
 	GetHorizontalProtectionLimit() fields.HPL
-	GetContainmentRadius() fields.ContainmentRadiusAirborne
+	GetContainmentRadius() fields.ContainmentRadius
 }
 
 var bds05Code = "BDS 0,5"
