@@ -45,9 +45,16 @@ const (
 // ToString returns a basic, but readable, representation of the field
 func (capabilities TerminalAreaOperationalCapabilities) ToString() string {
 
-	if capabilities <= 15 {
+	switch capabilities {
+
+	case TAOCReserved0, TAOCReserved1, TAOCReserved2, TAOCReserved3,
+		TAOCReserved4, TAOCReserved5, TAOCReserved6, TAOCReserved7,
+		TAOCReserved8, TAOCReserved9, TAOCReserved10, TAOCReserved11,
+		TAOCReserved12, TAOCReserved13, TAOCReserved14, TAOCReserved15:
+
 		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
+
+	default:
 		return fmt.Sprintf("%v - Unknown code", capabilities)
 	}
 }

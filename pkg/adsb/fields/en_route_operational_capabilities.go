@@ -45,9 +45,16 @@ const (
 // ToString returns a basic, but readable, representation of the field
 func (capabilities EnRouteOperationalCapabilities) ToString() string {
 
-	if capabilities <= 15 {
+	switch capabilities {
+
+	case EROCReserved0, EROCReserved1, EROCReserved2, EROCReserved3,
+		EROCReserved4, EROCReserved5, EROCReserved6, EROCReserved7,
+		EROCReserved8, EROCReserved9, EROCReserved10, EROCReserved11,
+		EROCReserved12, EROCReserved13, EROCReserved14, EROCReserved15:
+
 		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
+
+	default:
 		return fmt.Sprintf("%v - Unknown code", capabilities)
 	}
 }

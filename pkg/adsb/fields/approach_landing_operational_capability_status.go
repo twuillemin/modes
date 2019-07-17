@@ -43,12 +43,19 @@ const (
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (capabilities ApproachLandingOperationalCapabilityStatus) ToString() string {
+func (status ApproachLandingOperationalCapabilityStatus) ToString() string {
 
-	if capabilities <= 15 {
-		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
-		return fmt.Sprintf("%v - Unknown code", capabilities)
+	switch status {
+
+	case ALOCSReserved0, ALOCSReserved1, ALOCSReserved2, ALOCSReserved3,
+		ALOCSReserved4, ALOCSReserved5, ALOCSReserved6, ALOCSReserved7,
+		ALOCSReserved8, ALOCSReserved9, ALOCSReserved10, ALOCSReserved11,
+		ALOCSReserved12, ALOCSReserved13, ALOCSReserved14, ALOCSReserved15:
+
+		return fmt.Sprintf("%v - reserved", status)
+
+	default:
+		return fmt.Sprintf("%v - Unknown code", status)
 	}
 }
 

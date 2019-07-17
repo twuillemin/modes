@@ -43,12 +43,19 @@ const (
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (capabilities EnRouteOperationalCapabilityStatus) ToString() string {
+func (status EnRouteOperationalCapabilityStatus) ToString() string {
 
-	if capabilities <= 15 {
-		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
-		return fmt.Sprintf("%v - Unknown code", capabilities)
+	switch status {
+
+	case EROCSReserved0, EROCSReserved1, EROCSReserved2, EROCSReserved3,
+		EROCSReserved4, EROCSReserved5, EROCSReserved6, EROCSReserved7,
+		EROCSReserved8, EROCSReserved9, EROCSReserved10, EROCSReserved11,
+		EROCSReserved12, EROCSReserved13, EROCSReserved14, EROCSReserved15:
+
+		return fmt.Sprintf("%v - reserved", status)
+
+	default:
+		return fmt.Sprintf("%v - Unknown code", status)
 	}
 }
 

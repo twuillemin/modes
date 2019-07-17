@@ -45,9 +45,16 @@ const (
 // ToString returns a basic, but readable, representation of the field
 func (capabilities ApproachLandingOperationalCapabilities) ToString() string {
 
-	if capabilities <= 15 {
+	switch capabilities {
+
+	case ALOCReserved0, ALOCReserved1, ALOCReserved2, ALOCReserved3,
+		ALOCReserved4, ALOCReserved5, ALOCReserved6, ALOCReserved7,
+		ALOCReserved8, ALOCReserved9, ALOCReserved10, ALOCReserved11,
+		ALOCReserved12, ALOCReserved13, ALOCReserved14, ALOCReserved15:
+
 		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
+
+	default:
 		return fmt.Sprintf("%v - Unknown code", capabilities)
 	}
 }

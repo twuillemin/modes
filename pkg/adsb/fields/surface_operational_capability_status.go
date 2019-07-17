@@ -43,12 +43,19 @@ const (
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (capabilities SurfaceOperationalCapabilityStatus) ToString() string {
+func (status SurfaceOperationalCapabilityStatus) ToString() string {
 
-	if capabilities <= 15 {
-		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
-		return fmt.Sprintf("%v - Unknown code", capabilities)
+	switch status {
+
+	case SOCSReserved0, SOCSReserved1, SOCSReserved2, SOCSReserved3,
+		SOCSReserved4, SOCSReserved5, SOCSReserved6, SOCSReserved7,
+		SOCSReserved8, SOCSReserved9, SOCSReserved10, SOCSReserved11,
+		SOCSReserved12, SOCSReserved13, SOCSReserved14, SOCSReserved15:
+
+		return fmt.Sprintf("%v - reserved", status)
+
+	default:
+		return fmt.Sprintf("%v - Unknown code", status)
 	}
 }
 

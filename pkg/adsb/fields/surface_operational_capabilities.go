@@ -45,9 +45,16 @@ const (
 // ToString returns a basic, but readable, representation of the field
 func (capabilities SurfaceOperationalCapabilities) ToString() string {
 
-	if capabilities <= 15 {
+	switch capabilities {
+
+	case SOCReserved0, SOCReserved1, SOCReserved2, SOCReserved3,
+		SOCReserved4, SOCReserved5, SOCReserved6, SOCReserved7,
+		SOCReserved8, SOCReserved9, SOCReserved10, SOCReserved11,
+		SOCReserved12, SOCReserved13, SOCReserved14, SOCReserved15:
+
 		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
+
+	default:
 		return fmt.Sprintf("%v - Unknown code", capabilities)
 	}
 }

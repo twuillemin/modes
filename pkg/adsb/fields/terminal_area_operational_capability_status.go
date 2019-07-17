@@ -43,12 +43,19 @@ const (
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (capabilities TerminalAreaOperationalCapabilityStatus) ToString() string {
+func (status TerminalAreaOperationalCapabilityStatus) ToString() string {
 
-	if capabilities <= 15 {
-		return fmt.Sprintf("%v - reserved", capabilities)
-	} else {
-		return fmt.Sprintf("%v - Unknown code", capabilities)
+	switch status {
+
+	case TAOCSReserved0, TAOCSReserved1, TAOCSReserved2, TAOCSReserved3,
+		TAOCSReserved4, TAOCSReserved5, TAOCSReserved6, TAOCSReserved7,
+		TAOCSReserved8, TAOCSReserved9, TAOCSReserved10, TAOCSReserved11,
+		TAOCSReserved12, TAOCSReserved13, TAOCSReserved14, TAOCSReserved15:
+
+		return fmt.Sprintf("%v - reserved", status)
+
+	default:
+		return fmt.Sprintf("%v - Unknown code", status)
 	}
 }
 
