@@ -71,8 +71,8 @@ func (message *Format15) GetEncodedLongitude() fields.EncodedLongitude {
 }
 
 // GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
-func (message *Format15) GetHorizontalProtectionLimit() fields.HPLAirborne {
-	return fields.HPLABetween1852MAnd3704M
+func (message *Format15) GetHorizontalProtectionLimit() fields.HPL {
+	return fields.HPLABBetween1852MAnd3704M
 }
 
 // GetContainmentRadius returns the ContainmentRadius

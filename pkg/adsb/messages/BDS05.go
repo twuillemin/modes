@@ -15,7 +15,7 @@ type MessageBDS05 interface {
 	GetCPRFormat() fields.CPRFormat
 	GetEncodedLatitude() fields.EncodedLatitude
 	GetEncodedLongitude() fields.EncodedLongitude
-	GetHorizontalProtectionLimit() fields.HPLAirborne
+	GetHorizontalProtectionLimit() fields.HPL
 	GetContainmentRadius() fields.ContainmentRadiusAirborne
 }
 
