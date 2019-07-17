@@ -74,6 +74,12 @@ func ReadBDS05(data []byte) (MessageBDS05, error) {
 		return ReadFormat17(data)
 	case 18:
 		return ReadFormat18(data)
+	case 20:
+		return ReadFormat20(data)
+	case 21:
+		return ReadFormat21(data)
+	case 22:
+		return ReadFormat22(data)
 	}
 
 	return nil, fmt.Errorf("the format type code %v can not be read as a BDS 0,5 format", formatTypeCode)

@@ -27,7 +27,7 @@ func (message *Format15) GetBDS() string {
 
 // GetFormatTypeCode returns the Format Type Code
 func (message *Format15) GetFormatTypeCode() byte {
-	return 9
+	return 15
 }
 
 // ToString returns a basic, but readable, representation of the field

@@ -5,27 +5,46 @@ import (
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
 
+// AltitudeType defines by which source the altitude is reported
+type AltitudeSource int
+
+const (
+	// AltitudeBarometric signifies that altitude is barometric altitude
+	AltitudeBarometric AltitudeSource = 0
+	// AltitudeReport25FootIncrements signifies that altitude is GNSS height (HAE)
+	AltitudeGNSS AltitudeSource = 1
+)
+
 // AltitudeReportMethod defines how the altitude is reported
 type AltitudeReportMethod int
 
 const (
-	// AltitudeReport100FootIncrements signifies that altitude is reported in 100-foot increments.
+	// AltitudeReport100FootIncrements signifies that altitude is reported in 100-foot increments
 	AltitudeReport100FootIncrements AltitudeReportMethod = 0
-	// AltitudeReport25FootIncrements signifies that altitude is reported in 25-foot increments.
+	// AltitudeReport25FootIncrements signifies that altitude is reported in 25-foot increments
 	AltitudeReport25FootIncrements AltitudeReportMethod = 1
 )
 
 // Altitude field reports the barometric altitude in feet. It use (almost) the same encoding as the
 // AC field of Mode S Message
 type Altitude struct {
+	// Source is the source of the altitude
+	Source AltitudeSource
 	// ReportMethod is the way tha altitude is reported
 	ReportMethod AltitudeReportMethod
 	// AltitudeInFeet is the altitude in feet
 	AltitudeInFeet int
 }
 
-// ReadAltitude reads the altitude code from a message
+// ReadAltitude reads the altitude code from a message.
 func ReadAltitude(data []byte) Altitude {
+
+	// Determines the source of the altitude. Only format 20 to 22 are using GNSS altitude
+	source := AltitudeBarometric
+	format := (data[0] & 0xF8) >> 3
+	if 20 <= format && format <= 22 {
+		source = AltitudeGNSS
+	}
 
 	// Altitude code is a 13 bits fields, so read a uint16
 	// bit         | 8  9 10 11 12 13 14 15| 16 17 18 19 20 21 22 23 |
@@ -48,8 +67,9 @@ func ReadAltitude(data []byte) Altitude {
 		n |= uint16(data[2]&0xF0) >> 4
 
 		return Altitude{
-			AltitudeReport25FootIncrements,
-			25*int(n) - 1000,
+			Source:         source,
+			ReportMethod:   AltitudeReport25FootIncrements,
+			AltitudeInFeet: 25*int(n) - 1000,
 		}
 	}
 
@@ -81,8 +101,9 @@ func ReadAltitude(data []byte) Altitude {
 	altitudeFeet := -1200 + int(increment500)*500 + int(increment100)*100
 
 	return Altitude{
-		AltitudeReport100FootIncrements,
-		altitudeFeet,
+		Source:         source,
+		ReportMethod:   AltitudeReport100FootIncrements,
+		AltitudeInFeet: altitudeFeet,
 	}
 }
 
