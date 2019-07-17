@@ -3,6 +3,7 @@ package fields
 import "fmt"
 
 // HPLAirborneBarometric is the HPL (Horizontal Protection Limit) for Airborne aircraft format definition
+// when altitude type is barometric
 //
 // Specified in Doc 9871 / A.2.3.1
 type HPLAirborneBarometric byte
