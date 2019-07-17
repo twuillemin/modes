@@ -36,7 +36,7 @@ func (multipleThreatsDifferentSeparation ActiveRAMultipleThreatsDifferentSeparat
 		multipleThreatsDifferentSeparation.IsSenseReversal)
 }
 
-// Read reads the 14 bits data that constitutes the Active Resolution field (ARA)
+// ReadARAMultipleThreatsDifferentSeparation reads the 14 bits data that constitutes the Active Resolution field (ARA)
 //
 // Params:
 //    - value: the 14 bits of the ARA field. value is right packed in a 16 bit int

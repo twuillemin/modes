@@ -35,7 +35,7 @@ func (surveillanceStatus SurveillanceStatus) ToString() string {
 	}
 }
 
-// ReadSurveillanceStatus read the SurveillanceStatus from a 56 bits data field
+// ReadSurveillanceStatus reads the SurveillanceStatus from a 56 bits data field
 func ReadSurveillanceStatus(data []byte) SurveillanceStatus {
 	bits := (data[0] & 0x06) >> 1
 	return SurveillanceStatus(bits)

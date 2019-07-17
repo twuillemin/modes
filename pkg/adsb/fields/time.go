@@ -27,7 +27,7 @@ func (time Time) ToString() string {
 	}
 }
 
-// ReadTime read the Time from a 56 bits data field
+// ReadTime reads the Time from a 56 bits data field
 func ReadTime(data []byte) Time {
 	bits := (data[2] & 0x08) >> 3
 	return Time(bits)

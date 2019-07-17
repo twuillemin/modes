@@ -5,7 +5,7 @@ import (
 	"github.com/twuillemin/modes/pkg/acas/fields"
 )
 
-// MessageACAS (MV) field shall contain the aircraft address which provides the long ACAS message
+// ACAS30 (MV) field shall contain the aircraft address which provides the long ACAS message
 //
 // Defined at 3.1.2.8.3.1
 type ACAS30 struct {

@@ -5,13 +5,13 @@ import (
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
 
-// AltitudeType defines by which source the altitude is reported
+// AltitudeSource defines by which source the altitude is reported
 type AltitudeSource int
 
 const (
 	// AltitudeBarometric signifies that altitude is barometric altitude
 	AltitudeBarometric AltitudeSource = 0
-	// AltitudeReport25FootIncrements signifies that altitude is GNSS height (HAE)
+	// AltitudeGNSS signifies that altitude is GNSS height (HAE)
 	AltitudeGNSS AltitudeSource = 1
 )
 

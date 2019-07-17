@@ -12,7 +12,7 @@ type MessageBDS05 interface {
 	GetSingleAntennaFlag() fields.SingleAntennaFlag
 	GetAltitude() fields.Altitude
 	GetTime() fields.Time
-	GetCPRFormat() fields.CPRFormat
+	GetCPRFormat() fields.CompactPositionReportingFormat
 	GetEncodedLatitude() fields.EncodedLatitude
 	GetEncodedLongitude() fields.EncodedLongitude
 	GetHorizontalProtectionLimit() fields.HPL
@@ -23,17 +23,17 @@ var bds05Code = "BDS 0,5"
 var bds05Name = "Extended squitter airborne position"
 
 func bds05ToString(message MessageBDS05) string {
-	return fmt.Sprintf("Message:                   %v (%v)\n"+
-		"FormatTypeCode:            %v\n"+
-		"SurveillanceStatus:        %v\n"+
-		"HorizontalProtectionLimit: %v\n"+
-		"ContainmentRadius:         %v\n"+
-		"SingleAntenna:             %v\n"+
-		"Time:                      %v\n"+
-		"CPRFormat:                 %v\n"+
-		"GetAltitude:               %v\n"+
-		"EncodedLatitude:           %v\n"+
-		"EncodedLongitude:          %v",
+	return fmt.Sprintf("Message:                        %v (%v)\n"+
+		"FormatTypeCode:                 %v\n"+
+		"SurveillanceStatus:             %v\n"+
+		"HorizontalProtectionLimit:      %v\n"+
+		"ContainmentRadius:              %v\n"+
+		"SingleAntenna:                  %v\n"+
+		"Time:                           %v\n"+
+		"CompactPositionReportingFormat: %v\n"+
+		"GetAltitude:                    %v\n"+
+		"EncodedLatitude:                %v\n"+
+		"EncodedLongitude:               %v",
 		message.GetBDS(),
 		message.GetName(),
 		message.GetFormatTypeCode(),

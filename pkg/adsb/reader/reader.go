@@ -25,6 +25,8 @@ func ReadMessage(data []byte) (messages.ADSBMessage, error) {
 		return messages.ReadBDS08(data)
 	case 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22:
 		return messages.ReadBDS05(data)
+	case 31:
+		return messages.ReadBDS65(data)
 	}
 
 	return nil, nil

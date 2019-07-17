@@ -63,7 +63,7 @@ func (capability Capability) ToString() string {
 	case CapabilityLevel2OnTheGroundOrAirborne:
 		return "6 - Level 2 On The Ground or Airborne"
 	case CapabilityFSOrDR:
-		return "7 - Flight Status (FS) with alert rr downlink request (DR)"
+		return "7 - Flight Status (FS) with alert or downlink request (DR)"
 	default:
 		return fmt.Sprintf("%v - Unknown code", capability)
 	}

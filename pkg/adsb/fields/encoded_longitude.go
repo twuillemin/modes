@@ -15,7 +15,7 @@ func (encodedLongitude EncodedLongitude) ToString() string {
 	return fmt.Sprintf("%v", encodedLongitude)
 }
 
-// ReadEncodedLongitude read the EncodedLongitude from a 56 bits data field
+// ReadEncodedLongitude reads the EncodedLongitude from a 56 bits data field
 func ReadEncodedLongitude(data []byte) EncodedLongitude {
 
 	b2 := data[4] % 0x01

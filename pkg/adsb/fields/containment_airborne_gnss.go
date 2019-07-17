@@ -2,7 +2,7 @@ package fields
 
 import "fmt"
 
-// ContainmentRadiusAirborneBarometric is the 95% Containment radius,μ and v, on horizontal and vertical position error for
+// ContainmentRadiusAirborneGNSS is the 95% Containment radius,μ and v, on horizontal and vertical position error for
 // Airborne aircraft format definition
 //
 // Specified in Doc 9871 / A.2.3.1
@@ -11,9 +11,9 @@ type ContainmentRadiusAirborneGNSS byte
 const (
 	// CRAGHorizontalLowerThan3MAndVerticalLowerThan4M denotes μ < 3 m and v < 4 m
 	CRAGHorizontalLowerThan3MAndVerticalLowerThan4M ContainmentRadiusAirborneGNSS = 0
-	// CRABBetween3MAnd10M denotes μ < 10 m and v < 15 m
+	// CRAGHorizontalLowerThan10MAndVerticalLowerThan15M denotes μ < 10 m and v < 15 m
 	CRAGHorizontalLowerThan10MAndVerticalLowerThan15M ContainmentRadiusAirborneGNSS = 1
-	// CRABBetween10MAnd92Dot6M denotes μ > 10 m or v ≥ 15 m
+	// CRAGHorizontalGreaterThan10MOrVerticalGreaterThan15M denotes μ > 10 m or v ≥ 15 m
 	CRAGHorizontalGreaterThan10MOrVerticalGreaterThan15M ContainmentRadiusAirborneGNSS = 2
 )
 

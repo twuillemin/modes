@@ -10,7 +10,7 @@ type Format12 struct {
 	SingleAntennaFlag  fields.SingleAntennaFlag
 	Altitude           fields.Altitude
 	Time               fields.Time
-	CPRFormat          fields.CPRFormat
+	CPRFormat          fields.CompactPositionReportingFormat
 	EncodedLatitude    fields.EncodedLatitude
 	EncodedLongitude   fields.EncodedLongitude
 }
@@ -30,7 +30,7 @@ func (message *Format12) GetFormatTypeCode() byte {
 	return 12
 }
 
-// ToString returns a basic, but readable, representation of the field
+// ToString returns a basic, but readable, representation of the message
 func (message *Format12) ToString() string {
 	return bds05ToString(message)
 }
@@ -55,8 +55,8 @@ func (message *Format12) GetTime() fields.Time {
 	return message.Time
 }
 
-// GetCPRFormat returns the CPRFormat
-func (message *Format12) GetCPRFormat() fields.CPRFormat {
+// GetCPRFormat returns the CompactPositionReportingFormat
+func (message *Format12) GetCPRFormat() fields.CompactPositionReportingFormat {
 	return message.CPRFormat
 }
 
@@ -88,7 +88,7 @@ func ReadFormat12(data []byte) (*Format12, error) {
 		SingleAntennaFlag:  fields.ReadSingleAntennaFlag(data),
 		Altitude:           fields.ReadAltitude(data),
 		Time:               fields.ReadTime(data),
-		CPRFormat:          fields.ReadCPRFormat(data),
+		CPRFormat:          fields.ReadCompactPositionReportingFormat(data),
 		EncodedLatitude:    fields.ReadEncodedLatitude(data),
 		EncodedLongitude:   fields.ReadEncodedLongitude(data),
 	}, nil

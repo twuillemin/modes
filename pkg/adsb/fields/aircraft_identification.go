@@ -10,7 +10,7 @@ var identificationCharacterCoding = []byte{
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '#', '#', '#', '#', '#', '#',
 }
 
-// ReadAircraftIdentification read the aircraft identification from a 56 bits data field
+// ReadAircraftIdentification reads the aircraft identification from a 56 bits data field
 func ReadAircraftIdentification(data []byte) AircraftIdentification {
 
 	// Get the codes

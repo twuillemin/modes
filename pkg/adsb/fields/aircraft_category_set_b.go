@@ -54,7 +54,7 @@ func (category AircraftCategorySetB) ToString() string {
 	}
 }
 
-// ReadAircraftCategorySetB read the aircraft category from a 56 bits data field
+// ReadAircraftCategorySetB reads the aircraft category from a 56 bits data field
 func ReadAircraftCategorySetB(data []byte) AircraftCategorySetB {
 
 	// The category are the the 3 lsb bits of the the fist byte of the message

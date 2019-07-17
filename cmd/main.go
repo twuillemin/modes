@@ -125,10 +125,11 @@ func readExampleFile() []string {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer func() {
-		err := file.Close()
-		if err != nil {
-			log.Fatal(err)
+		errClose := file.Close()
+		if errClose != nil {
+			log.Fatal(errClose)
 		}
 	}()
 
@@ -139,7 +140,7 @@ func readExampleFile() []string {
 		result = append(result, scanner.Text())
 	}
 
-	if err := scanner.Err(); err != nil {
+	if err = scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 

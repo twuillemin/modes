@@ -25,7 +25,7 @@ func (message *Format01) GetFormatTypeCode() byte {
 	return 1
 }
 
-// ToString returns a basic, but readable, representation of the field
+// ToString returns a basic, but readable, representation of the message
 func (message *Format01) ToString() string {
 	return bds08ToString(message)
 }

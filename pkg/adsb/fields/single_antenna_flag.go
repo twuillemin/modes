@@ -27,7 +27,7 @@ func (saf SingleAntennaFlag) ToString() string {
 	}
 }
 
-// ReadSingleAntennaFlag read the SingleAntennaFlag from a 56 bits data field
+// ReadSingleAntennaFlag reads the SingleAntennaFlag from a 56 bits data field
 func ReadSingleAntennaFlag(data []byte) SingleAntennaFlag {
 	bits := data[0] & 0x01
 	return SingleAntennaFlag(bits)

@@ -2,7 +2,7 @@ package fields
 
 import "fmt"
 
-// ContainmentRadiusAirborneBarometric is the 95% Containment radius,μ and v, on horizontal and vertical position error for
+// ContainmentRadiusSurface is the 95% Containment radius,μ and v, on horizontal and vertical position error for
 // Airborne aircraft format definition
 //
 // Specified in Doc 9871 / A.2.3.1

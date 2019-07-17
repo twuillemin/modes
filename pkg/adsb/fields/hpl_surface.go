@@ -8,13 +8,13 @@ import "fmt"
 type HPLSurface byte
 
 const (
-	// HPLABLowerThan7Dot5M denotes HPL < 7.5 m
+	// HPLSLowerThan7Dot5M denotes HPL < 7.5 m
 	HPLSLowerThan7Dot5M HPLSurface = 0
-	// HPLABBetween7Dot5MAnd25M denotes HPL < 25 m
+	// HPLSLowerThan25M denotes HPL < 25 m
 	HPLSLowerThan25M HPLSurface = 1
-	// HPLABBetween7Dot5MAnd25M denotes HPL < 25 m
+	// HPLSLowerThan185Point2M denotes HPL < 25 m
 	HPLSLowerThan185Point2M HPLSurface = 2
-	// HPLABBetween25MAnd185Dot2M denotes 25 m ≤ HPL
+	// HPLSGreaterThan185Point2M denotes 25 m ≤ HPL
 	HPLSGreaterThan185Point2M HPLSurface = 3
 )
 

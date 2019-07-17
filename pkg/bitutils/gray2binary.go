@@ -1,6 +1,6 @@
 package bitutils
 
-// grayToBinary convert the given bits (b0 being the MSB and b7 the LSB) from gray code to "classical" binary
+// GrayToBinary converts the given bits (b0 being the MSB and b7 the LSB) from gray code to "classical" binary
 func GrayToBinary(b0, b1, b2, b3, b4, b5, b6, b7 bool) uint8 {
 
 	num := uint8(0)
