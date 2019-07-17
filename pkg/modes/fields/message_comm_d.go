@@ -30,7 +30,7 @@ func ReadMessageCommD(message common.MessageData) MessageCommD {
 
 // ToString returns a basic, but readable, representation of the field
 func (messageCommD MessageCommD) ToString() string {
-	return fmt.Sprintf("%X %X %X %X %X %X %X %X %X %X",
+	return fmt.Sprintf("%02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
 		messageCommD.Data[0],
 		messageCommD.Data[1],
 		messageCommD.Data[2],

@@ -86,12 +86,12 @@ func (messageACAS ACAS30) GetVDS2() byte {
 
 // ToString returns a basic, but readable, representation of the field
 func (messageACAS ACAS30) ToString() string {
-	return fmt.Sprintf("VDS 1: %X\n"+
-		"VDS 2: %X\n"+
+	return fmt.Sprintf("VDS 1:                                           %02X\n"+
+		"VDS 2:                                           %02X\n"+
 		"Active Resolution Advisory:\n%v\n"+
-		"Active Resolution Advisory Complement: \n%v\n"+
+		"Active Resolution Advisory Complement:\n%v\n"+
 		"Active Resolution Advisory Terminated Indicator: %v\n"+
-		"Multiple Threat Encounter: %v",
+		"Multiple Threat Encounter:                       %v",
 		messageACAS.VDS1,
 		messageACAS.VDS2,
 		messageACAS.ActiveRA.ToString(),

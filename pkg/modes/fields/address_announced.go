@@ -30,7 +30,7 @@ func ReadAddressAnnounced(message common.MessageData) AddressAnnounced {
 
 // ToString returns a basic, but readable, representation of the field
 func (addressAnnounced AddressAnnounced) ToString() string {
-	return fmt.Sprintf("%X %X %X",
+	return fmt.Sprintf("%02X %02X %02X",
 		uint8((addressAnnounced.Address&0x00FF0000)>>16),
 		uint8((addressAnnounced.Address&0x0000FF00)>>8),
 		uint8(addressAnnounced.Address&0x000000FF))

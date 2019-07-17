@@ -30,7 +30,7 @@ func ReadMessageExtendedSquitter(message common.MessageData) MessageExtendedSqui
 
 // ToString returns a basic, but readable, representation of the field
 func (messageExtendedSquitter MessageExtendedSquitter) ToString() string {
-	return fmt.Sprintf("%X %X %X %X %X %X %X",
+	return fmt.Sprintf("%02X %02X %02X %02X %02X %02X %02X",
 		messageExtendedSquitter.Data[0],
 		messageExtendedSquitter.Data[1],
 		messageExtendedSquitter.Data[2],
