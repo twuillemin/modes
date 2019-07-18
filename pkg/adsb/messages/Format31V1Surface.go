@@ -34,26 +34,29 @@ func (message *Format31V1Surface) GetFormatTypeCode() byte {
 	return 31
 }
 
-// GetOperationalStatusSubTypeCode returns the code of the Operational Status Sub Type
-func (message *Format31V1Surface) GetOperationalStatusSubTypeCode() byte {
-	return 1
+// GetOperationalStatusSubtypeCode returns the code of the Operational Status Subtype
+func (message *Format31V1Surface) GetOperationalStatusSubtypeCode() byte {
+	return byte(fields.OSSCAirborne)
 }
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V1Surface) ToString() string {
-	return fmt.Sprintf("Message:          %v (%v)\n"+
-		"SubType:                              0 - Airborne\n"+
-		"AirborneCapabilityClass:\n%v\n"+
-		"AircraftLengthAndWidth                %v\n"+
-		"OperationalMode:\n%v\n"+
-		"VersionNumber:                        %v\n"+
-		"NICSupplement:                        %v\n"+
-		"NavigationalAccuracyCategoryPosition: %v\n"+
-		"SurveillanceIntegrityLevel:\n%v\n"+
-		"NICBaro:                              %v\n"+
-		"HorizontalReferenceDirection:         %v",
+	return fmt.Sprintf("Message:                                 %v (%v)\n"+
+		"Format Type Code:                        %v\n"+
+		"Subtype:                                 %v\n"+
+		"Airborne Capability Class:\n%v\n"+
+		"Aircraft Length And Width                %v\n"+
+		"Operational Mode:\n%v\n"+
+		"ADSV Version Number:                     %v\n"+
+		"NIC Supplement:                          %v\n"+
+		"Navigational Accuracy Category Position: %v\n"+
+		"Surveillance Integrity Level:\n%v\n"+
+		"NIC Baro:                                %v\n"+
+		"Horizontal Reference Direction:          %v",
 		message.GetBDS(),
 		message.GetName(),
+		message.GetFormatTypeCode(),
+		fields.OSSCAirborne.ToString(),
 		common.PrefixMultiLine(message.SurfaceCapabilityClass.ToString(), " - "),
 		message.AircraftLengthAndWidth.ToString(),
 		common.PrefixMultiLine(message.OperationalMode.ToString(), " - "),

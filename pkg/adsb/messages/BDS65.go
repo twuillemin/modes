@@ -8,8 +8,8 @@ import (
 // MessageBDS65 is the basic interface that ADSB messages at the format BDS 6,5 are expected to implement
 type MessageBDS65 interface {
 	ADSBMessage
-	// GetOperationalStatusSubTypeCode returns the code of the Operational Status Sub Type
-	GetOperationalStatusSubTypeCode() byte
+	// GetOperationalStatusSubtypeCode returns the code of the Operational Status Sub Type
+	GetOperationalStatusSubtypeCode() byte
 }
 
 var bds65Code = "BDS 6,5"

@@ -2,32 +2,32 @@ package fields
 
 import "fmt"
 
-// AirborneVelocitySubtypeCode is the Airborne Velocity Subtype Code definition
+// AirborneVelocitySubtype is the Airborne Velocity Subtype Code definition
 //
 // Specified in Doc 9871 / Table A-2-9
-type AirborneVelocitySubtypeCode byte
+type AirborneVelocitySubtype byte
 
 const (
 	// AVSCReserved0 indicates Airborne Status Message
-	AVSCReserved0 AirborneVelocitySubtypeCode = 0
+	AVSCReserved0 AirborneVelocitySubtype = 0
 	// AVSCGroundSpeedNormal indicates Surface Status Message
-	AVSCGroundSpeedNormal AirborneVelocitySubtypeCode = 1
+	AVSCGroundSpeedNormal AirborneVelocitySubtype = 1
 	// AVSCGroundSpeedSupersonic is reserved
-	AVSCGroundSpeedSupersonic AirborneVelocitySubtypeCode = 2
+	AVSCGroundSpeedSupersonic AirborneVelocitySubtype = 2
 	// AVSCAirspeedNormal is reserved
-	AVSCAirspeedNormal AirborneVelocitySubtypeCode = 3
+	AVSCAirspeedNormal AirborneVelocitySubtype = 3
 	// AVSCAirspeedSupersonic is reserved
-	AVSCAirspeedSupersonic AirborneVelocitySubtypeCode = 4
+	AVSCAirspeedSupersonic AirborneVelocitySubtype = 4
 	// AVSCReserved5 is reserved
-	AVSCReserved5 AirborneVelocitySubtypeCode = 5
+	AVSCReserved5 AirborneVelocitySubtype = 5
 	// AVSCReserved6 is reserved
-	AVSCReserved6 AirborneVelocitySubtypeCode = 6
+	AVSCReserved6 AirborneVelocitySubtype = 6
 	// AVSCReserved7 is reserved
-	AVSCReserved7 AirborneVelocitySubtypeCode = 7
+	AVSCReserved7 AirborneVelocitySubtype = 7
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (code AirborneVelocitySubtypeCode) ToString() string {
+func (code AirborneVelocitySubtype) ToString() string {
 
 	switch code {
 	case AVSCGroundSpeedNormal:
@@ -45,8 +45,8 @@ func (code AirborneVelocitySubtypeCode) ToString() string {
 	}
 }
 
-// ReadAirborneVelocitySubtypeCode reads the AirborneVelocitySubtypeCode from a 56 bits data field
-func ReadAirborneVelocitySubtypeCode(data []byte) AirborneVelocitySubtypeCode {
+// ReadAirborneVelocitySubtype reads the AirborneVelocitySubtype from a 56 bits data field
+func ReadAirborneVelocitySubtype(data []byte) AirborneVelocitySubtype {
 	bits := data[0] & 0x07
-	return AirborneVelocitySubtypeCode(bits)
+	return AirborneVelocitySubtype(bits)
 }
