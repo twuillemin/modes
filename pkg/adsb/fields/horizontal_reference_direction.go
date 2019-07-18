@@ -29,6 +29,6 @@ func (direction HorizontalReferenceDirection) ToString() string {
 
 // ReadHorizontalReferenceDirection reads the HorizontalReferenceDirection from a 56 bits data field
 func ReadHorizontalReferenceDirection(data []byte) HorizontalReferenceDirection {
-	bits := (data[5] & 0x04) >> 2
+	bits := (data[6] & 0x04) >> 2
 	return HorizontalReferenceDirection(bits)
 }

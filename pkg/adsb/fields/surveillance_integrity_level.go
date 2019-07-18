@@ -56,6 +56,6 @@ func (level SurveillanceIntegrityLevel) ToString() string {
 
 // ReadSurveillanceIntegrityLevel reads the SurveillanceIntegrityLevel from a 56 bits data field
 func ReadSurveillanceIntegrityLevel(data []byte) SurveillanceIntegrityLevel {
-	bits := (data[5] & 0x30) >> 4
+	bits := (data[6] & 0x30) >> 4
 	return SurveillanceIntegrityLevel(bits)
 }

@@ -29,6 +29,6 @@ func (headingAngle TrackAngleHeading) ToString() string {
 
 // ReadTrackAngleHeading reads the TrackAngleHeading from a 56 bits data field
 func ReadTrackAngleHeading(data []byte) TrackAngleHeading {
-	bits := (data[5] & 0x08) >> 3
+	bits := (data[6] & 0x08) >> 3
 	return TrackAngleHeading(bits)
 }
