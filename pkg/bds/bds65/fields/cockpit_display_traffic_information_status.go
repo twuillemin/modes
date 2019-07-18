@@ -2,7 +2,7 @@ package fields
 
 import "fmt"
 
-// CockpitDisplayOfTrafficInformationStatus is the CDTI Status definition
+// CockpitDisplayOfTrafficInformationStatus is the Cockpit Display of Traffic Information Status definition
 //
 // Specified in Doc 9871 / B.2.3.10.3
 type CockpitDisplayOfTrafficInformationStatus byte

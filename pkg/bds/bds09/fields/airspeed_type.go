@@ -2,25 +2,25 @@ package fields
 
 import "fmt"
 
-// AirspeedType is the Direction Airspeed Type definition
+// AirspeedType is the Airspeed Type definition
 //
 // Specified in Doc 9871 / Table A-2-9
 type AirspeedType byte
 
 const (
-	// ATIAS indicates IAS
-	ATIAS AirspeedType = 0
-	// ATTAS indicates TAS
-	ATTAS AirspeedType = 1
+	// ATIndicatedAirSpeed indicates IAS
+	ATIndicatedAirSpeed AirspeedType = 0
+	// ATTrueAirSpeed indicates TAS
+	ATTrueAirSpeed AirspeedType = 1
 )
 
 // ToString returns a basic, but readable, representation of the field
 func (bit AirspeedType) ToString() string {
 
 	switch bit {
-	case ATIAS:
+	case ATIndicatedAirSpeed:
 		return "0 - IAS"
-	case ATTAS:
+	case ATTrueAirSpeed:
 		return "1 - TAS"
 	default:
 		return fmt.Sprintf("%v - Unknown code", bit)
