@@ -33,7 +33,7 @@ func (velocity VelocityNSNormal) ToString() string {
 	}
 }
 
-// GetVelocityValue returns the velocity. Note that the returned value will be 0 for VelocityStatusNoInformation and
+// GetVelocity returns the velocity. Note that the returned value will be 0 for VelocityStatusNoInformation and
 // the maximum for VelocityMaximum
 func (velocity VelocityNSNormal) GetVelocity() int {
 
