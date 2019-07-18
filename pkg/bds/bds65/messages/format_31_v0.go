@@ -2,8 +2,7 @@ package messages
 
 import (
 	"fmt"
-	"github.com/twuillemin/modes/pkg/adsb/fields"
-	"github.com/twuillemin/modes/pkg/bds/bds65/messages"
+	"github.com/twuillemin/modes/pkg/bds/bds65/fields"
 )
 
 // Format31V0 is a message at the format BDS 6,5 the ADSB V1
@@ -20,12 +19,12 @@ type Format31V0 struct {
 
 // GetName returns the name of the message
 func (message *Format31V0) GetName() string {
-	return messages.bds65Name
+	return bds65Name
 }
 
 // GetBDS returns the binary data format
 func (message *Format31V0) GetBDS() string {
-	return messages.bds65Code
+	return bds65Code
 }
 
 // GetFormatTypeCode returns the Format Type Code
@@ -33,15 +32,16 @@ func (message *Format31V0) GetFormatTypeCode() byte {
 	return 31
 }
 
-// GetOperationalStatusSubTypeCode returns the code of the Operational Status Sub Type
-func (message *Format31V0) GetOperationalStatusSubTypeCode() byte {
+// GetOperationalStatusSubtypeCode returns the code of the Operational Status Subtype
+func (message *Format31V0) GetOperationalStatusSubtypeCode() byte {
 	return 0
 }
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V0) ToString() string {
 	return fmt.Sprintf("Message:                                        %v (%v)\n"+
-		"OperationalStatusSubType:                       0\n"+
+		"Format Type Code:                               %v\n"+
+		"Subtype:                                        %v\n"+
 		"En Route Operational Capabilities:              %v\n"+
 		"En Route Operational Capability Status:         %v\n"+
 		"Terminal Area Operational Capabilities:         %v\n"+
@@ -52,6 +52,8 @@ func (message Format31V0) ToString() string {
 		"Surface Operational Capability Status:          %v",
 		message.GetBDS(),
 		message.GetName(),
+		message.GetFormatTypeCode(),
+		message.GetOperationalStatusSubtypeCode(),
 		message.EnRouteOperationalCapabilities.ToString(),
 		message.EnRouteOperationalCapabilityStatus.ToString(),
 		message.TerminalAreaOperationalCapabilities.ToString(),

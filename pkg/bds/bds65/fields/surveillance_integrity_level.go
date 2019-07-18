@@ -26,8 +26,8 @@ const (
 	SIL3 SurveillanceIntegrityLevel = 3
 )
 
-var silLabelHorizontal = "- Probability of exceeding the Horizontal Containment Radius reported in the NIC Subfield without an indication: "
-var silLabelVertical = "- Probability of exceeding the Vertical Integrity Containment Region (VPL) without an indication:                "
+var silLabelHorizontal = "Probability of exceeding the Horizontal Containment Radius reported in the NIC Subfield without an indication: "
+var silLabelVertical = "Probability of exceeding the Vertical Integrity Containment Region (VPL) without an indication:                "
 
 // ToString returns a basic, but readable, representation of the field
 func (level SurveillanceIntegrityLevel) ToString() string {
@@ -56,6 +56,6 @@ func (level SurveillanceIntegrityLevel) ToString() string {
 
 // ReadSurveillanceIntegrityLevel reads the SurveillanceIntegrityLevel from a 56 bits data field
 func ReadSurveillanceIntegrityLevel(data []byte) SurveillanceIntegrityLevel {
-	bits := (data[5] & 0x30) >> 4
+	bits := (data[6] & 0x30) >> 4
 	return SurveillanceIntegrityLevel(bits)
 }

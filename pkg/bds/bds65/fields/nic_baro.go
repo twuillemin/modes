@@ -33,6 +33,6 @@ func (baro NICBaro) ToString() string {
 
 // ReadNICBaro reads the NICBaro from a 56 bits data field
 func ReadNICBaro(data []byte) NICBaro {
-	bits := (data[5] & 0x08) >> 3
+	bits := (data[6] & 0x08) >> 3
 	return NICBaro(bits)
 }

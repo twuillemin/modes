@@ -1,16 +1,21 @@
 package messages
 
 import (
+	"errors"
 	"fmt"
-	"github.com/twuillemin/modes/pkg/adsb/messages"
-	fields2 "github.com/twuillemin/modes/pkg/bds/bds08/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds08/fields"
+	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
 // MessageBDS08 is the basic interface that ADSB messages at the format BDS 0,8 are expected to implement
 type MessageBDS08 interface {
-	messages.ADSBMessage
-	GetAircraftCategory() fields2.AircraftCategory
-	GetAircraftIdentification() fields2.AircraftIdentification
+	common.BDSMessage
+	// GetFormatTypeCode returns the Format Type Code
+	GetFormatTypeCode() byte
+	// GetAircraftCategory returns the aircraft category
+	GetAircraftCategory() fields.AircraftCategory
+	// GetAircraftIdentification returns the identity of the aircraft
+	GetAircraftIdentification() fields.AircraftIdentification
 }
 
 var bds08Code = "BDS 0,8"
@@ -31,6 +36,10 @@ func bds08ToString(message MessageBDS08) string {
 
 // ReadBDS08 reads a message at the format BDS 0,8
 func ReadBDS08(data []byte) (MessageBDS08, error) {
+
+	if len(data) != 7 {
+		return nil, errors.New("the data for BDS message must be 7 bytes long")
+	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
