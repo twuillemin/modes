@@ -24,7 +24,7 @@ func ReadBDS65(data []byte) (MessageBDS65, error) {
 
 		// Read the version of ADSB and the subtype
 		version := fields.ReadVersionNumber(data)
-		subType := fields.ReadPositionSubtypeCode(data)
+		subType := fields.ReadOperationalStatusSubtypeCode(data)
 
 		switch version {
 
@@ -33,9 +33,9 @@ func ReadBDS65(data []byte) (MessageBDS65, error) {
 
 		case fields.ADSBV1, fields.ADSBV2:
 			switch subType {
-			case fields.PSCAirborne:
+			case fields.OSSCAirborne:
 				return ReadFormat31V1Airborne(data)
-			case fields.PSCSurface:
+			case fields.OSSCSurface:
 				return ReadFormat31V1Surface(data)
 			default:
 				return nil, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)
