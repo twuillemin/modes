@@ -33,7 +33,7 @@ func (airspeed AirspeedNormal) ToString() string {
 	}
 }
 
-// GetAirspeed returns the airspeed. Note that the returned value will be 0 for VelocityStatusNoInformation and
+// GetTargetAltitude returns the airspeed. Note that the returned value will be 0 for VelocityStatusNoInformation and
 // the maximum for VelocityMaximum
 func (airspeed AirspeedNormal) GetAirspeed() int {
 

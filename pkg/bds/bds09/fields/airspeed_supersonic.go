@@ -33,7 +33,7 @@ func (airspeed AirspeedSupersonic) ToString() string {
 	}
 }
 
-// GetAirspeed returns the velocity. Note that the returned value will be 0 for VelocityStatusNoInformation and
+// GetTargetAltitude returns the velocity. Note that the returned value will be 0 for VelocityStatusNoInformation and
 // the maximum for VelocityMaximum
 func (airspeed AirspeedSupersonic) GetAirspeed() int {
 
