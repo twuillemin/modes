@@ -3,6 +3,7 @@ package messages
 import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds65/messages"
 )
 
 // Format31V1Surface is a message at the format BDS 6,5 the ADSB V1 / Surface
@@ -14,12 +15,12 @@ type Format31V1Surface struct {
 
 // GetName returns the name of the message
 func (message *Format31V1Surface) GetName() string {
-	return bds65Name
+	return messages.bds65Name
 }
 
 // GetBDS returns the binary data format
 func (message *Format31V1Surface) GetBDS() string {
-	return bds65Code
+	return messages.bds65Code
 }
 
 // GetFormatTypeCode returns the Format Type Code

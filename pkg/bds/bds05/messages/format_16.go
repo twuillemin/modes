@@ -1,11 +1,11 @@
 package messages
 
 import (
-	"github.com/twuillemin/modes/pkg/adsb/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds05/fields"
 )
 
-// Format18 is a message at the format BDS 0,5
-type Format18 struct {
+// Format16 is a message at the format BDS 0,5
+type Format16 struct {
 	SurveillanceStatus fields.SurveillanceStatus
 	SingleAntennaFlag  fields.SingleAntennaFlag
 	Altitude           fields.Altitude
@@ -16,74 +16,74 @@ type Format18 struct {
 }
 
 // GetName returns the name of the message
-func (message *Format18) GetName() string {
+func (message *Format16) GetName() string {
 	return bds05Name
 }
 
 // GetBDS returns the binary data format
-func (message *Format18) GetBDS() string {
+func (message *Format16) GetBDS() string {
 	return bds05Code
 }
 
 // GetFormatTypeCode returns the Format Type Code
-func (message *Format18) GetFormatTypeCode() byte {
-	return 18
+func (message *Format16) GetFormatTypeCode() byte {
+	return 16
 }
 
 // ToString returns a basic, but readable, representation of the message
-func (message *Format18) ToString() string {
+func (message *Format16) ToString() string {
 	return bds05ToString(message)
 }
 
 // GetSurveillanceStatus returns the Surveillance Status
-func (message *Format18) GetSurveillanceStatus() fields.SurveillanceStatus {
+func (message *Format16) GetSurveillanceStatus() fields.SurveillanceStatus {
 	return message.SurveillanceStatus
 }
 
 // GetSingleAntennaFlag returns the SingleAntennaFlag
-func (message *Format18) GetSingleAntennaFlag() fields.SingleAntennaFlag {
+func (message *Format16) GetSingleAntennaFlag() fields.SingleAntennaFlag {
 	return message.SingleAntennaFlag
 }
 
 // GetAltitude returns the Altitude
-func (message *Format18) GetAltitude() fields.Altitude {
+func (message *Format16) GetAltitude() fields.Altitude {
 	return message.Altitude
 }
 
 // GetTime returns the Time
-func (message *Format18) GetTime() fields.Time {
+func (message *Format16) GetTime() fields.Time {
 	return message.Time
 }
 
 // GetCPRFormat returns the CompactPositionReportingFormat
-func (message *Format18) GetCPRFormat() fields.CompactPositionReportingFormat {
+func (message *Format16) GetCPRFormat() fields.CompactPositionReportingFormat {
 	return message.CPRFormat
 }
 
 // GetEncodedLatitude returns the EncodedLatitude
-func (message *Format18) GetEncodedLatitude() fields.EncodedLatitude {
+func (message *Format16) GetEncodedLatitude() fields.EncodedLatitude {
 	return message.EncodedLatitude
 }
 
 // GetEncodedLongitude returns the EncodedLongitude
-func (message *Format18) GetEncodedLongitude() fields.EncodedLongitude {
+func (message *Format16) GetEncodedLongitude() fields.EncodedLongitude {
 	return message.EncodedLongitude
 }
 
 // GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
-func (message *Format18) GetHorizontalProtectionLimit() fields.HPL {
-	return fields.HPLABLargerThan37Point04Km
+func (message *Format16) GetHorizontalProtectionLimit() fields.HPL {
+	return fields.HPLABBetween3704MAnd18Point52Km
 }
 
 // GetContainmentRadius returns the ContainmentRadius
-func (message *Format18) GetContainmentRadius() fields.ContainmentRadius {
-	return fields.CRABLargerThan18Point52Km
+func (message *Format16) GetContainmentRadius() fields.ContainmentRadius {
+	return fields.CRABBetween1Point852KmAnd9Point26Km
 }
 
-// ReadFormat18 reads a message at the format BDS 0,5
-func ReadFormat18(data []byte) (*Format18, error) {
+// ReadFormat16 reads a message at the format BDS 0,5
+func ReadFormat16(data []byte) (*Format16, error) {
 
-	return &Format18{
+	return &Format16{
 		SurveillanceStatus: fields.ReadSurveillanceStatus(data),
 		SingleAntennaFlag:  fields.ReadSingleAntennaFlag(data),
 		Altitude:           fields.ReadAltitude(data),

@@ -3,11 +3,12 @@ package messages
 import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb/fields"
+	"github.com/twuillemin/modes/pkg/adsb/messages"
 )
 
 // MessageBDS65 is the basic interface that ADSB messages at the format BDS 6,5 are expected to implement
 type MessageBDS65 interface {
-	ADSBMessage
+	messages.ADSBMessage
 	// GetOperationalStatusSubTypeCode returns the code of the Operational Status Sub Type
 	GetOperationalStatusSubTypeCode() byte
 }
@@ -29,14 +30,14 @@ func ReadBDS65(data []byte) (MessageBDS65, error) {
 		switch version {
 
 		case fields.ADSBV0:
-			return ReadFormat31V0(data)
+			return messages.ReadFormat31V0(data)
 
 		case fields.ADSBV1, fields.ADSBV2:
 			switch subType {
 			case fields.STCAirborne:
-				return ReadFormat31V1Airborne(data)
+				return messages.ReadFormat31V1Airborne(data)
 			case fields.STCSurface:
-				return ReadFormat31V1Surface(data)
+				return messages.ReadFormat31V1Surface(data)
 			default:
 				return nil, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)
 			}

@@ -2,14 +2,15 @@ package messages
 
 import (
 	"fmt"
-	"github.com/twuillemin/modes/pkg/adsb/fields"
+	"github.com/twuillemin/modes/pkg/adsb/messages"
+	fields2 "github.com/twuillemin/modes/pkg/bds/bds08/fields"
 )
 
 // MessageBDS08 is the basic interface that ADSB messages at the format BDS 0,8 are expected to implement
 type MessageBDS08 interface {
-	ADSBMessage
-	GetAircraftCategory() fields.AircraftCategory
-	GetAircraftIdentification() fields.AircraftIdentification
+	messages.ADSBMessage
+	GetAircraftCategory() fields2.AircraftCategory
+	GetAircraftIdentification() fields2.AircraftIdentification
 }
 
 var bds08Code = "BDS 0,8"

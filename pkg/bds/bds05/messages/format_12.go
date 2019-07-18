@@ -1,7 +1,7 @@
 package messages
 
 import (
-	"github.com/twuillemin/modes/pkg/adsb/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds05/fields"
 )
 
 // Format12 is a message at the format BDS 0,5

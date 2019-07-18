@@ -1,13 +1,13 @@
 package messages
 
 import (
-	"github.com/twuillemin/modes/pkg/adsb/fields"
+	fields2 "github.com/twuillemin/modes/pkg/bds/bds08/fields"
 )
 
 // Format03 is a message at the format BDS 0,8
 type Format03 struct {
-	AircraftCategory       fields.AircraftCategorySetB
-	AircraftIdentification fields.AircraftIdentification
+	AircraftCategory       fields2.AircraftCategorySetB
+	AircraftIdentification fields2.AircraftIdentification
 }
 
 // GetName returns the name of the message
@@ -31,12 +31,12 @@ func (message *Format03) ToString() string {
 }
 
 // GetAircraftCategory returns the category of the aircraft
-func (message *Format03) GetAircraftCategory() fields.AircraftCategory {
+func (message *Format03) GetAircraftCategory() fields2.AircraftCategory {
 	return message.AircraftCategory
 }
 
 // GetAircraftIdentification returns the identification of the aircraft
-func (message *Format03) GetAircraftIdentification() fields.AircraftIdentification {
+func (message *Format03) GetAircraftIdentification() fields2.AircraftIdentification {
 	return message.AircraftIdentification
 }
 
@@ -44,7 +44,7 @@ func (message *Format03) GetAircraftIdentification() fields.AircraftIdentificati
 func ReadFormat03(data []byte) (*Format03, error) {
 
 	return &Format03{
-		AircraftCategory:       fields.ReadAircraftCategorySetB(data),
-		AircraftIdentification: fields.ReadAircraftIdentification(data),
+		AircraftCategory:       fields2.ReadAircraftCategorySetB(data),
+		AircraftIdentification: fields2.ReadAircraftIdentification(data),
 	}, nil
 }
