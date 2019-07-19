@@ -8,24 +8,24 @@ import "fmt"
 type VersionNumber byte
 
 const (
-	// ADSBV0 indicates ADSB V0: Conformant to Doc 9871, 1st Edition, Appendix A
-	ADSBV0 VersionNumber = 0
-	// ADSBV1 indicates ADSB V1: Conformant to Doc 9871, 1st Edition, Appendix B
-	ADSBV1 VersionNumber = 1
-	// ADSBV2 indicates ADSB V2: Conformant to Doc 9871, 2nd Edition
-	ADSBV2 VersionNumber = 2
+	// ADSBVersion0 indicates ADSB V0: Conformant to Doc 9871, 1st Edition, Appendix A
+	ADSBVersion0 VersionNumber = 0
+	// ADSBVersion1 indicates ADSB V1: Conformant to Doc 9871, 1st Edition, Appendix B
+	ADSBVersion1 VersionNumber = 1
+	// ADSBVersion2 indicates ADSB V2: Conformant to Doc 9871, ?th Edition, Appendix C
+	ADSBVersion2 VersionNumber = 2
 )
 
 // ToString returns a basic, but readable, representation of the field
 func (versionNumber VersionNumber) ToString() string {
 
 	switch versionNumber {
-	case ADSBV0:
+	case ADSBVersion0:
 		return "0 - ADSB V0: Conformant to Doc 9871, 1st Edition, Appendix A"
-	case ADSBV1:
+	case ADSBVersion1:
 		return "1 - ADSB V1: Conformant to Doc 9871, 1st Edition, Appendix B"
-	case ADSBV2:
-		return "2 - ADSB V2: Conformant to Doc 9871, 2nd Edition"
+	case ADSBVersion2:
+		return "2 - ADSB V2: Conformant to Doc 9871, ?th Edition, Appendix C"
 	}
 	return fmt.Sprintf("%v", versionNumber)
 }

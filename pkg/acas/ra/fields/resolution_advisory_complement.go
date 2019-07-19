@@ -16,10 +16,10 @@ type RAComplement struct {
 
 // ToString returns a basic, but readable, representation of the field
 func (complement RAComplement) ToString() string {
-	return fmt.Sprintf("    Do not pass below: %v\n"+
-		"    Do not pass above: %v\n"+
-		"    Do not turn left: %v\n"+
-		"    Do not turn right: %v",
+	return fmt.Sprintf("Do not pass below: %v\n"+
+		"Do not pass above: %v\n"+
+		"Do not turn left:  %v\n"+
+		"Do not turn right: %v",
 		complement.DoNotPassBelow,
 		complement.DoNotPassAbove,
 		complement.DoNotTurnLeft,
@@ -27,22 +27,12 @@ func (complement RAComplement) ToString() string {
 }
 
 // ReadRAComplement reads the bit data that constitutes the Resolution Advisory Complement (RAC)
-//
-// Params:
-//    - value: the 4 bits of the RAC field. value is right packed in a 8 bits int.
-//
-// Returns an RAComplement properly filled
-func ReadRAComplement(value byte) RAComplement {
-
-	doNotPassBelow := (value & 0x80) != 0
-	doNotPassAbove := (value & 0x40) != 0
-	doNotTurnLeft := (value & 0x20) != 0
-	doNotTurnRight := (value & 0x10) != 0
+func ReadRAComplement(data []byte) RAComplement {
 
 	return RAComplement{
-		DoNotPassBelow: doNotPassBelow,
-		DoNotPassAbove: doNotPassAbove,
-		DoNotTurnLeft:  doNotTurnLeft,
-		DoNotTurnRight: doNotTurnRight,
+		DoNotPassBelow: (data[1] & 0x02) != 0,
+		DoNotPassAbove: (data[1] & 0x01) != 0,
+		DoNotTurnLeft:  (data[2] & 0x80) != 0,
+		DoNotTurnRight: (data[2] & 0x40) != 0,
 	}
 }

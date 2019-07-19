@@ -27,15 +27,10 @@ func (terminatedIndicator RATerminatedIndicator) ToString() string {
 }
 
 // ReadRATerminatedIndicator reads the bit data that constitutes the Resolution Advisory Terminated Indicator field (RAT)
-//
-// Params:
-//    - value: the single bit of the RAT field. value is right packed in a 8 bits int.
-//
-// Returns an RATerminatedIndicator properly filled
-func ReadRATerminatedIndicator(value byte) RATerminatedIndicator {
+func ReadRATerminatedIndicator(data []byte) RATerminatedIndicator {
 
 	rat := RATCurrent
-	if (value & 0x01) != 0 {
+	if (data[2] & 0x20) != 0 {
 		rat = RATTerminated
 	}
 

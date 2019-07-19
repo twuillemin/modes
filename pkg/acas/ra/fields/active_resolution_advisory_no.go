@@ -12,5 +12,5 @@ func (noVerticalRAGenerated ActiveRANoVerticalRAGenerated) GetType() RAType {
 
 // ToString returns a basic, but readable, representation of the field
 func (noVerticalRAGenerated ActiveRANoVerticalRAGenerated) ToString() string {
-	return fmt.Sprintf("    Type: no Resolution Advisory has been generated")
+	return fmt.Sprintf("Type: no Resolution Advisory has been generated")
 }

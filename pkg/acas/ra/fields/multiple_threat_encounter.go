@@ -28,15 +28,10 @@ func (multipleThreatEncounter MultipleThreatEncounter) ToString() string {
 }
 
 // ReadMultipleThreatEncounter reads the bit data that constitutes the MultipleThreatEncounter field (MTE)
-//
-// Params:
-//    - value: the single bit of the MTE field. value is right packed in a 8 bits int.
-//
-// Returns an MultipleThreatEncounter properly filled
-func ReadMultipleThreatEncounter(value byte) MultipleThreatEncounter {
+func ReadMultipleThreatEncounter(data []byte) MultipleThreatEncounter {
 
 	mte := MTEOneOrZero
-	if (value & 0x01) != 0 {
+	if (data[2]&0x10)>>4 != 0 {
 		mte = MTETwoOrMore
 	}
 

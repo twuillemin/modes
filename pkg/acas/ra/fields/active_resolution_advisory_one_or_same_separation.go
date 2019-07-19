@@ -21,13 +21,13 @@ func (oneThreatOrSameSeparation ActiveRAOneThreatOrSameSeparation) GetType() RAT
 
 // ToString returns a basic, but readable, representation of the field
 func (oneThreatOrSameSeparation ActiveRAOneThreatOrSameSeparation) ToString() string {
-	return fmt.Sprintf("    Type: One threat or multiple threats with separation in same direction\n"+
-		"    Preventive/Corrective: %v\n"+
-		"    Sense generated: %v\n"+
-		"    Is increased rate: %v\n"+
-		"    Is sense reversal: %v\n"+
-		"    Is altitude crossing: %v\n"+
-		"    Vertical Speed Limit/Positive: %v",
+	return fmt.Sprintf("Type: One threat or multiple threats with separation in same direction\n"+
+		"Preventive/Corrective: %v\n"+
+		"Sense generated: %v\n"+
+		"Is increased rate: %v\n"+
+		"Is sense reversal: %v\n"+
+		"Is altitude crossing: %v\n"+
+		"Vertical Speed Limit/Positive: %v",
 		oneThreatOrSameSeparation.PreventiveCorrective.ToString(),
 		oneThreatOrSameSeparation.Sense.ToString(),
 		oneThreatOrSameSeparation.IsIncreasedRate,
@@ -37,44 +37,39 @@ func (oneThreatOrSameSeparation ActiveRAOneThreatOrSameSeparation) ToString() st
 }
 
 // ReadARAOneThreatOrSameSeparation reads the 14 bits data that constitutes the Active Resolution field (ARA)
-//
-// Params:
-//    - value: the 14 bits of the ARA field. value is right packed in a 16 bit int
-//
-// Returns an ActiveRAOneThreatOrSameSeparation properly filled
-func ReadARAOneThreatOrSameSeparation(value uint16) ActiveResolutionAdvisory {
+func ReadARAOneThreatOrSameSeparation(data []byte) *ActiveRAOneThreatOrSameSeparation {
 
 	preventiveCorrective := ActiveRAPreventive
-	if (value & 0x1000) != 0 {
+	if (data[0] & 0x40) != 0 {
 		preventiveCorrective = ActiveRACorrective
 	}
 
 	sense := ActiveRASenseUpward
-	if (value & 0x0800) != 0 {
+	if (data[0] & 0x20) != 0 {
 		sense = ActiveRASenseDownward
 	}
 
 	isIncreasedRate := false
-	if (value & 0x0400) != 0 {
+	if (data[0] & 0x10) != 0 {
 		isIncreasedRate = true
 	}
 
 	isSenseReversal := false
-	if (value & 0x0200) != 0 {
+	if (data[0] & 0x08) != 0 {
 		isSenseReversal = true
 	}
 
 	isAltitudeCrossing := false
-	if (value & 0x0100) != 0 {
+	if (data[0] & 0x04) != 0 {
 		isAltitudeCrossing = true
 	}
 
 	verticalSpeedLimitOrPositive := ActiveRAVerticalSpeedLimit
-	if (value & 0x0080) != 0 {
+	if (data[0] & 0x02) != 0 {
 		verticalSpeedLimitOrPositive = ActiveRAPositive
 	}
 
-	return ActiveRAOneThreatOrSameSeparation{
+	return &ActiveRAOneThreatOrSameSeparation{
 		PreventiveCorrective:         preventiveCorrective,
 		Sense:                        sense,
 		IsIncreasedRate:              isIncreasedRate,

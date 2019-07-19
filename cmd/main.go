@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	acasReader "github.com/twuillemin/modes/pkg/acas/reader"
+	resolutionAdvisoryMessage "github.com/twuillemin/modes/pkg/acas/ra/messages"
 	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
 	"github.com/twuillemin/modes/pkg/adsbspy"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
@@ -69,14 +69,23 @@ func postProcessMessage16(messageDF16 *modeSMessages.MessageDF16) {
 
 	fmt.Printf(" -- ACAS Information --\n")
 
-	// Read the ACAS content
-	messageACAS, errACAS := acasReader.ReadMessage(messageDF16.MessageACAS)
-	if errACAS != nil {
-		fmt.Println(errACAS)
-		return
-	}
+	// Extract the format
+	vds1 := (messageDF16.MessageACAS[0] & 0xF0) >> 4
+	vds2 := messageDF16.MessageACAS[0] & 0x0F
 
-	fmt.Printf("%v\n", messageACAS.ToString())
+	if vds1 == 3 && vds2 == 0 {
+
+		// Read the ACAS content
+		messageACAS, errACAS := resolutionAdvisoryMessage.ReadResolutionAdvisory(messageDF16.MessageACAS[1:])
+		if errACAS != nil {
+			fmt.Println(errACAS)
+			return
+		}
+
+		fmt.Printf("%v\n", messageACAS.ToString())
+	} else {
+		fmt.Printf("Unknown message type: [%X:%X]\n", vds1, vds2)
+	}
 }
 
 func postProcessMessage17(messageDF17 *modeSMessages.MessageDF17) {

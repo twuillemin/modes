@@ -36,10 +36,10 @@ func ReadBDS65(data []byte) (MessageBDS65, error) {
 
 	switch version {
 
-	case fields.ADSBV0:
+	case fields.ADSBVersion0:
 		return ReadFormat31V0(data)
 
-	case fields.ADSBV1, fields.ADSBV2:
+	case fields.ADSBVersion1, fields.ADSBVersion2:
 		switch subType {
 		case fields.OSSCAirborne:
 			return ReadFormat31V1Airborne(data)

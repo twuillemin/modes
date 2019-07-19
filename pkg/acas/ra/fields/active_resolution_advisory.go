@@ -21,3 +21,21 @@ type ActiveResolutionAdvisory interface {
 	// ToString returns a basic, but readable, representation of the field
 	ToString() string
 }
+
+// ReadActiveResolutionAdvisory reads a ActiveResolutionAdvisory field
+func ReadActiveResolutionAdvisory(data []byte) ActiveResolutionAdvisory {
+
+	// The type of Active RA depends on the first bit of the RA and of the presence
+	// of multiple threats
+	mte := (data[2] & 0x10) >> 4
+	araFirstBit := (data[0] & 0x80) >> 7
+
+	if araFirstBit == 1 {
+		return ReadARAOneThreatOrSameSeparation(data)
+	} else if mte != 0 {
+		return ReadARAMultipleThreatsDifferentSeparation(data)
+	} else {
+		return ActiveRANoVerticalRAGenerated{}
+	}
+
+}

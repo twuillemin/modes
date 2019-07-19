@@ -21,6 +21,41 @@ func ReadMessage(data []byte) (messages.ADSBMessage, error) {
 		return nil, errors.New("the data for ADSB message must be 7 bytes long")
 	}
 
+	// -----------------------------------
+	// Code   BDS     V0      V1       V2
+	//  0
+	//  1     0,8
+	//  2     0,8
+	//  3     0,8
+	//  4     0,8
+	//  5
+	//  6
+	//  7
+	//  8
+	//  9     0,5
+	// 10     0,5
+	// 14     0,5
+	// 12     0,5
+	// 13     0,5
+	// 14     0,5
+	// 15     0,5
+	// 16     0,5
+	// 17     0,5
+	// 18     0,5
+	// 19     0,9
+	// 20     0,5
+	// 21     0,5
+	// 22     0,5
+	// 23   Reserved
+	// 24   Reserved
+	// 25   Reserved
+	// 26   Reserved
+	// 27   Reserved
+	// 28
+	// 29   Reserved
+	// 30   Reserved
+	// 31     6,5      OK
+
 	// Get the type
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
