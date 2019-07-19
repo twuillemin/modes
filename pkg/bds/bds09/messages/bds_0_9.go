@@ -7,19 +7,35 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
-// MessageBDS09 is the basic interface that ADSB messages at the format BDS 6,5 are expected to implement
+// MessageBDS09 is the basic interface that ADSB messages at the format BDS 0,9 are expected to implement
 type MessageBDS09 interface {
 	common.BDSMessage
 	// GetFormatTypeCode returns the Format Type Code
 	GetFormatTypeCode() byte
-	// GetAirborneVelocitySubtype returns the Airborne Velocity Subtype
-	GetAirborneVelocitySubtype() fields.AirborneVelocitySubtype
+	// GetSubtype returns the Airborne Velocity Subtype
+	GetSubtype() fields.Subtype
+	// GetIntentChange returns the IntentChange
+	GetIntentChange() fields.IntentChange
+	// GetIFRCapability returns the IFRCapability
+	GetIFRCapability() fields.IFRCapability
+	// GetNavigationUncertaintyCategory returns the NavigationUncertaintyCategory
+	GetNavigationUncertaintyCategory() fields.NavigationUncertaintyCategory
+	// GetVerticalRateSource returns the VerticalRateSource
+	GetVerticalRateSource() fields.VerticalRateSource
+	// GetVerticalRateSign returns the VerticalRateSign
+	GetVerticalRateSign() fields.VerticalRateSign
+	// GetVerticalRate returns the VerticalRate
+	GetVerticalRate() fields.VerticalRate
+	// GetDifferenceGNSSBaroSign returns the DifferenceGNSSBaroSign
+	GetDifferenceGNSSBaroSign() fields.DifferenceGNSSBaroSign
+	// GetDifferenceGNSSBaro returns the DifferenceGNSSBaro
+	GetDifferenceGNSSBaro() fields.DifferenceGNSSBaro
 }
 
 var bds09Code = "BDS 0,9"
 var bds09Name = "Extended squitter airborne velocity"
 
-// ReadBDS09 reads a message at the format BDS 6,5
+// ReadBDS09 reads a message at the format BDS 0,5
 func ReadBDS09(data []byte) (MessageBDS09, error) {
 
 	if len(data) != 7 {
@@ -32,17 +48,17 @@ func ReadBDS09(data []byte) (MessageBDS09, error) {
 		return nil, fmt.Errorf("the format type code %v can not be read as a BDS 0,9 format", formatTypeCode)
 	}
 
-	// Read the version of ADSB and the subtype
+	// Read the subtype
 	subType := fields.ReadAirborneVelocitySubtype(data)
 
 	switch subType {
-	case fields.AVSCGroundSpeedNormal:
+	case fields.SubtypeGroundSpeedNormal:
 		return ReadFormat19GroundNormal(data)
-	case fields.AVSCGroundSpeedSupersonic:
+	case fields.SubtypeGroundSpeedSupersonic:
 		return ReadFormat19GroundSupersonic(data)
-	case fields.AVSCAirspeedNormal:
+	case fields.SubtypeAirspeedNormal:
 		return ReadFormat19AirspeedNormal(data)
-	case fields.AVSCAirspeedSupersonic:
+	case fields.SubtypeAirspeedSupersonic:
 		return ReadFormat19AirspeedSupersonic(data)
 
 	default:

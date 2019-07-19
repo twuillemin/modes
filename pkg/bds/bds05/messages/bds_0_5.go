@@ -36,17 +36,17 @@ var bds05Code = "BDS 0,5"
 var bds05Name = "Extended squitter airborne position"
 
 func bds05ToString(message MessageBDS05) string {
-	return fmt.Sprintf("Message:                        %v (%v)\n"+
-		"FormatTypeCode:                 %v\n"+
-		"SurveillanceStatus:             %v\n"+
-		"HorizontalProtectionLimit:      %v\n"+
-		"ContainmentRadius:              %v\n"+
-		"SingleAntenna:                  %v\n"+
-		"Time:                           %v\n"+
-		"CompactPositionReportingFormat: %v\n"+
-		"GetAltitude:                    %v\n"+
-		"EncodedLatitude:                %v\n"+
-		"EncodedLongitude:               %v",
+	return fmt.Sprintf("Message:                           %v (%v)\n"+
+		"Format Type Code:                  %v\n"+
+		"Surveillance Status:               %v\n"+
+		"Horizontal Protection Limit:       %v\n"+
+		"Containment Radius:                %v\n"+
+		"Single Antenna:                    %v\n"+
+		"Time:                              %v\n"+
+		"Compact Position Reporting Format: %v\n"+
+		"Altitude:                          %v\n"+
+		"Encoded Latitude:                  %v\n"+
+		"Encoded Longitude:                 %v",
 		message.GetBDS(),
 		message.GetName(),
 		message.GetFormatTypeCode(),

@@ -5,7 +5,6 @@ import (
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
 
-// AltitudeSource defines by which source the altitude is reported
 type AltitudeSource int
 
 const (
@@ -26,7 +25,10 @@ const (
 )
 
 // Altitude field reports the barometric altitude in feet. It use (almost) the same encoding as the
-// AC field of Mode S Message
+// AC field of Mode S Message. The main difference is that the M bit is removed, so altitude is only
+// reported in feet, not in meter.
+//
+// Specified in Doc 9871 / Table A-2-5 + Annexe 4 / 3.1.2.6.5.4
 type Altitude struct {
 	// Source is the source of the altitude
 	Source AltitudeSource

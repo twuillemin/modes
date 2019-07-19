@@ -8,12 +8,12 @@ import (
 type DifferenceGNSSBaroStatus int
 
 const (
-	// DifferenceGNSSBaroStatusNoInformation indicates no vertical rate
-	DifferenceGNSSBaroStatusNoInformation DifferenceGNSSBaroStatus = 0
-	// DifferenceGNSSBaroStatusRegular indicates that the DifferenceGNSSBaro is computed on the linear scale value of field * factor
-	DifferenceGNSSBaroStatusRegular DifferenceGNSSBaroStatus = 1
-	// DifferenceGNSSBaroStatusMaximum indicates that the DifferenceGNSSBaro field value indicates vertical rate greater the maximum of the scale
-	DifferenceGNSSBaroStatusMaximum DifferenceGNSSBaroStatus = 2
+	// DGBSNoInformation indicates no vertical rate
+	DGBSNoInformation DifferenceGNSSBaroStatus = 0
+	// DGBSRegular indicates that the DifferenceGNSSBaro is computed on the linear scale value of field * factor
+	DGBSRegular DifferenceGNSSBaroStatus = 1
+	// DGBSMaximum indicates that the DifferenceGNSSBaro field value indicates vertical rate greater the maximum of the scale
+	DGBSMaximum DifferenceGNSSBaroStatus = 2
 )
 
 // DifferenceGNSSBaro is the Velocity EW Normal definition
@@ -24,11 +24,11 @@ type DifferenceGNSSBaro uint16
 // GetStatus returns the status of the velocity
 func (DifferenceGNSSBaro DifferenceGNSSBaro) GetStatus() DifferenceGNSSBaroStatus {
 	if DifferenceGNSSBaro == 0 {
-		return DifferenceGNSSBaroStatusNoInformation
+		return DGBSNoInformation
 	} else if DifferenceGNSSBaro >= 127 {
-		return DifferenceGNSSBaroStatusMaximum
+		return DGBSMaximum
 	} else {
-		return DifferenceGNSSBaroStatusRegular
+		return DGBSRegular
 	}
 }
 
@@ -44,8 +44,8 @@ func (DifferenceGNSSBaro DifferenceGNSSBaro) ToString() string {
 	}
 }
 
-// GetDifferenceGNSSBaro returns the vertical rate. Note that the returned value will be 0 for DifferenceGNSSBaroStatusNoInformation and
-// the maximum for DifferenceGNSSBaroStatusMaximum
+// GetDifferenceGNSSBaro returns the vertical rate. Note that the returned value will be 0 for DGBSNoInformation and
+// the maximum for DGBSMaximum
 func (DifferenceGNSSBaro DifferenceGNSSBaro) GetDifferenceGNSSBaro() int {
 
 	if DifferenceGNSSBaro == 0 {

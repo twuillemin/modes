@@ -72,12 +72,12 @@ func (message *Format17) GetEncodedLongitude() fields.EncodedLongitude {
 
 // GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
 func (message *Format17) GetHorizontalProtectionLimit() fields.HPL {
-	return fields.HPLABBetween18Point52KmAnd37Point04Km
+	return fields.HPLBBetween18Point52KmAnd37Point04Km
 }
 
 // GetContainmentRadius returns the ContainmentRadius
 func (message *Format17) GetContainmentRadius() fields.ContainmentRadius {
-	return fields.CRABBetween9Point26KmAnd18Point52Km
+	return fields.CRBBetween9Point26KmAnd18Point52Km
 }
 
 // ReadFormat17 reads a message at the format BDS 0,5

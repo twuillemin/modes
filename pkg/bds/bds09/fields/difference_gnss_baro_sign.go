@@ -2,20 +2,20 @@ package fields
 
 import "fmt"
 
-// GNSSAltitudeSignBit is the GNSS Altitude Sign Bit definition
+// DifferenceGNSSBaroSign is the GNSS Altitude Sign Bit definition
 //
 // Specified in Doc 9871 / Table A-2-9
-type GNSSAltitudeSignBit byte
+type DifferenceGNSSBaroSign byte
 
 const (
 	// GASBAboveBaro indicates above baro alt.
-	GASBAboveBaro GNSSAltitudeSignBit = 0
+	GASBAboveBaro DifferenceGNSSBaroSign = 0
 	// GASBBelowBaro indicates below baro alt.
-	GASBBelowBaro GNSSAltitudeSignBit = 1
+	GASBBelowBaro DifferenceGNSSBaroSign = 1
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (bit GNSSAltitudeSignBit) ToString() string {
+func (bit DifferenceGNSSBaroSign) ToString() string {
 
 	switch bit {
 	case GASBAboveBaro:
@@ -27,8 +27,8 @@ func (bit GNSSAltitudeSignBit) ToString() string {
 	}
 }
 
-// ReadGNSSAltitudeSignBit reads the GNSSAltitudeSignBit from a 56 bits data field
-func ReadGNSSAltitudeSignBit(data []byte) GNSSAltitudeSignBit {
+// ReadDifferenceGNSSBaroSign reads the DifferenceGNSSBaroSign from a 56 bits data field
+func ReadDifferenceGNSSBaroSign(data []byte) DifferenceGNSSBaroSign {
 	bits := (data[6] & 0x08) >> 3
-	return GNSSAltitudeSignBit(bits)
+	return DifferenceGNSSBaroSign(bits)
 }

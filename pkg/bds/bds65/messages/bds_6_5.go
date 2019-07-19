@@ -26,7 +26,7 @@ func ReadBDS65(data []byte) (MessageBDS65, error) {
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
-	if formatTypeCode == 31 {
+	if formatTypeCode != 31 {
 		return nil, fmt.Errorf("the format type code %v can not be read as a BDS 6,5 format", formatTypeCode)
 	}
 

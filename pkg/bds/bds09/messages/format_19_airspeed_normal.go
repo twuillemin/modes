@@ -7,17 +7,17 @@ import (
 
 // Format19AirspeedNormal is a message at the format BDS 9,0
 type Format19AirspeedNormal struct {
-	IntentChangeFlag              fields.IntentChangeFlag
-	IFRCapabilityFlag             fields.IFRCapabilityFlag
+	IntentChange                  fields.IntentChange
+	IFRCapability                 fields.IFRCapability
 	NavigationUncertaintyCategory fields.NavigationUncertaintyCategory
 	MagneticHeadingStatus         fields.MagneticHeadingStatus
 	MagneticHeading               fields.MagneticHeading
 	AirspeedType                  fields.AirspeedType
 	AirspeedNormal                fields.AirspeedNormal
-	SourceBitVerticalRate         fields.SourceBitVerticalRate
-	SignBitVerticalRate           fields.SignBitVerticalRate
+	VerticalRateSource            fields.VerticalRateSource
+	VerticalRateSign              fields.VerticalRateSign
 	VerticalRate                  fields.VerticalRate
-	GNSSAltitudeSignBit           fields.GNSSAltitudeSignBit
+	DifferenceGNSSBaroSign        fields.DifferenceGNSSBaroSign
 	DifferenceGNSSBaro            fields.DifferenceGNSSBaro
 }
 
@@ -36,9 +36,49 @@ func (message *Format19AirspeedNormal) GetFormatTypeCode() byte {
 	return 19
 }
 
-// GetAirborneVelocitySubtype returns the code of the Operational Status Sub Type
-func (message *Format19AirspeedNormal) GetAirborneVelocitySubtype() fields.AirborneVelocitySubtype {
-	return fields.AVSCAirspeedNormal
+// GetSubtype returns the code of the Operational Status Sub Type
+func (message *Format19AirspeedNormal) GetSubtype() fields.Subtype {
+	return fields.SubtypeAirspeedNormal
+}
+
+// GetIntentChange returns the IntentChange
+func (message *Format19AirspeedNormal) GetIntentChange() fields.IntentChange {
+	return message.IntentChange
+}
+
+// GetIFRCapability returns the IFRCapability
+func (message *Format19AirspeedNormal) GetIFRCapability() fields.IFRCapability {
+	return message.IFRCapability
+}
+
+// GetNavigationUncertaintyCategory returns the NavigationUncertaintyCategory
+func (message *Format19AirspeedNormal) GetNavigationUncertaintyCategory() fields.NavigationUncertaintyCategory {
+	return message.NavigationUncertaintyCategory
+}
+
+// GetVerticalRateSource returns the VerticalRateSource
+func (message *Format19AirspeedNormal) GetVerticalRateSource() fields.VerticalRateSource {
+	return message.VerticalRateSource
+}
+
+// GetVerticalRateSign returns the VerticalRateSign
+func (message *Format19AirspeedNormal) GetVerticalRateSign() fields.VerticalRateSign {
+	return message.VerticalRateSign
+}
+
+// GetVerticalRate returns the VerticalRate
+func (message *Format19AirspeedNormal) GetVerticalRate() fields.VerticalRate {
+	return message.VerticalRate
+}
+
+// GetDifferenceGNSSBaroSign returns the DifferenceGNSSBaroSign
+func (message *Format19AirspeedNormal) GetDifferenceGNSSBaroSign() fields.DifferenceGNSSBaroSign {
+	return message.DifferenceGNSSBaroSign
+}
+
+// GetDifferenceGNSSBaro returns the DifferenceGNSSBaro
+func (message *Format19AirspeedNormal) GetDifferenceGNSSBaro() fields.DifferenceGNSSBaro {
+	return message.DifferenceGNSSBaro
 }
 
 // ToString returns a basic, but readable, representation of the message
@@ -46,33 +86,33 @@ func (message Format19AirspeedNormal) ToString() string {
 	return fmt.Sprintf("Message:                         %v (%v)\n"+
 		"Format Type Code:                %v\n"+
 		"Subtype:                         %v\n"+
-		"Intent Change Flag:              %v\n"+
-		"IFR Capability Flag:             %v\n"+
+		"Intent Change:                   %v\n"+
+		"IFR Capability:                  %v\n"+
 		"Navigation Uncertainty Category: %v\n"+
 		"Magnetic Heading Status:         %v\n"+
 		"Magnetic Heading:                %v\n"+
 		"Airspeed Type:                   %v\n"+
 		"Airspeed:                        %v\n"+
-		"Source Bit Vertical Rate:        %v\n"+
-		"Sign Bit Vertical Rate:          %v\n"+
+		"Vertical Rate Source :           %v\n"+
+		"Vertical Rate Sign:              %v\n"+
 		"Vertical Rate:                   %v\n"+
-		"GNSS Altitude Sign Bit:          %v\n"+
+		"Difference GNSS Baro Sign:       %v\n"+
 		"Difference GNSS Baro:            %v",
 		message.GetBDS(),
 		message.GetName(),
 		message.GetFormatTypeCode(),
-		message.GetAirborneVelocitySubtype().ToString(),
-		message.IntentChangeFlag.ToString(),
-		message.IFRCapabilityFlag.ToString(),
+		message.GetSubtype().ToString(),
+		message.IntentChange.ToString(),
+		message.IFRCapability.ToString(),
 		message.NavigationUncertaintyCategory.ToString(),
 		message.MagneticHeadingStatus.ToString(),
 		message.MagneticHeading.ToString(),
 		message.AirspeedType.ToString(),
 		message.AirspeedNormal.ToString(),
-		message.SourceBitVerticalRate.ToString(),
-		message.SignBitVerticalRate.ToString(),
+		message.VerticalRateSource.ToString(),
+		message.VerticalRateSign.ToString(),
 		message.VerticalRate.ToString(),
-		message.GNSSAltitudeSignBit.ToString(),
+		message.DifferenceGNSSBaroSign.ToString(),
 		message.DifferenceGNSSBaro.ToString())
 }
 
@@ -80,17 +120,17 @@ func (message Format19AirspeedNormal) ToString() string {
 func ReadFormat19AirspeedNormal(data []byte) (*Format19AirspeedNormal, error) {
 
 	return &Format19AirspeedNormal{
-		IntentChangeFlag:              fields.ReadIntentChangeFlag(data),
-		IFRCapabilityFlag:             fields.ReadIFRCapabilityFlag(data),
+		IntentChange:                  fields.ReadIntentChange(data),
+		IFRCapability:                 fields.ReadIFRCapability(data),
 		NavigationUncertaintyCategory: fields.ReadNavigationUncertaintyCategory(data),
 		MagneticHeadingStatus:         fields.ReadMagneticHeadingStatus(data),
 		MagneticHeading:               fields.ReadMagneticHeading(data),
 		AirspeedType:                  fields.ReadAirspeedType(data),
 		AirspeedNormal:                fields.ReadAirspeedNormal(data),
-		SourceBitVerticalRate:         fields.ReadSourceBitVerticalRate(data),
-		SignBitVerticalRate:           fields.ReadSignBitVerticalRate(data),
+		VerticalRateSource:            fields.ReadVerticalRateSource(data),
+		VerticalRateSign:              fields.ReadVerticalRateSign(data),
 		VerticalRate:                  fields.ReadVerticalRate(data),
-		GNSSAltitudeSignBit:           fields.ReadGNSSAltitudeSignBit(data),
+		DifferenceGNSSBaroSign:        fields.ReadDifferenceGNSSBaroSign(data),
 		DifferenceGNSSBaro:            fields.ReadDifferenceGNSSBaro(data),
 	}, nil
 }

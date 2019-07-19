@@ -13,7 +13,7 @@ const (
 	CRAGHorizontalLowerThan3MAndVerticalLowerThan4M ContainmentRadiusAirborneGNSS = 0
 	// CRAGHorizontalLowerThan10MAndVerticalLowerThan15M denotes μ < 10 m and v < 15 m
 	CRAGHorizontalLowerThan10MAndVerticalLowerThan15M ContainmentRadiusAirborneGNSS = 1
-	// CRAGHorizontalGreaterThan10MOrVerticalGreaterThan15M denotes μ > 10 m or v ≥ 15 m
+	// CRAGHorizontalGreaterThan10MOrVerticalGreaterThan15M denotes μ > 10 m or v >= 15 m
 	CRAGHorizontalGreaterThan10MOrVerticalGreaterThan15M ContainmentRadiusAirborneGNSS = 2
 )
 
@@ -53,7 +53,7 @@ func (cr ContainmentRadiusAirborneGNSS) ToString() string {
 	case CRAGHorizontalLowerThan10MAndVerticalLowerThan15M:
 		return "μ < 10 m and v < 15 m"
 	case CRAGHorizontalGreaterThan10MOrVerticalGreaterThan15M:
-		return "μ > 10 m or v ≥ 15 m"
+		return "μ > 10 m or v >= 15 m"
 	default:
 		return fmt.Sprintf("%v - Unknown code", cr)
 	}

@@ -2,57 +2,57 @@ package fields
 
 import "fmt"
 
-// EmergencyState is the Emergency State definition
+// EmergencyPriorityStatus is the Emergency Priority Status definition
 //
 // Specified in Doc 9871 / Table B-2-97a
-type EmergencyState byte
+type EmergencyPriorityStatus byte
 
 const (
-	// ESNoEmergency indicates no emergency
-	ESNoEmergency EmergencyState = 0
-	// ESGeneralEmergency indicates general emergency
-	ESGeneralEmergency EmergencyState = 1
-	// ESLifeguardMedical indicates lifeguard/medical emergency
-	ESLifeguardMedical EmergencyState = 2
-	// ESMinimumFuel indicates minimum fuel
-	ESMinimumFuel EmergencyState = 3
-	// ESNoCommunication indicates no communications
-	ESNoCommunication EmergencyState = 4
-	// ESUnlawfulInterference indicates unlawful interference
-	ESUnlawfulInterference EmergencyState = 5
-	// ESDownedAircraft indicates downed aircraft
-	ESDownedAircraft EmergencyState = 6
-	// ESReserved7 is reserved
-	ESReserved7 EmergencyState = 7
+	// EPSNoEmergency indicates no emergency
+	EPSNoEmergency EmergencyPriorityStatus = 0
+	// EPSGeneralEmergency indicates general emergency
+	EPSGeneralEmergency EmergencyPriorityStatus = 1
+	// EPSLifeguardMedical indicates lifeguard/medical emergency
+	EPSLifeguardMedical EmergencyPriorityStatus = 2
+	// EPSMinimumFuel indicates minimum fuel
+	EPSMinimumFuel EmergencyPriorityStatus = 3
+	// EPSNoCommunication indicates no communications
+	EPSNoCommunication EmergencyPriorityStatus = 4
+	// EPSUnlawfulInterference indicates unlawful interference
+	EPSUnlawfulInterference EmergencyPriorityStatus = 5
+	// EPSDownedAircraft indicates downed aircraft
+	EPSDownedAircraft EmergencyPriorityStatus = 6
+	// EPSReserved7 is reserved
+	EPSReserved7 EmergencyPriorityStatus = 7
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (capability EmergencyState) ToString() string {
+func (capability EmergencyPriorityStatus) ToString() string {
 
 	switch capability {
-	case ESNoEmergency:
+	case EPSNoEmergency:
 		return "0 - no emergency"
-	case ESGeneralEmergency:
+	case EPSGeneralEmergency:
 		return "1 - general emergency"
-	case ESLifeguardMedical:
+	case EPSLifeguardMedical:
 		return "2 - lifeguard/medical emergency"
-	case ESMinimumFuel:
+	case EPSMinimumFuel:
 		return "3 - minimum fuel"
-	case ESNoCommunication:
+	case EPSNoCommunication:
 		return "4 - no communications"
-	case ESUnlawfulInterference:
+	case EPSUnlawfulInterference:
 		return "5 - unlawful interference"
-	case ESDownedAircraft:
+	case EPSDownedAircraft:
 		return "6 - downed aircraft"
-	case ESReserved7:
+	case EPSReserved7:
 		return "7 - reserved"
 	default:
 		return fmt.Sprintf("%v - Unknown code", capability)
 	}
 }
 
-// ReadEmergencyState reads the EmergencyState from a 56 bits data field
-func ReadEmergencyState(data []byte) EmergencyState {
+// ReadEmergencyPriorityStatus reads the EmergencyPriorityStatus from a 56 bits data field
+func ReadEmergencyPriorityStatus(data []byte) EmergencyPriorityStatus {
 	bits := data[6] & 0x0E
-	return EmergencyState(bits)
+	return EmergencyPriorityStatus(bits)
 }

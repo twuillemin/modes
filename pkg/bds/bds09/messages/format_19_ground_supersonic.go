@@ -7,17 +7,17 @@ import (
 
 // Format19GroundSupersonic is a message at the format BDS 9,0
 type Format19GroundSupersonic struct {
-	IntentChangeFlag              fields.IntentChangeFlag
-	IFRCapabilityFlag             fields.IFRCapabilityFlag
+	IntentChange                  fields.IntentChange
+	IFRCapability                 fields.IFRCapability
 	NavigationUncertaintyCategory fields.NavigationUncertaintyCategory
-	DirectionBitEWVelocity        fields.DirectionBitEWVelocity
+	DirectionEastWest             fields.DirectionEastWest
 	VelocityEWSupersonic          fields.VelocityEWSupersonic
-	DirectionBitNSVelocity        fields.DirectionBitNSVelocity
+	DirectionNorthSouth           fields.DirectionNorthSouth
 	VelocityNSSupersonic          fields.VelocityNSSupersonic
-	SourceBitVerticalRate         fields.SourceBitVerticalRate
-	SignBitVerticalRate           fields.SignBitVerticalRate
+	VerticalRateSource            fields.VerticalRateSource
+	VerticalRateSign              fields.VerticalRateSign
 	VerticalRate                  fields.VerticalRate
-	GNSSAltitudeSignBit           fields.GNSSAltitudeSignBit
+	DifferenceGNSSBaroSign        fields.DifferenceGNSSBaroSign
 	DifferenceGNSSBaro            fields.DifferenceGNSSBaro
 }
 
@@ -36,9 +36,49 @@ func (message *Format19GroundSupersonic) GetFormatTypeCode() byte {
 	return 19
 }
 
-// GetAirborneVelocitySubtype returns the code of the Operational Status Sub Type
-func (message *Format19GroundSupersonic) GetAirborneVelocitySubtype() fields.AirborneVelocitySubtype {
-	return fields.AVSCGroundSpeedSupersonic
+// GetSubtype returns the code of the Operational Status Sub Type
+func (message *Format19GroundSupersonic) GetSubtype() fields.Subtype {
+	return fields.SubtypeGroundSpeedSupersonic
+}
+
+// GetIntentChange returns the IntentChange
+func (message *Format19GroundSupersonic) GetIntentChange() fields.IntentChange {
+	return message.IntentChange
+}
+
+// GetIFRCapability returns the IFRCapability
+func (message *Format19GroundSupersonic) GetIFRCapability() fields.IFRCapability {
+	return message.IFRCapability
+}
+
+// GetNavigationUncertaintyCategory returns the NavigationUncertaintyCategory
+func (message *Format19GroundSupersonic) GetNavigationUncertaintyCategory() fields.NavigationUncertaintyCategory {
+	return message.NavigationUncertaintyCategory
+}
+
+// GetVerticalRateSource returns the VerticalRateSource
+func (message *Format19GroundSupersonic) GetVerticalRateSource() fields.VerticalRateSource {
+	return message.VerticalRateSource
+}
+
+// GetVerticalRateSign returns the VerticalRateSign
+func (message *Format19GroundSupersonic) GetVerticalRateSign() fields.VerticalRateSign {
+	return message.VerticalRateSign
+}
+
+// GetVerticalRate returns the VerticalRate
+func (message *Format19GroundSupersonic) GetVerticalRate() fields.VerticalRate {
+	return message.VerticalRate
+}
+
+// GetDifferenceGNSSBaroSign returns the DifferenceGNSSBaroSign
+func (message *Format19GroundSupersonic) GetDifferenceGNSSBaroSign() fields.DifferenceGNSSBaroSign {
+	return message.DifferenceGNSSBaroSign
+}
+
+// GetDifferenceGNSSBaro returns the DifferenceGNSSBaro
+func (message *Format19GroundSupersonic) GetDifferenceGNSSBaro() fields.DifferenceGNSSBaro {
+	return message.DifferenceGNSSBaro
 }
 
 // ToString returns a basic, but readable, representation of the message
@@ -46,33 +86,33 @@ func (message Format19GroundSupersonic) ToString() string {
 	return fmt.Sprintf("Message:                         %v (%v)\n"+
 		"Format Type Code:                %v\n"+
 		"Subtype:                         %v\n"+
-		"Intent Change Flag:              %v\n"+
-		"IFR Capability Flag:             %v\n"+
+		"Intent Change:                   %v\n"+
+		"IFR Capability:                  %v\n"+
 		"Navigation Uncertainty Category: %v\n"+
-		"Direction Bit EW Velocity:       %v\n"+
+		"Direction EW:                    %v\n"+
 		"Velocity EW Supersonic:          %v\n"+
-		"Direction Bit NS Velocity:       %v\n"+
+		"Direction NS:                    %v\n"+
 		"Velocity NS Supersonic:          %v\n"+
-		"Source Bit Vertical Rate:        %v\n"+
-		"Sign Bit Vertical Rate:          %v\n"+
+		"Vertical Rate Source:            %v\n"+
+		"Vertical Rate Sign:              %v\n"+
 		"Vertical Rate:                   %v\n"+
-		"GNSS Altitude Sign Bit:          %v\n"+
+		"Difference GNSS Baro Sign:       %v\n"+
 		"Difference GNSS Baro:            %v",
 		message.GetBDS(),
 		message.GetName(),
 		message.GetFormatTypeCode(),
-		message.GetAirborneVelocitySubtype().ToString(),
-		message.IntentChangeFlag.ToString(),
-		message.IFRCapabilityFlag.ToString(),
+		message.GetSubtype().ToString(),
+		message.IntentChange.ToString(),
+		message.IFRCapability.ToString(),
 		message.NavigationUncertaintyCategory.ToString(),
-		message.DirectionBitEWVelocity.ToString(),
+		message.DirectionEastWest.ToString(),
 		message.VelocityEWSupersonic.ToString(),
-		message.DirectionBitNSVelocity.ToString(),
+		message.DirectionNorthSouth.ToString(),
 		message.VelocityNSSupersonic.ToString(),
-		message.SourceBitVerticalRate.ToString(),
-		message.SignBitVerticalRate.ToString(),
+		message.VerticalRateSource.ToString(),
+		message.VerticalRateSign.ToString(),
 		message.VerticalRate.ToString(),
-		message.GNSSAltitudeSignBit.ToString(),
+		message.DifferenceGNSSBaroSign.ToString(),
 		message.DifferenceGNSSBaro.ToString())
 }
 
@@ -80,17 +120,17 @@ func (message Format19GroundSupersonic) ToString() string {
 func ReadFormat19GroundSupersonic(data []byte) (*Format19GroundSupersonic, error) {
 
 	return &Format19GroundSupersonic{
-		IntentChangeFlag:              fields.ReadIntentChangeFlag(data),
-		IFRCapabilityFlag:             fields.ReadIFRCapabilityFlag(data),
+		IntentChange:                  fields.ReadIntentChange(data),
+		IFRCapability:                 fields.ReadIFRCapability(data),
 		NavigationUncertaintyCategory: fields.ReadNavigationUncertaintyCategory(data),
-		DirectionBitEWVelocity:        fields.ReadDirectionBitEWVelocity(data),
+		DirectionEastWest:             fields.ReadDirectionEastWest(data),
 		VelocityEWSupersonic:          fields.ReadVelocityEWSupersonic(data),
-		DirectionBitNSVelocity:        fields.ReadDirectionBitNSVelocity(data),
+		DirectionNorthSouth:           fields.ReadDirectionNorthSouth(data),
 		VelocityNSSupersonic:          fields.ReadVelocityNSSupersonic(data),
-		SourceBitVerticalRate:         fields.ReadSourceBitVerticalRate(data),
-		SignBitVerticalRate:           fields.ReadSignBitVerticalRate(data),
+		VerticalRateSource:            fields.ReadVerticalRateSource(data),
+		VerticalRateSign:              fields.ReadVerticalRateSign(data),
 		VerticalRate:                  fields.ReadVerticalRate(data),
-		GNSSAltitudeSignBit:           fields.ReadGNSSAltitudeSignBit(data),
+		DifferenceGNSSBaroSign:        fields.ReadDifferenceGNSSBaroSign(data),
 		DifferenceGNSSBaro:            fields.ReadDifferenceGNSSBaro(data),
 	}, nil
 }

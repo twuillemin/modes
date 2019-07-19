@@ -72,7 +72,7 @@ func (message *Format21) GetEncodedLongitude() fields.EncodedLongitude {
 
 // GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
 func (message *Format21) GetHorizontalProtectionLimit() fields.HPL {
-	return fields.HPLAGLowerThan25M
+	return fields.HPLGLowerThan25M
 }
 
 // GetContainmentRadius returns the ContainmentRadius
