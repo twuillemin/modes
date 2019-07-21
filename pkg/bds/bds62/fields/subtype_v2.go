@@ -50,6 +50,6 @@ func (subtype SubtypeV2) ToString() string {
 
 // ReadSubtypeV2 reads the Subtype from a 56 bits data field
 func ReadSubtypeV2(data []byte) SubtypeV2 {
-	bits := data[0] & 0x07
+	bits := (data[0] & 0x06) >> 1
 	return SubtypeV2(bits)
 }

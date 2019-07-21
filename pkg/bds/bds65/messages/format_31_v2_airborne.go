@@ -15,10 +15,10 @@ type Format31V2Airborne struct {
 	NICSupplementA                       fields.NICSupplementA
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV2
 	GeometricVerticalAccuracy            fields.GeometricVerticalAccuracy
-	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV2
+	SourceIntegrityLevel                 fields.SourceIntegrityLevel
 	NICBaro                              fields.NICBaro
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
-	SurveillanceIntegrityLevelSupplement fields.SurveillanceIntegrityLevelSupplement
+	SourceIntegrityLevelSupplement       fields.SourceIntegrityLevelSupplement
 }
 
 // GetName returns the name of the message
@@ -51,8 +51,8 @@ func (message Format31V2Airborne) ToString() string {
 		"NIC Supplement:                          %v\n"+
 		"Navigational Accuracy Category Position: %v\n"+
 		"Geometric Vertical Accuracy:             %v\n"+
-		"Surveillance Integrity Level:            %v\n"+
-		"Surveillance Integrity Level Supplement: %v\n"+
+		"Source Integrity Level:                  %v\n"+
+		"Source Integrity Level Supplement:       %v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
 		message.GetFormatTypeCode(),
@@ -65,8 +65,8 @@ func (message Format31V2Airborne) ToString() string {
 		message.NICSupplementA.ToString(),
 		message.NavigationalAccuracyCategoryPosition.ToString(),
 		message.GeometricVerticalAccuracy.ToString(),
-		message.SurveillanceIntegrityLevel.ToString(),
-		message.SurveillanceIntegrityLevelSupplement.ToString(),
+		message.SourceIntegrityLevel.ToString(),
+		message.SourceIntegrityLevelSupplement.ToString(),
 		message.NICBaro.ToString(),
 		message.HorizontalReferenceDirection.ToString())
 }
@@ -82,9 +82,9 @@ func ReadFormat31V2Airborne(data []byte) (*Format31V2Airborne, error) {
 		NICSupplementA:                       fields.ReadNICSupplementA(data),
 		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV2(data),
 		GeometricVerticalAccuracy:            fields.ReadGeometricVerticalAccuracy(data),
-		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV2(data),
+		SourceIntegrityLevel:                 fields.ReadSourceIntegrityLevel(data),
 		NICBaro:                              fields.ReadNICBaro(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
-		SurveillanceIntegrityLevelSupplement: fields.ReadSurveillanceIntegrityLevelSupplement(data),
+		SourceIntegrityLevelSupplement:       fields.ReadSourceIntegrityLevelSupplement(data),
 	}, nil
 }

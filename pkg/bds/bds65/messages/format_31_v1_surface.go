@@ -15,7 +15,7 @@ type Format31V1Surface struct {
 	VersionNumber                        fields.VersionNumber
 	NICSupplement                        fields.NICSupplementA
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV1
-	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV1
+	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevel
 	TrackAngleHeading                    fields.TrackAngleHeading
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
 }
@@ -79,7 +79,7 @@ func ReadFormat31V1Surface(data []byte) (*Format31V1Surface, error) {
 		VersionNumber:                        fields.ReadVersionNumber(data),
 		NICSupplement:                        fields.ReadNICSupplementA(data),
 		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV1(data),
-		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV1(data),
+		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevel(data),
 		TrackAngleHeading:                    fields.ReadTrackAngleHeading(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
 	}, nil

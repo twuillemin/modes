@@ -14,7 +14,7 @@ type Format31V1Airborne struct {
 	VersionNumber                        fields.VersionNumber
 	NICSupplement                        fields.NICSupplementA
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV1
-	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV1
+	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevel
 	NICBaro                              fields.NICBaro
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
 }
@@ -75,7 +75,7 @@ func ReadFormat31V1Airborne(data []byte) (*Format31V1Airborne, error) {
 		VersionNumber:                        fields.ReadVersionNumber(data),
 		NICSupplement:                        fields.ReadNICSupplementA(data),
 		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV1(data),
-		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV1(data),
+		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevel(data),
 		NICBaro:                              fields.ReadNICBaro(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
 	}, nil

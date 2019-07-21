@@ -17,7 +17,7 @@ type Format29Subtype0 struct {
 	TargetHeadingTrackAngle                fields.TargetHeadingTrackAngle
 	TargetHeadingTrackIndicator            fields.TargetHeadingTrackIndicator
 	HorizontalModeIndicator                fields.HorizontalModeIndicator
-	NavigationalAccuracyCategoryPosition   fields.NavigationalAccuracyCategoryPosition
+	NavigationalAccuracyCategoryPosition   fields.NavigationalAccuracyCategoryPositionV1
 	NICBaro                                fields.NICBaro
 	SurveillanceIntegrityLevel             fields.SurveillanceIntegrityLevel
 	CapabilityModeCode                     fields.CapabilityModeCode
@@ -101,7 +101,7 @@ func readFormat29Subtype0(data []byte) (*Format29Subtype0, error) {
 		TargetHeadingTrackAngle:                fields.ReadTargetHeadingTrackAngle(data),
 		TargetHeadingTrackIndicator:            fields.ReadTargetHeadingTrackIndicator(data),
 		HorizontalModeIndicator:                fields.ReadHorizontalModeIndicator(data),
-		NavigationalAccuracyCategoryPosition:   fields.ReadNavigationalAccuracyCategoryPosition(data),
+		NavigationalAccuracyCategoryPosition:   fields.ReadNavigationalAccuracyCategoryPositionV1(data),
 		NICBaro:                                fields.ReadNICBaro(data),
 		SurveillanceIntegrityLevel:             fields.ReadSurveillanceIntegrityLevel(data),
 		CapabilityModeCode:                     fields.ReadCapabilityModeCode(data),

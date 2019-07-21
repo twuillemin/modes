@@ -8,7 +8,7 @@ import "fmt"
 type NICBaro byte
 
 const (
-	// NICBGilhamNotCrossChecked indicates that he barometric altitude that is being reported in the Airborne
+	// NICBGilhamNotCrossChecked indicates that the barometric altitude that is being reported in the Airborne
 	// Position Message is based on a Gilham coded input that has not been cross-checked against another source of
 	// pressure-altitude
 	NICBGilhamNotCrossChecked NICBaro = 0
@@ -25,7 +25,7 @@ func (baro NICBaro) ToString() string {
 	case NICBGilhamNotCrossChecked:
 		return "0 - barometric altitude based on a Gilham input that has not been cross-checked"
 	case NICBGilhamCrossCheckedOrNonGilham:
-		return "0 - barometric altitude based on a Gilham input that has been cross-checked or on a non Gilham input"
+		return "1 - barometric altitude based on a Gilham input that has been cross-checked or on a non Gilham input"
 	default:
 		return fmt.Sprintf("%v - Unknown code", baro)
 	}

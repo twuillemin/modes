@@ -69,7 +69,7 @@ func ReadMessage(
 	// 26          Reserved
 	// 27          Reserved
 	// 28     6,1  Emergency report      OK      OK      OK
-	// 29     6,2  Target and status     __      OK     TODO
+	// 29     6,2  Target and status     __      OK      OK
 	// 30          Reserved
 	// 31     6,5  Operational status    OK      OK      OK
 

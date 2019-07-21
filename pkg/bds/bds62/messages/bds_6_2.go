@@ -37,7 +37,7 @@ func ReadBDS62(adsbLevel common.ADSBLevel, data []byte) (MessageBDS62, common.AD
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
-	subType := data[0] & 0x07
+	subType := (data[0] & 0x06) >> 1
 
 	if formatTypeCode != 29 {
 		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 6,2 format", formatTypeCode)
@@ -78,8 +78,8 @@ func ReadBDS62(adsbLevel common.ADSBLevel, data []byte) (MessageBDS62, common.AD
 			message, err := readFormat29Subtype0(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 1 {
-			// TODO implement for subtype 2
-			return nil, adsbLevelToUse, fmt.Errorf("the subtype %v of Target state and status information is not implement", formatTypeCode)
+			message, err := readFormat29Subtype1(data)
+			return message, adsbLevelToUse, err
 		}
 	}
 

@@ -15,10 +15,10 @@ type Format31V2Surface struct {
 	VersionNumber                        fields.VersionNumber
 	NICSupplement                        fields.NICSupplementA
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV2
-	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV2
+	SSourceIntegrityLevel                fields.SourceIntegrityLevel
 	TrackAngleHeading                    fields.TrackAngleHeading
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
-	SurveillanceIntegrityLevelSupplement fields.SurveillanceIntegrityLevelSupplement
+	SourceIntegrityLevelSupplement       fields.SourceIntegrityLevelSupplement
 }
 
 // GetName returns the name of the message
@@ -51,8 +51,8 @@ func (message Format31V2Surface) ToString() string {
 		"ADSV Version Number:                     %v\n"+
 		"NIC Supplement:                          %v\n"+
 		"Navigational Accuracy Category Position: %v\n"+
-		"Surveillance Integrity Level:            %v\n"+
-		"Surveillance Integrity Level Supplement: %v\n"+
+		"Source Integrity Level:                  %v\n"+
+		"Source Integrity Level Supplement:       %v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
 		message.GetFormatTypeCode(),
@@ -65,8 +65,8 @@ func (message Format31V2Surface) ToString() string {
 		message.VersionNumber.ToString(),
 		message.NICSupplement.ToString(),
 		message.NavigationalAccuracyCategoryPosition.ToString(),
-		message.SurveillanceIntegrityLevel.ToString(),
-		message.SurveillanceIntegrityLevelSupplement.ToString(),
+		message.SSourceIntegrityLevel.ToString(),
+		message.SourceIntegrityLevelSupplement.ToString(),
 		message.TrackAngleHeading.ToString(),
 		message.HorizontalReferenceDirection.ToString())
 }
@@ -82,9 +82,9 @@ func ReadFormat31V2Surface(data []byte) (*Format31V2Surface, error) {
 		VersionNumber:                        fields.ReadVersionNumber(data),
 		NICSupplement:                        fields.ReadNICSupplementA(data),
 		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV2(data),
-		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV2(data),
+		SSourceIntegrityLevel:                fields.ReadSourceIntegrityLevel(data),
 		TrackAngleHeading:                    fields.ReadTrackAngleHeading(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
-		SurveillanceIntegrityLevelSupplement: fields.ReadSurveillanceIntegrityLevelSupplement(data),
+		SourceIntegrityLevelSupplement:       fields.ReadSourceIntegrityLevelSupplement(data),
 	}, nil
 }
