@@ -21,11 +21,11 @@ func (versionNumber VersionNumber) ToString() string {
 
 	switch versionNumber {
 	case ADSBVersion0:
-		return "0 - ADSB V0: Conformant to Doc 9871, 1st Edition, Appendix A"
+		return "0 - ADSB V0: Conformant to Doc 9871, Appendix A"
 	case ADSBVersion1:
-		return "1 - ADSB V1: Conformant to Doc 9871, 1st Edition, Appendix B"
+		return "1 - ADSB V1: Conformant to Doc 9871, Appendix B"
 	case ADSBVersion2:
-		return "2 - ADSB V2: Conformant to Doc 9871, ?th Edition, Appendix C"
+		return "2 - ADSB V2: Conformant to Doc 9871, Appendix C"
 	}
 	return fmt.Sprintf("%v", versionNumber)
 }

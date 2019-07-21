@@ -8,12 +8,13 @@ import (
 
 // Format31V1Airborne is a message at the format BDS 6,5 the ADSB V1 / Airborne
 type Format31V1Airborne struct {
-	AirborneCapabilityClass              fields.CapabilityClassAirborne
+	Subtype                              fields.SubtypeV1
+	AirborneCapabilityClass              fields.AirborneCapabilityClassV1
 	OperationalMode                      fields.OperationalMode
 	VersionNumber                        fields.VersionNumber
-	NICSupplement                        fields.NICSupplement
-	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPosition
-	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevel
+	NICSupplement                        fields.NICSupplementA
+	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV1
+	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV1
 	NICBaro                              fields.NICBaro
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
 }
@@ -33,15 +34,14 @@ func (message *Format31V1Airborne) GetFormatTypeCode() byte {
 	return 31
 }
 
-// GetOperationalStatusSubtypeCode returns the code of the Operational Status Subtype
-func (message *Format31V1Airborne) GetOperationalStatusSubtypeCode() byte {
-	return byte(fields.OSSCSurface)
+// GetSubtype returns the subtype of the Operational Status Sub Type
+func (message *Format31V1Airborne) GetSubtype() fields.Subtype {
+	return message.Subtype
 }
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V1Airborne) ToString() string {
-	return fmt.Sprintf("Message:                                 %v (%v)\n"+
-		"Format Type Code:                        %v\n"+
+	return fmt.Sprintf("Message:                                 %v - %v (%v)\n"+
 		"Subtype:                                 %v\n"+
 		"Airborne Capability Class:\n%v\n"+
 		"Operational Mode:\n%v\n"+
@@ -51,16 +51,16 @@ func (message Format31V1Airborne) ToString() string {
 		"Surveillance Integrity Level:\n%v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
-		message.GetBDS(),
 		message.GetName(),
 		message.GetFormatTypeCode(),
-		fields.OSSCSurface.ToString(),
-		common.PrefixMultiLine(message.AirborneCapabilityClass.ToString(), " - "),
-		common.PrefixMultiLine(message.OperationalMode.ToString(), " - "),
+		message.GetBDS(),
+		message.GetSubtype().ToString(),
+		common.PrefixMultiLine(message.AirborneCapabilityClass.ToString(), "    "),
+		common.PrefixMultiLine(message.OperationalMode.ToString(), "    "),
 		message.VersionNumber.ToString(),
 		message.NICSupplement.ToString(),
 		message.NavigationalAccuracyCategoryPosition.ToString(),
-		common.PrefixMultiLine(message.SurveillanceIntegrityLevel.ToString(), " - "),
+		common.PrefixMultiLine(message.SurveillanceIntegrityLevel.ToString(), "    "),
 		message.NICBaro.ToString(),
 		message.HorizontalReferenceDirection.ToString())
 }
@@ -69,12 +69,13 @@ func (message Format31V1Airborne) ToString() string {
 func ReadFormat31V1Airborne(data []byte) (*Format31V1Airborne, error) {
 
 	return &Format31V1Airborne{
-		AirborneCapabilityClass:              fields.ReadCapabilityClassAirborne(data),
+		Subtype:                              fields.ReadSubtypeV1(data),
+		AirborneCapabilityClass:              fields.ReadAirborneCapabilityClassV1(data),
 		OperationalMode:                      fields.ReadOperationalMode(data),
 		VersionNumber:                        fields.ReadVersionNumber(data),
-		NICSupplement:                        fields.ReadNICSupplement(data),
-		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPosition(data),
-		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevel(data),
+		NICSupplement:                        fields.ReadNICSupplementA(data),
+		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV1(data),
+		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV1(data),
 		NICBaro:                              fields.ReadNICBaro(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
 	}, nil

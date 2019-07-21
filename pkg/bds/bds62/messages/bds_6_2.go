@@ -83,5 +83,5 @@ func ReadBDS62(adsbLevel common.ADSBLevel, data []byte) (MessageBDS62, common.AD
 		}
 	}
 
-	return nil, adsbLevelToUse, fmt.Errorf("the subtype %v of Target state and status information is not supported", formatTypeCode)
+	return nil, adsbLevelToUse, fmt.Errorf("the subtype %v of Target state and status information is not supported", subType)
 }

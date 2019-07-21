@@ -6,42 +6,43 @@ import (
 	"github.com/twuillemin/modes/pkg/common"
 )
 
-// Format31V1Surface is a message at the format BDS 6,5 the ADSB V1 / Surface
-type Format31V1Surface struct {
-	Subtype                              fields.SubtypeV1
-	SurfaceCapabilityClass               fields.SurfaceCapabilityClassV1
+// Format31V2Surface is a message at the format BDS 6,5 the ADSB V2 / Surface
+type Format31V2Surface struct {
+	Subtype                              fields.SubtypeV2
+	SurfaceCapabilityClass               fields.SurfaceCapabilityClassV2
 	LengthAndWidth                       fields.LengthWidth
-	OperationalMode                      fields.OperationalMode
+	SurfaceOperationalMode               fields.SurfaceOperationalMode
 	VersionNumber                        fields.VersionNumber
 	NICSupplement                        fields.NICSupplementA
-	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV1
-	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV1
+	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV2
+	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevelV2
 	TrackAngleHeading                    fields.TrackAngleHeading
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
+	SurveillanceIntegrityLevelSupplement fields.SurveillanceIntegrityLevelSupplement
 }
 
 // GetName returns the name of the message
-func (message *Format31V1Surface) GetName() string {
+func (message *Format31V2Surface) GetName() string {
 	return bds65Name
 }
 
 // GetBDS returns the binary data format
-func (message *Format31V1Surface) GetBDS() string {
+func (message *Format31V2Surface) GetBDS() string {
 	return bds65Code
 }
 
 // GetFormatTypeCode returns the Format Type Code
-func (message *Format31V1Surface) GetFormatTypeCode() byte {
+func (message *Format31V2Surface) GetFormatTypeCode() byte {
 	return 31
 }
 
 // GetSubtype returns the subtype of the Operational Status Sub Type
-func (message *Format31V1Surface) GetSubtype() fields.Subtype {
+func (message *Format31V2Surface) GetSubtype() fields.Subtype {
 	return message.Subtype
 }
 
 // ToString returns a basic, but readable, representation of the message
-func (message Format31V1Surface) ToString() string {
+func (message Format31V2Surface) ToString() string {
 	return fmt.Sprintf("Message:                                 %v - %v (%v)\n"+
 		"Subtype:                                 %v\n"+
 		"Airborne Capability Class:\n%v\n"+
@@ -50,7 +51,8 @@ func (message Format31V1Surface) ToString() string {
 		"ADSV Version Number:                     %v\n"+
 		"NIC Supplement:                          %v\n"+
 		"Navigational Accuracy Category Position: %v\n"+
-		"Surveillance Integrity Level:\n%v\n"+
+		"Surveillance Integrity Level:            %v\n"+
+		"Surveillance Integrity Level Supplement: %v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
 		message.GetName(),
@@ -59,28 +61,30 @@ func (message Format31V1Surface) ToString() string {
 		fields.OSSCAirborne.ToString(),
 		common.PrefixMultiLine(message.SurfaceCapabilityClass.ToString(), "    "),
 		message.LengthAndWidth.ToString(),
-		common.PrefixMultiLine(message.OperationalMode.ToString(), "    "),
+		common.PrefixMultiLine(message.SurfaceOperationalMode.ToString(), "    "),
 		message.VersionNumber.ToString(),
 		message.NICSupplement.ToString(),
 		message.NavigationalAccuracyCategoryPosition.ToString(),
-		common.PrefixMultiLine(message.SurveillanceIntegrityLevel.ToString(), "    "),
+		message.SurveillanceIntegrityLevel.ToString(),
+		message.SurveillanceIntegrityLevelSupplement.ToString(),
 		message.TrackAngleHeading.ToString(),
 		message.HorizontalReferenceDirection.ToString())
 }
 
-// ReadFormat31V1Surface reads a message at the format Format31V1Surface
-func ReadFormat31V1Surface(data []byte) (*Format31V1Surface, error) {
+// ReadFormat31V2Surface reads a message at the format Format31V2Surface
+func ReadFormat31V2Surface(data []byte) (*Format31V2Surface, error) {
 
-	return &Format31V1Surface{
-		Subtype:                              fields.ReadSubtypeV1(data),
-		SurfaceCapabilityClass:               fields.ReadSurfaceCapabilityClassV1(data),
+	return &Format31V2Surface{
+		Subtype:                              fields.ReadSubtypeV2(data),
+		SurfaceCapabilityClass:               fields.ReadSurfaceCapabilityClassV2(data),
 		LengthAndWidth:                       fields.ReadAircraftLengthAndWidth(data),
-		OperationalMode:                      fields.ReadOperationalMode(data),
+		SurfaceOperationalMode:               fields.ReadSurfaceOperationalMode(data),
 		VersionNumber:                        fields.ReadVersionNumber(data),
 		NICSupplement:                        fields.ReadNICSupplementA(data),
-		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV1(data),
-		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV1(data),
+		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV2(data),
+		SurveillanceIntegrityLevel:           fields.ReadSurveillanceIntegrityLevelV2(data),
 		TrackAngleHeading:                    fields.ReadTrackAngleHeading(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
+		SurveillanceIntegrityLevelSupplement: fields.ReadSurveillanceIntegrityLevelSupplement(data),
 	}, nil
 }

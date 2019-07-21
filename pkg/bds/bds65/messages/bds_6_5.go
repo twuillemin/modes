@@ -11,8 +11,8 @@ import (
 // MessageBDS65 is the basic interface that ADSB messages at the format BDS 6,5 are expected to implement
 type MessageBDS65 interface {
 	messages.ADSBMessage
-	// GetOperationalStatusSubtypeCode returns the code of the Operational Status Sub Type
-	GetOperationalStatusSubtypeCode() byte
+	// GetSubtype returns the subtype of the Operational Status Sub Type
+	GetSubtype() fields.Subtype
 }
 
 var bds65Code = "BDS 6,5"
@@ -26,6 +26,7 @@ func ReadBDS65(adsbLevel common.ADSBLevel, data []byte) (MessageBDS65, common.AD
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
+	subType := data[0] & 0x07
 
 	if formatTypeCode != 31 {
 		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 6,5 format", formatTypeCode)
@@ -33,7 +34,6 @@ func ReadBDS65(adsbLevel common.ADSBLevel, data []byte) (MessageBDS65, common.AD
 
 	// Read the detectedADSBLevel of ADSB and the subtype
 	detectedADSBLevel := fields.ReadVersionNumber(data)
-	subType := fields.ReadOperationalStatusSubtypeCode(data)
 
 	// If the version is fixed but different from the read one, return an error
 	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == common.Level1Exactly || adsbLevel == common.Level2)) ||
@@ -58,19 +58,31 @@ func ReadBDS65(adsbLevel common.ADSBLevel, data []byte) (MessageBDS65, common.AD
 		resultingADSBLevel = common.Level2
 	}
 
-	switch detectedADSBLevel {
+	switch resultingADSBLevel {
 
-	case fields.ADSBVersion0:
+	case common.Level0Exactly:
 		message, err := ReadFormat31V0(data)
 		return message, resultingADSBLevel, err
 
-	case fields.ADSBVersion1, fields.ADSBVersion2:
+	case common.Level1Exactly:
 		switch subType {
-		case fields.OSSCAirborne:
+		case 0:
 			message, err := ReadFormat31V1Airborne(data)
 			return message, resultingADSBLevel, err
-		case fields.OSSCSurface:
+		case 1:
 			message, err := ReadFormat31V1Surface(data)
+			return message, resultingADSBLevel, err
+		default:
+			return nil, resultingADSBLevel, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)
+		}
+
+	case common.Level2:
+		switch subType {
+		case 0:
+			message, err := ReadFormat31V2Airborne(data)
+			return message, resultingADSBLevel, err
+		case 1:
+			message, err := ReadFormat31V2Surface(data)
 			return message, resultingADSBLevel, err
 		default:
 			return nil, resultingADSBLevel, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)

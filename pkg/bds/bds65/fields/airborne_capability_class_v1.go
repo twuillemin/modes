@@ -2,10 +2,10 @@ package fields
 
 import "fmt"
 
-// CapabilityClassAirborne is the Capability Class Airborne definition
+// AirborneCapabilityClassV1 is the Airborne Capability Class definition
 //
 // Specified in Doc 9871 / B.2.3.10.3
-type CapabilityClassAirborne struct {
+type AirborneCapabilityClassV1 struct {
 	NotACASStatus                            NotACASStatus
 	CockpitDisplayOfTrafficInformationStatus CockpitDisplayOfTrafficInformationStatus
 	AirReferencedVelocityReportCapability    AirReferencedVelocityReportCapability
@@ -14,13 +14,13 @@ type CapabilityClassAirborne struct {
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (capability CapabilityClassAirborne) ToString() string {
+func (capability AirborneCapabilityClassV1) ToString() string {
 
-	return fmt.Sprintf("NotACASStatus:                            %v\n"+
-		"CockpitDisplayOfTrafficInformationStatus: %v\n"+
-		"AirReferencedVelocityReportCapability:    %v\n"+
-		"TargetStateReportCapability:              %v\n"+
-		"TargetChangeReportCapability:             %v",
+	return fmt.Sprintf("Not ACAS Status:                               %v\n"+
+		"Cockpit Display Of Traffic Information Status: %v\n"+
+		"Air Referenced Velocity Report Capability:     %v\n"+
+		"Target State Report Capability:                %v\n"+
+		"Target Change Report Capability:               %v",
 		capability.NotACASStatus.ToString(),
 		capability.CockpitDisplayOfTrafficInformationStatus.ToString(),
 		capability.AirReferencedVelocityReportCapability.ToString(),
@@ -28,9 +28,9 @@ func (capability CapabilityClassAirborne) ToString() string {
 		capability.TargetChangeReportCapability.ToString())
 }
 
-// ReadCapabilityClassAirborne reads the CapabilityClassAirborne from a 56 bits data field
-func ReadCapabilityClassAirborne(data []byte) CapabilityClassAirborne {
-	return CapabilityClassAirborne{
+// ReadAirborneCapabilityClassV1 reads the AirborneCapabilityClassV1 from a 56 bits data field
+func ReadAirborneCapabilityClassV1(data []byte) AirborneCapabilityClassV1 {
+	return AirborneCapabilityClassV1{
 		NotACASStatus:                            ReadNotACASStatus(data),
 		CockpitDisplayOfTrafficInformationStatus: ReadCockpitDisplayOfTrafficInformationStatus(data),
 		AirReferencedVelocityReportCapability:    ReadAirReferencedVelocityReportCapability(data),

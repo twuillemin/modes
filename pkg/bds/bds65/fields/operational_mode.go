@@ -6,7 +6,7 @@ import "fmt"
 //
 // Specified in Doc 9871 / B.2.3.10.4
 type OperationalMode struct {
-	ACASResolutionAdvisoryActive ACASResolutionAdvisoryActive
+	ACASResolutionAdvisoryActive ACASResolutionAdvisoryActiveV1
 	IdentSwitchActive            IdentSwitchActive
 	ReceivingATCServices         ReceivingATCServices
 }
@@ -14,9 +14,9 @@ type OperationalMode struct {
 // ToString returns a basic, but readable, representation of the field
 func (mode OperationalMode) ToString() string {
 
-	return fmt.Sprintf("ACASResolutionAdvisoryActive:  %v\n"+
-		"IdentSwitchActive:             %v\n"+
-		"ReceivingATCServices:          %v",
+	return fmt.Sprintf("ACAS Resolution Advisory Active: %v\n"+
+		"Ident Switch Active:             %v\n"+
+		"Receiving ATC Services:          %v",
 		mode.ACASResolutionAdvisoryActive.ToString(),
 		mode.IdentSwitchActive.ToString(),
 		mode.ReceivingATCServices.ToString())
@@ -25,7 +25,7 @@ func (mode OperationalMode) ToString() string {
 // ReadOperationalMode reads the OperationalMode from a 56 bits data field
 func ReadOperationalMode(data []byte) OperationalMode {
 	return OperationalMode{
-		ACASResolutionAdvisoryActive: ReadACASResolutionAdvisoryActive(data),
+		ACASResolutionAdvisoryActive: ReadACASResolutionAdvisoryActiveV1(data),
 		IdentSwitchActive:            ReadIdentSwitchActive(data),
 		ReceivingATCServices:         ReadReceivingATCServices(data),
 	}

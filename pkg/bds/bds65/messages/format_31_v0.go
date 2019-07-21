@@ -7,6 +7,7 @@ import (
 
 // Format31V0 is a message at the format BDS 6,5 the ADSB V1
 type Format31V0 struct {
+	Subtype                                    fields.SubtypeV0
 	EnRouteOperationalCapabilities             fields.EnRouteOperationalCapabilities
 	EnRouteOperationalCapabilityStatus         fields.EnRouteOperationalCapabilityStatus
 	TerminalAreaOperationalCapabilities        fields.TerminalAreaOperationalCapabilities
@@ -32,15 +33,14 @@ func (message *Format31V0) GetFormatTypeCode() byte {
 	return 31
 }
 
-// GetOperationalStatusSubtypeCode returns the code of the Operational Status Subtype
-func (message *Format31V0) GetOperationalStatusSubtypeCode() byte {
-	return 0
+// GetSubtype returns the subtype of the Operational Status Sub Type
+func (message *Format31V0) GetSubtype() fields.Subtype {
+	return message.Subtype
 }
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V0) ToString() string {
-	return fmt.Sprintf("Message:                                        %v (%v)\n"+
-		"Format Type Code:                               %v\n"+
+	return fmt.Sprintf("Message:                                        %v - %v (%v)\n"+
 		"Subtype:                                        %v\n"+
 		"En Route Operational Capabilities:              %v\n"+
 		"En Route Operational Capability Status:         %v\n"+
@@ -50,10 +50,10 @@ func (message Format31V0) ToString() string {
 		"Approach/Landing Operational Capability Status: %v\n"+
 		"Surface Operational Capabilities:               %v\n"+
 		"Surface Operational Capability Status:          %v",
-		message.GetBDS(),
-		message.GetName(),
 		message.GetFormatTypeCode(),
-		message.GetOperationalStatusSubtypeCode(),
+		message.GetName(),
+		message.GetBDS(),
+		message.GetSubtype().ToString(),
 		message.EnRouteOperationalCapabilities.ToString(),
 		message.EnRouteOperationalCapabilityStatus.ToString(),
 		message.TerminalAreaOperationalCapabilities.ToString(),
@@ -68,6 +68,7 @@ func (message Format31V0) ToString() string {
 func ReadFormat31V0(data []byte) (*Format31V0, error) {
 
 	return &Format31V0{
+		Subtype:                                    fields.ReadSubtypeV0(data),
 		EnRouteOperationalCapabilities:             fields.ReadEnRouteOperationalCapabilities(data),
 		EnRouteOperationalCapabilityStatus:         fields.ReadEnRouteOperationalCapabilityStatus(data),
 		TerminalAreaOperationalCapabilities:        fields.ReadTerminalAreaOperationalCapabilities(data),

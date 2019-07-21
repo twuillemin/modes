@@ -2,29 +2,29 @@ package fields
 
 import "fmt"
 
-// CapabilityClassSurface is the Capability Class Surface definition
+// SurfaceCapabilityClassV1 is the Capability Class Surface definition
 //
 // Specified in Doc 9871 / B.2.3.10.3
-type CapabilityClassSurface struct {
+type SurfaceCapabilityClassV1 struct {
 	PositionOffsetApplied                    PositionOffsetApplied
 	CockpitDisplayOfTrafficInformationStatus CockpitDisplayOfTrafficInformationStatus
 	B2Low                                    B2Low
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (capability CapabilityClassSurface) ToString() string {
+func (capability SurfaceCapabilityClassV1) ToString() string {
 
-	return fmt.Sprintf("PositionOffsetApplied:                    %v\n"+
-		"CockpitDisplayOfTrafficInformationStatus: %v\n"+
-		"B2Low:                                    %v",
+	return fmt.Sprintf("Position Offset Applied:                       %v\n"+
+		"Cockpit Display Of Traffic Information Status: %v\n"+
+		"B2Low:                                         %v",
 		capability.PositionOffsetApplied.ToString(),
 		capability.CockpitDisplayOfTrafficInformationStatus.ToString(),
 		capability.B2Low.ToString())
 }
 
-// ReadCapabilityClassSurface reads the CapabilityClassSurface from a 56 bits data field
-func ReadCapabilityClassSurface(data []byte) CapabilityClassSurface {
-	return CapabilityClassSurface{
+// ReadSurfaceCapabilityClassV1 reads the SurfaceCapabilityClassV1 from a 56 bits data field
+func ReadSurfaceCapabilityClassV1(data []byte) SurfaceCapabilityClassV1 {
+	return SurfaceCapabilityClassV1{
 		PositionOffsetApplied:                    ReadPositionOffsetApplied(data),
 		CockpitDisplayOfTrafficInformationStatus: ReadCockpitDisplayOfTrafficInformationStatus(data),
 		B2Low:                                    ReadB2Low(data),

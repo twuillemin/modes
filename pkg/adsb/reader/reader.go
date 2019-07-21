@@ -71,7 +71,7 @@ func ReadMessage(
 	// 28     6,1  Emergency report      OK      OK      OK
 	// 29     6,2  Target and status     __      OK     TODO
 	// 30          Reserved
-	// 31     6,5  Operational status    OK     TODO    TODO
+	// 31     6,5  Operational status    OK      OK      OK
 
 	// Get the type
 	formatTypeCode := (data[0] & 0xF8) >> 3

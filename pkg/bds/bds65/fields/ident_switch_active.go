@@ -21,7 +21,7 @@ func (status IdentSwitchActive) ToString() string {
 	case ISANotActive:
 		return "0 - Ident switch not active"
 	case ISAActive:
-		return "1 - Ident switch active - retained for 18 ±1 seconds"
+		return "1 - Ident switch active - retained for 18 +/-1 seconds"
 	default:
 		return fmt.Sprintf("%v - Unknown code", status)
 	}

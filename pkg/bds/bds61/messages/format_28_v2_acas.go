@@ -7,7 +7,7 @@ import (
 
 // Format28V2ACAS is a message at the format BDS 6,1
 type Format28V2ACAS struct {
-	Subtype  fields.SubtypeV1
+	Subtype  fields.SubtypeV2
 	ACASData []byte
 }
 
@@ -56,7 +56,7 @@ func readFormat28V2ACAS(data []byte) (*Format28V2ACAS, error) {
 	}
 
 	return &Format28V2ACAS{
-		Subtype:  fields.ReadSubtypeV1(data),
+		Subtype:  fields.ReadSubtypeV2(data),
 		ACASData: acasData,
 	}, nil
 }

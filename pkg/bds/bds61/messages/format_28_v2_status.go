@@ -8,7 +8,7 @@ import (
 
 // Format28V2Status is a message at the format BDS 6,1
 type Format28V2Status struct {
-	Subtype                 fields.SubtypeV1
+	Subtype                 fields.SubtypeV2
 	EmergencyPriorityStatus fields.EmergencyPriorityStatus
 	ModeACode               uint16
 }
@@ -57,7 +57,7 @@ func readFormat28V2Status(data []byte) (*Format28V2Status, error) {
 	byte2 := data[2]
 
 	return &Format28V2Status{
-		Subtype:                 fields.ReadSubtypeV1(data),
+		Subtype:                 fields.ReadSubtypeV2(data),
 		EmergencyPriorityStatus: fields.ReadEmergencyPriorityStatus(data),
 		ModeACode:               bitutils.Pack2Bytes(byte1, byte2),
 	}, nil

@@ -51,7 +51,7 @@ func (message *Format29Subtype0) GetEmergencyPriorityStatus() fields.EmergencyPr
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format29Subtype0) ToString() string {
-	return fmt.Sprintf("Message:                                      %v - %v (BDS: %v)\n"+
+	return fmt.Sprintf("Message:                                      %v - %v (%v)\n"+
 		"Subtype:                                      %v\n"+
 		"Vertical Data Available / Source Indicator:   %v\n"+
 		"Target Altitude Type:                         %v\n"+
