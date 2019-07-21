@@ -8,7 +8,7 @@ import "fmt"
 type CompactPositionReportingFormat byte
 
 const (
-	// CPRFormatEven denotes an even format coding
+	// CPRFormatEven indicates an even format coding
 	CPRFormatEven CompactPositionReportingFormat = 0
 	// CPRFormatOdd indicates an odd format coding
 	CPRFormatOdd CompactPositionReportingFormat = 1

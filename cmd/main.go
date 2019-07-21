@@ -6,6 +6,7 @@ import (
 	resolutionAdvisoryMessage "github.com/twuillemin/modes/pkg/acas/ra/messages"
 	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
 	"github.com/twuillemin/modes/pkg/adsbspy"
+	"github.com/twuillemin/modes/pkg/bds/common"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
 	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
@@ -93,7 +94,7 @@ func postProcessMessage17(messageDF17 *modeSMessages.MessageDF17) {
 	fmt.Printf(" -- ADSB Information --\n")
 
 	// Get the content
-	messageADSB, errADSB := adsbReader.ReadMessage(messageDF17.MessageExtendedSquitter.Data)
+	messageADSB, _, errADSB := adsbReader.ReadMessage(common.Level0OrMore, false, false, messageDF17.MessageExtendedSquitter.Data)
 	if errADSB != nil {
 		fmt.Println(errADSB)
 		return
@@ -110,7 +111,7 @@ func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18) {
 		fmt.Printf(" -- ADSB Information --\n")
 
 		// Get the content
-		messageADSB, errADSB := adsbReader.ReadMessage(messageDF18.MessageExtendedSquitter.Data)
+		messageADSB, _, errADSB := adsbReader.ReadMessage(common.Level0OrMore, false, false, messageDF18.MessageExtendedSquitter.Data)
 		if errADSB != nil {
 			fmt.Println(errADSB)
 			return
@@ -127,6 +128,8 @@ func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18) {
 		fmt.Printf("Not implemented\n")
 	}
 }
+
+// TODO Add management for ADSBLevel, nicSupplementA and nicSupplementC
 
 func readExampleFile() []string {
 

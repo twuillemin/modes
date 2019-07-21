@@ -10,6 +10,10 @@ const (
 	MSValid MovementStatus = 1
 	// MSAboveMaximum indicates that the Movement is above the maximum
 	MSAboveMaximum MovementStatus = 2
-	// MSReserved indicates that the value is reserved
-	MSReserved MovementStatus = 3
+	// MSReservedDecelerating indicates that the value is reserved
+	MSReservedDecelerating MovementStatus = 3
+	// MSReservedAccelerating indicates that the value is reserved
+	MSReservedAccelerating MovementStatus = 4
+	// MSReservedBackingUp indicates that the value is reserved
+	MSReservedBackingUp MovementStatus = 5
 )

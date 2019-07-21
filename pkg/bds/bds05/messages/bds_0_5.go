@@ -14,8 +14,6 @@ type MessageBDS05 interface {
 	GetFormatTypeCode() byte
 	// GetSurveillanceStatus returns the Surveillance Status
 	GetSurveillanceStatus() fields.SurveillanceStatus
-	// GetSingleAntennaFlag returns the SingleAntennaFlag
-	GetSingleAntennaFlag() fields.SingleAntennaFlag
 	// GetAltitude returns the Altitude
 	GetAltitude() fields.Altitude
 	// GetTime returns the Time
@@ -26,78 +24,66 @@ type MessageBDS05 interface {
 	GetEncodedLatitude() fields.EncodedLatitude
 	// GetEncodedLongitude returns the EncodedLongitude
 	GetEncodedLongitude() fields.EncodedLongitude
-	// GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
-	GetHorizontalProtectionLimit() fields.HPL
-	// GetContainmentRadius returns the ContainmentRadius
-	GetContainmentRadius() fields.ContainmentRadius
 }
 
 var bds05Code = "BDS 0,5"
 var bds05Name = "Extended squitter airborne position"
 
-func bds05ToString(message MessageBDS05) string {
-	return fmt.Sprintf("Message:                           %v (%v)\n"+
-		"Format Type Code:                  %v\n"+
-		"Surveillance Status:               %v\n"+
-		"Horizontal Protection Limit:       %v\n"+
-		"Containment Radius:                %v\n"+
-		"Single Antenna:                    %v\n"+
-		"Time:                              %v\n"+
-		"Compact Position Reporting Format: %v\n"+
-		"Altitude:                          %v\n"+
-		"Encoded Latitude:                  %v\n"+
-		"Encoded Longitude:                 %v",
-		message.GetBDS(),
-		message.GetName(),
-		message.GetFormatTypeCode(),
-		message.GetSurveillanceStatus().ToString(),
-		message.GetHorizontalProtectionLimit().ToString(),
-		message.GetContainmentRadius().ToString(),
-		message.GetSingleAntennaFlag().ToString(),
-		message.GetTime().ToString(),
-		message.GetCPRFormat().ToString(),
-		message.GetAltitude().ToString(),
-		message.GetEncodedLatitude(),
-		message.GetEncodedLongitude())
-}
-
-// ReadBDS05 reads a message at the format BDS 0,5
-func ReadBDS05(data []byte) (MessageBDS05, error) {
+// ReadBDS05 reads a message at the format BDS 0,5. As there is no information in this message for guessing the
+// correct ADSB version, the lowest adsbLevel given is used and returned.
+//
+// Changes between version:
+//    - ADSB V0 -> ADSB V1: Add NIC Supplement A bit coming from a previous message type 31
+//    - ADSB V1 -> ADSB V2: Precision on the movement values 125, 126 and 127, from simply Reserved to
+//                          Reserved with details.
+//    - ADSB V1 -> ADSB V2: Add the replace the SingleAntennaFlag bit by the NIC B bit in first byte of data
+//
+// Params:
+//    - adsbLevel: The ADSB level request (not used, but present for coherency)
+//    - data: The data of the message must be 7 bytes
+//    - nicSupplementA: The nic supplement A bit coming from previous Format Code 31 message if any. If none, 0 is fine
+//
+// Returns the message read, the given ADSBLevel or an error
+func ReadBDS05(adsbLevel common.ADSBLevel, nicSupplementA bool, data []byte) (MessageBDS05, common.ADSBLevel, error) {
 
 	if len(data) != 7 {
-		return nil, errors.New("the data for BDS message must be 7 bytes long")
+		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
-	switch formatTypeCode {
-	case 9:
-		return ReadFormat09(data)
-	case 10:
-		return ReadFormat10(data)
-	case 11:
-		return ReadFormat11(data)
-	case 12:
-		return ReadFormat12(data)
-	case 13:
-		return ReadFormat13(data)
-	case 14:
-		return ReadFormat14(data)
-	case 15:
-		return ReadFormat15(data)
-	case 16:
-		return ReadFormat16(data)
-	case 17:
-		return ReadFormat17(data)
-	case 18:
-		return ReadFormat18(data)
-	case 20:
-		return ReadFormat20(data)
-	case 21:
-		return ReadFormat21(data)
-	case 22:
-		return ReadFormat22(data)
+	switch adsbLevel {
+
+	case common.Level0Exactly, common.Level0OrMore:
+
+		if 9 <= formatTypeCode && formatTypeCode <= 18 {
+			message, err := readFormat09To18V0(data)
+			return message, adsbLevel, err
+		} else if 20 <= formatTypeCode && formatTypeCode <= 22 {
+			message, err := readFormat20To22V0(data)
+			return message, adsbLevel, err
+		}
+
+	case common.Level1Exactly, common.Level1OrMore:
+
+		if 9 <= formatTypeCode && formatTypeCode <= 18 {
+			message, err := readFormat09To18V1(nicSupplementA, data)
+			return message, adsbLevel, err
+		} else if 20 <= formatTypeCode && formatTypeCode <= 22 {
+			message, err := readFormat20To22V1(data)
+			return message, adsbLevel, err
+		}
+
+	case common.Level2:
+
+		if 9 <= formatTypeCode && formatTypeCode <= 18 {
+			message, err := readFormat09To18V2(nicSupplementA, data)
+			return message, adsbLevel, err
+		} else if 20 <= formatTypeCode && formatTypeCode <= 22 {
+			message, err := readFormat20To22V2(data)
+			return message, adsbLevel, err
+		}
 	}
 
-	return nil, fmt.Errorf("the format type code %v can not be read as a BDS 0,5 format", formatTypeCode)
+	return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,5 format", formatTypeCode)
 }

@@ -16,8 +16,6 @@ const (
 	Level1OrMore ADSBLevel = 2
 	// Level1Exactly indicates that the message must be read as ADSB 1 or has been determined as being level 1 only
 	Level1Exactly ADSBLevel = 3
-	// Level2OrMore indicates that the message could be level ADSB level 2 or more
-	Level2OrMore ADSBLevel = 4
-	// Level2Exactly indicates that the message must be read as ADSB 2 or has been determined as being level 2 only
-	Level2Exactly ADSBLevel = 5
+	// Level2 indicates that the message must be read as ADSB 2 or has been determined as being level 1 only
+	Level2 ADSBLevel = 4
 )

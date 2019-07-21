@@ -116,8 +116,8 @@ func (message Format19AirspeedSupersonic) ToString() string {
 		message.DifferenceGNSSBaro.ToString())
 }
 
-// ReadFormat19AirspeedSupersonic reads a message at the format BDS 6,5
-func ReadFormat19AirspeedSupersonic(data []byte) (*Format19AirspeedSupersonic, error) {
+// readFormat19AirspeedSupersonic reads a message at the format BDS 6,5
+func readFormat19AirspeedSupersonic(data []byte) (*Format19AirspeedSupersonic, error) {
 
 	return &Format19AirspeedSupersonic{
 		IntentChange:                  fields.ReadIntentChange(data),

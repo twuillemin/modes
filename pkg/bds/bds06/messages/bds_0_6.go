@@ -26,60 +26,58 @@ type MessageBDS06 interface {
 	GetEncodedLatitude() fields.EncodedLatitude
 	// GetEncodedLongitude returns the EncodedLongitude
 	GetEncodedLongitude() fields.EncodedLongitude
-	// GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
-	GetHorizontalProtectionLimit() fields.HorizontalProtectionLimit
-	// GetContainmentRadius returns the ContainmentRadius
-	GetContainmentRadius() fields.ContainmentRadius
 }
 
 var bds06Code = "BDS 0,6"
 var bds06Name = "Extended squitter surface position"
 
-func bds06ToString(message MessageBDS06) string {
-	return fmt.Sprintf("Message:                           %v (%v)\n"+
-		"FormatTypeCode:                    %v\n"+
-		"Horizontal Protection Limit:       %v\n"+
-		"Containment Radius:                %v\n"+
-		"Movement:                          %v\n"+
-		"Ground Track Status:               %v\n"+
-		"Ground Track:                      %v\n"+
-		"Time:                              %v\n"+
-		"Compact Position Reporting Format: %v\n"+
-		"Encoded Latitude:                  %v\n"+
-		"Encoded Longitude:                 %v",
-		message.GetBDS(),
-		message.GetName(),
-		message.GetFormatTypeCode(),
-		message.GetHorizontalProtectionLimit().ToString(),
-		message.GetContainmentRadius().ToString(),
-		message.GetMovement().ToString(),
-		message.GetGroundTrackStatus(),
-		message.GetGroundTrack(),
-		message.GetTime().ToString(),
-		message.GetCPRFormat().ToString(),
-		message.GetEncodedLatitude(),
-		message.GetEncodedLongitude())
-}
-
-// ReadBDS06 reads a message at the format BDS 0,6
-func ReadBDS06(data []byte) (MessageBDS06, error) {
+// ReadBDS06 reads a message at the format BDS 0,6. As there is no information in this message for guessing the
+// correct ADSB version, the lowest adsbLevel given is used and returned.
+//
+// Changes between version:
+//    - ADSB V0 -> ADSB V1: Add NIC Supplement A bit coming from a previous message type 31
+//    - ADSB V1 -> ADSB V2: Precision on the movement values 125, 126 and 127, from simply Reserved to
+//                          Reserved with details.
+//    - ADSB V1 -> ADSB V2: Add the replace the SingleAntennaFlag bit by the NIC B bit in first byte of data
+//
+// Params:
+//    - adsbLevel: The ADSB level request (not used, but present for coherency)
+//    - nicSupplementA: The NIC Supplement-A comes from the Aircraft  Operational  Status - Message Type Format 31 (see
+//                      C.2.3.10.20). If no previous Type Format 31 message was received before calling this function, a
+//                      default value of 0 can be used.
+//    - nicSupplementC: The NIC Supplement-C comes from the Surface Capability Class (CC) Code  Subfield  of  the
+//                      Aircraft  Operational  Status - Message Type Format 31 (see  C.2.3.10.20). If no previous Type
+//                      Format 31 message was received before calling this function, a default value of 0 can be used.
+//    - data: The data of the message must be 7 bytes
+//
+// Returns the message read, the given ADSBLevel or an error
+func ReadBDS06(
+	adsbLevel common.ADSBLevel,
+	nicSupplementA bool,
+	nicSupplementC bool,
+	data []byte) (MessageBDS06, common.ADSBLevel, error) {
 
 	if len(data) != 7 {
-		return nil, errors.New("the data for BDS message must be 7 bytes long")
+		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
-	switch formatTypeCode {
-	case 5:
-		return ReadFormat05(data)
-	case 6:
-		return ReadFormat06(data)
-	case 7:
-		return ReadFormat07(data)
-	case 8:
-		return ReadFormat08(data)
+	if formatTypeCode < 5 || formatTypeCode > 8 {
+		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,6 format", formatTypeCode)
 	}
 
-	return nil, fmt.Errorf("the format type code %v can not be read as a BDS 0,6 format", formatTypeCode)
+	switch adsbLevel {
+	case common.Level0Exactly, common.Level0OrMore:
+		message, err := readFormat05To08V0(data)
+		return message, adsbLevel, err
+
+	case common.Level1Exactly, common.Level1OrMore:
+		message, err := readFormat05To08V1(nicSupplementA, data)
+		return message, adsbLevel, err
+	// case common.Level2Exactly, common.Level2OrMore:
+	default:
+		message, err := readFormat05To08V2(nicSupplementA, nicSupplementC, data)
+		return message, adsbLevel, err
+	}
 }

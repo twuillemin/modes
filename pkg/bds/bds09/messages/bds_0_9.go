@@ -35,17 +35,24 @@ type MessageBDS09 interface {
 var bds09Code = "BDS 0,9"
 var bds09Name = "Extended squitter airborne velocity"
 
-// ReadBDS09 reads a message at the format BDS 0,5
-func ReadBDS09(data []byte) (MessageBDS09, error) {
+// ReadBDS09 reads a message at the format BDS 0,9. As this format does not have changes from ADSB V0 to
+// ADSB V2, the returned ADSBLevel is always the given one.
+//
+// Params:
+//    - adsbLevel: The ADSB level request (not used, but present for coherency)
+//    - data: The data of the message must be 7 bytes
+//
+// Returns the message read, the given ADSBLevel or an error
+func ReadBDS09(adsbLevel common.ADSBLevel, data []byte) (MessageBDS09, common.ADSBLevel, error) {
 
 	if len(data) != 7 {
-		return nil, errors.New("the data for BDS message must be 7 bytes long")
+		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
 	if formatTypeCode != 19 {
-		return nil, fmt.Errorf("the format type code %v can not be read as a BDS 0,9 format", formatTypeCode)
+		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,9 format", formatTypeCode)
 	}
 
 	// Read the subtype
@@ -53,15 +60,19 @@ func ReadBDS09(data []byte) (MessageBDS09, error) {
 
 	switch subType {
 	case fields.SubtypeGroundSpeedNormal:
-		return ReadFormat19GroundNormal(data)
+		message, err := readFormat19GroundNormal(data)
+		return message, adsbLevel, err
 	case fields.SubtypeGroundSpeedSupersonic:
-		return ReadFormat19GroundSupersonic(data)
+		message, err := readFormat19GroundSupersonic(data)
+		return message, adsbLevel, err
 	case fields.SubtypeAirspeedNormal:
-		return ReadFormat19AirspeedNormal(data)
+		message, err := readFormat19AirspeedNormal(data)
+		return message, adsbLevel, err
 	case fields.SubtypeAirspeedSupersonic:
-		return ReadFormat19AirspeedSupersonic(data)
+		message, err := readFormat19AirspeedSupersonic(data)
+		return message, adsbLevel, err
 
 	default:
-		return nil, fmt.Errorf("the subtype %v of Airborne Velocity is not supported", formatTypeCode)
+		return nil, adsbLevel, fmt.Errorf("the subtype %v of Airborne Velocity is not supported", formatTypeCode)
 	}
 }

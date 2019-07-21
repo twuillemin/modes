@@ -9,36 +9,46 @@ type Movement byte
 
 // GetStatus returns the status of the altitude
 func (movement Movement) GetStatus() MovementStatus {
-	if movement == 0 {
-		return MSNoInformation
-	} else if movement == 124 {
-		return MSAboveMaximum
-	} else if movement > 124 {
-		return MSReserved
-	}
 
-	return MSValid
+	switch movement {
+	case 0:
+		return MSNoInformation
+	case 124:
+		return MSAboveMaximum
+	case 125:
+		return MSReservedDecelerating
+	case 126:
+		return MSReservedAccelerating
+	case 127:
+		return MSReservedBackingUp
+	default:
+		return MSValid
+	}
 }
 
 // ToString returns a basic, but readable, representation of the field
 func (movement Movement) ToString() string {
 
-	if movement == 0 {
+	switch movement {
+	case 0:
 		return "0 - no information available"
-	} else if movement == 1 {
+	case 1:
 		return "1 - aircraft stopped (ground speed < 0.2315 km/h (0.125 kt))"
-	} else if movement == 124 {
-		return "124 - Ground speed ≥ 324.1 km/h (175 kt)"
-	} else if movement > 124 {
-		return fmt.Sprintf("%v - reserved", movement)
+	case 124:
+		return "124 - ground speed ≥ 324.1 km/h (175 kt)"
+	case 125:
+		return "125 - reserved for A/C Decelerating"
+	case 126:
+		return "126 - reserved for A/C Accelerating"
+	case 127:
+		return "127 - reserved for Backing Up"
+	default:
+		return fmt.Sprintf("%v km/h", movement.GetMovement())
 	}
-
-	return fmt.Sprintf("%v km/h", movement.GetMovement())
-
 }
 
 // GetMovement returns the Movement in km/h. Note that the returned value will be 0 if movement status is
-// MSNoInformation or MSReserved and returned 324.1 if movement status is MsAboveMaximum.
+// MSNoInformation or MSReserved* and returned 324.1 if movement status is MsAboveMaximum.
 func (movement Movement) GetMovement() float32 {
 
 	if movement == 0 || movement == 1 || movement > 124 {

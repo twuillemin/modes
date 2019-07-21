@@ -40,8 +40,8 @@ func (message *Format04) GetAircraftIdentification() fields2.AircraftIdentificat
 	return message.AircraftIdentification
 }
 
-// ReadFormat04 reads a message at the format BDS 0,8
-func ReadFormat04(data []byte) (*Format04, error) {
+// readFormat04 reads a message at the format BDS 0,8
+func readFormat04(data []byte) (*Format04, error) {
 
 	return &Format04{
 		AircraftCategory:       fields2.ReadAircraftCategorySetA(data),

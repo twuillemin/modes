@@ -26,8 +26,8 @@ const (
 	SubtypeV0Reserved7 SubtypeV0 = 7
 )
 
-// GetSubtype returns the subtype itself
-func (subtype SubtypeV0) GetSubtype() Subtype {
+// ToSubtype returns the subtype itself
+func (subtype SubtypeV0) ToSubtype() Subtype {
 	return subtype
 }
 
