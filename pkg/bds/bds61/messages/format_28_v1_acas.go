@@ -41,7 +41,9 @@ func (message *Format28V1ACAS) ToString() string {
 	return fmt.Sprintf("Message:                   %v - %v (BDS: %v)\n"+
 		"Subtype:                   %v\n"+
 		"ACAS Data                  : %02X %02X %02X %02X %02X %02X",
-		message.GetFormatTypeCode(), message.GetName(), message.GetBDS(),
+		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSubtype().ToString(),
 		message.ACASData[0], message.ACASData[1], message.ACASData[2], message.ACASData[3], message.ACASData[4], message.ACASData[5])
 }

@@ -34,7 +34,9 @@ func (message *Format28NoInformation) GetSubtype() fields.Subtype {
 func (message *Format28NoInformation) ToString() string {
 	return fmt.Sprintf("Message:                   %v - %v (BDS: %v)\n"+
 		"Subtype:                   %v - No Information",
-		message.GetFormatTypeCode(), message.GetName(), message.GetBDS(),
+		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSubtype().ToString())
 }
 

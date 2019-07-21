@@ -53,10 +53,10 @@ func (message Format31V1Surface) ToString() string {
 		"Surveillance Integrity Level:\n%v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
 		message.GetBDS(),
-		fields.OSSCAirborne.ToString(),
+		message.Subtype.ToString(),
 		common.PrefixMultiLine(message.SurfaceCapabilityClass.ToString(), "    "),
 		message.LengthAndWidth.ToString(),
 		common.PrefixMultiLine(message.OperationalMode.ToString(), "    "),

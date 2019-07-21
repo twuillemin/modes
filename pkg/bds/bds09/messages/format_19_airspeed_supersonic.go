@@ -83,8 +83,7 @@ func (message *Format19AirspeedSupersonic) GetDifferenceGNSSBaro() fields.Differ
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format19AirspeedSupersonic) ToString() string {
-	return fmt.Sprintf("Message:                         %v (%v)\n"+
-		"Format Type Code:                %v\n"+
+	return fmt.Sprintf("Message:                         %v - %v (%v)\n"+
 		"Subtype:                         %v\n"+
 		"Intent Change:                   %v\n"+
 		"IFR Capability:                  %v\n"+
@@ -98,9 +97,9 @@ func (message Format19AirspeedSupersonic) ToString() string {
 		"Vertical Rate:                   %v\n"+
 		"Difference GNSS Baro Sign:       %v\n"+
 		"Difference GNSS Baro:            %v",
-		message.GetBDS(),
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSubtype().ToString(),
 		message.IntentChange.ToString(),
 		message.IFRCapability.ToString(),

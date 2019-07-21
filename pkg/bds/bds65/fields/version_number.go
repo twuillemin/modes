@@ -8,11 +8,11 @@ import "fmt"
 type VersionNumber byte
 
 const (
-	// ADSBVersion0 indicates ADSB V0: Conformant to Doc 9871, 1st Edition, Appendix A
+	// ADSBVersion0 indicates ADSB V0: Conformant to Doc 9871, Appendix A
 	ADSBVersion0 VersionNumber = 0
-	// ADSBVersion1 indicates ADSB V1: Conformant to Doc 9871, 1st Edition, Appendix B
+	// ADSBVersion1 indicates ADSB V1: Conformant to Doc 9871, Appendix B
 	ADSBVersion1 VersionNumber = 1
-	// ADSBVersion2 indicates ADSB V2: Conformant to Doc 9871, ?th Edition, Appendix C
+	// ADSBVersion2 indicates ADSB V2: Conformant to Doc 9871, Appendix C
 	ADSBVersion2 VersionNumber = 2
 )
 

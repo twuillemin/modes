@@ -51,8 +51,8 @@ func (message Format31V1Airborne) ToString() string {
 		"Surveillance Integrity Level:\n%v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
 		message.GetBDS(),
 		message.GetSubtype().ToString(),
 		common.PrefixMultiLine(message.AirborneCapabilityClass.ToString(), "    "),

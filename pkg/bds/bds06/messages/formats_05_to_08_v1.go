@@ -81,8 +81,7 @@ func (message *Format05To08V1) GetNavigationIntegrityCategory() byte {
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format05To08V1) ToString() string {
-	return fmt.Sprintf("Message:                           %v (%v)\n"+
-		"FormatTypeCode:                    %v\n"+
+	return fmt.Sprintf("Message:                           %v - %v (%v)\n"+
 		"Horizontal Containment Radius:     %v\n"+
 		"Navigation Integrity Category      %v\n"+
 		"Movement:                          %v\n"+
@@ -92,9 +91,9 @@ func (message *Format05To08V1) ToString() string {
 		"Compact Position Reporting Format: %v\n"+
 		"Encoded Latitude:                  %v\n"+
 		"Encoded Longitude:                 %v",
-		message.GetBDS(),
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetHorizontalContainmentRadius().ToString(),
 		message.GetNavigationIntegrityCategory(),
 		message.GetMovement().ToString(),

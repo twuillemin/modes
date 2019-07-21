@@ -22,13 +22,12 @@ var bds08Code = "BDS 0,8"
 var bds08Name = "Extended squitter aircraft identification and category"
 
 func bds08ToString(message MessageBDS08) string {
-	return fmt.Sprintf("Message:                 %v (%v)\n"+
-		"Format Type Code:        %v\n"+
+	return fmt.Sprintf("Message:                 %v - %v (%v)\n"+
 		"Aircraft Category:       %v (%v)\n"+
 		"Aircraft Identification: %v",
-		message.GetBDS(),
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetAircraftCategory().ToString(),
 		message.GetAircraftCategory().GetCategorySetName(),
 		message.GetAircraftIdentification())

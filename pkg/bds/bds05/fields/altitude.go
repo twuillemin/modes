@@ -5,6 +5,7 @@ import (
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
 
+// AltitudeSource is the type of source of the Altitude: Barometric or GNSS
 type AltitudeSource int
 
 const (

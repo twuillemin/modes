@@ -16,8 +16,7 @@ type MessageBDS05V1 interface {
 }
 
 func bds05v1ToString(message MessageBDS05V1) string {
-	return fmt.Sprintf("Message:                           %v (%v)\n"+
-		"Format Type Code:                  %v\n"+
+	return fmt.Sprintf("Message:                           %v - %v (%v)\n"+
 		"Surveillance Status:               %v\n"+
 		"Horizontal Containment Radius      %v\n"+
 		"Navigation Integrity Category      %v\n"+
@@ -27,9 +26,9 @@ func bds05v1ToString(message MessageBDS05V1) string {
 		"Altitude:                          %v\n"+
 		"Encoded Latitude:                  %v\n"+
 		"Encoded Longitude:                 %v",
-		message.GetBDS(),
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSurveillanceStatus().ToString(),
 		message.GetHorizontalContainmentRadius().ToString(),
 		message.GetNavigationIntegrityCategory(),

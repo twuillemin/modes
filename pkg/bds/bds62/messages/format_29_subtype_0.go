@@ -67,8 +67,9 @@ func (message *Format29Subtype0) ToString() string {
 		"Surveillance Integrity Level:                 %v\n"+
 		"Capability / Mode Codes:                      %v\n"+
 		"Emergency / Priority Status:                  %v",
-
-		message.GetFormatTypeCode(), message.GetName(), message.GetBDS(),
+		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSubtype().ToString(),
 		message.VerticalDataAvailableSourceIndicator.ToString(),
 		message.TargetAltitudeType.ToString(),

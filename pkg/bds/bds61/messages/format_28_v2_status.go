@@ -44,7 +44,9 @@ func (message *Format28V2Status) ToString() string {
 		"Subtype:                   %v\n"+
 		"Emergency Priority Status: %v\n"+
 		"Mode A Code:               %v\n",
-		message.GetFormatTypeCode(), message.GetName(), message.GetBDS(),
+		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSubtype().ToString(),
 		message.GetEmergencyPriorityStatus().ToString(),
 		message.ModeACode)

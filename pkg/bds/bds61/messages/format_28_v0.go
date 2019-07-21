@@ -41,7 +41,9 @@ func (message *Format28V0) ToString() string {
 	return fmt.Sprintf("Message:                   %v - %v (BDS: %v)\n"+
 		"Subtype:                   %v\n"+
 		"Emergency Priority Status: %v",
-		message.GetFormatTypeCode(), message.GetName(), message.GetBDS(),
+		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetSubtype().ToString(),
 		message.GetEmergencyPriorityStatus().ToString())
 }

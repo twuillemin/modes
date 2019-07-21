@@ -95,8 +95,7 @@ var crByFormat = map[byte]fields.ContainmentRadius{
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format05To08V0) ToString() string {
-	return fmt.Sprintf("Message:                           %v (%v)\n"+
-		"FormatTypeCode:                    %v\n"+
+	return fmt.Sprintf("Message:                           %v - %v (%v)\n"+
 		"Horizontal Protection Limit:       %v\n"+
 		"Containment Radius:                %v\n"+
 		"Movement:                          %v\n"+
@@ -106,9 +105,9 @@ func (message *Format05To08V0) ToString() string {
 		"Compact Position Reporting Format: %v\n"+
 		"Encoded Latitude:                  %v\n"+
 		"Encoded Longitude:                 %v",
-		message.GetBDS(),
-		message.GetName(),
 		message.GetFormatTypeCode(),
+		message.GetName(),
+		message.GetBDS(),
 		message.GetHorizontalProtectionLimit().ToString(),
 		message.GetContainmentRadius().ToString(),
 		message.GetMovement().ToString(),
