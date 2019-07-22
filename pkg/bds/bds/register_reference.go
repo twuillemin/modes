@@ -37,7 +37,7 @@ func (register registerDefinition) GetDescription() string {
 //                              INSTANCES
 // -------------------------------------------------------------------------
 
-// BDS05 is the definition f the register 0,5
+// BDS05 is the definition of the register 0,5
 var BDS05 = registerDefinition{
 	id:          "BDS 0,5",
 	description: "Extended squitter airborne position",

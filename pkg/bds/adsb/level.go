@@ -22,6 +22,7 @@ const (
 	Level2 Level = 4
 )
 
+// ToString returns a basic, but readable, representation of the message
 func (level Level) ToString() string {
 	switch level {
 	case Level0OrMore:

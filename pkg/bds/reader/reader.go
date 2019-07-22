@@ -2,7 +2,7 @@ package reader
 
 import (
 	"errors"
-	"github.com/twuillemin/modes/pkg/adsb/messages"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	messages05 "github.com/twuillemin/modes/pkg/bds/bds05/messages"
 	messages06 "github.com/twuillemin/modes/pkg/bds/bds06/messages"
 	messages08 "github.com/twuillemin/modes/pkg/bds/bds08/messages"
@@ -10,10 +10,9 @@ import (
 	messages61 "github.com/twuillemin/modes/pkg/bds/bds61/messages"
 	messages62 "github.com/twuillemin/modes/pkg/bds/bds62/messages"
 	messages65 "github.com/twuillemin/modes/pkg/bds/bds65/messages"
-	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
-// ReadMessage reads and parse an ADSB message.
+// ReadADSBMessage reads and parse an ADSB message.
 //
 // params:
 //    - adsbLevel: The ADSB level request (not used, but present for coherency)
@@ -28,11 +27,11 @@ import (
 //    - message: The body of the message. The message must be 7 bytes long
 //
 // Return the parsed message or an error
-func ReadMessage(
-	adsbLevel common.ADSBLevel,
+func ReadADSBMessage(
+	adsbLevel adsb.Level,
 	nicSupplementA bool,
 	nicSupplementC bool,
-	data []byte) (messages.ADSBMessage, common.ADSBLevel, error) {
+	data []byte) (adsb.Message, adsb.Level, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for ADSB message must be 7 bytes long")
@@ -90,7 +89,6 @@ func ReadMessage(
 	case 29:
 		return messages62.ReadBDS62(adsbLevel, data)
 	case 31:
-		bds := common.BDS05
 		return messages65.ReadBDS65(adsbLevel, data)
 	}
 

@@ -15,13 +15,22 @@ import (
 )
 
 func main() {
-	generateFile("format_05_v1.go", "Format05V1")
-	generateFile("format_06_v1.go", "Format06V1")
-	generateFile("format_07_v1.go", "Format07V1")
-	generateFile("format_08_v1.go", "Format08V1")
+	generateFile("format_09_v1.go", "Format09V1", true)
+	generateFile("format_10_v1.go", "Format10V1", true)
+	generateFile("format_11_v1.go", "Format11V1", true)
+	generateFile("format_12_v1.go", "Format12V1", true)
+	generateFile("format_13_v1.go", "Format13V1", true)
+	generateFile("format_14_v1.go", "Format14V1", true)
+	generateFile("format_15_v1.go", "Format15V1", true)
+	generateFile("format_16_v1.go", "Format16V1", true)
+	generateFile("format_17_v1.go", "Format17V1", true)
+	generateFile("format_18_v1.go", "Format18V1", true)
+	generateFile("format_20_v1.go", "Format20V1", false)
+	generateFile("format_21_v1.go", "Format21V1", false)
+	generateFile("format_22_v1.go", "Format22V1", false)
 }
 
-func generateFile(fileName string, name string) {
+func generateFile(fileName string, name string, isBaro bool) {
 	// Open the target file
 	f, err := os.Create(fileName)
 	if err != nil {
@@ -42,9 +51,11 @@ func generateFile(fileName string, name string) {
 		struct {
 			Timestamp time.Time
 			Name      string
+			IsBaro    bool
 		}{
 			Timestamp: time.Now(),
 			Name:      name,
+			IsBaro:    isBaro,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -68,7 +79,7 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds"
-	"github.com/twuillemin/modes/pkg/bds/bds06/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds05/fields"
 )
 
 // ------------------------------------------------------------------------------------
@@ -77,16 +88,16 @@ import (
 //
 // ------------------------------------------------------------------------------------
 
-// {{ .Name }} is a message at the format BDS 0,6
+// {{ .Name }} is a message at the format BDS 0,5 for ADSB V1
 type {{ .Name }} struct {
-	Movement                    fields.Movement
-	GroundTrackStatus           fields.GroundTrackStatus
-	GroundTrack                 fields.GroundTrack
+	SurveillanceStatus          fields.SurveillanceStatus
+	SingleAntennaFlag           fields.SingleAntennaFlag
+	Altitude                    fields.Altitude
 	Time                        fields.Time
 	CPRFormat                   fields.CompactPositionReportingFormat
 	EncodedLatitude             fields.EncodedLatitude
 	EncodedLongitude            fields.EncodedLongitude
-	HorizontalContainmentRadius fields.HorizontalContainmentRadiusV1
+	HorizontalContainmentRadius fields.HorizontalContainmentRadius{{ if .IsBaro }}Barometric{{ else }}GNSS{{ end }}V1
 	NavigationIntegrityCategory byte
 }
 
@@ -100,19 +111,24 @@ func (message *{{ .Name }}) GetRegister() bds.Register {
 	return adsb.{{ .Name }}.GetRegister()
 }
 
-// GetMovement returns the Movement
-func (message *{{ .Name }}) GetMovement() fields.Movement {
-	return message.Movement
+// ToString returns a basic, but readable, representation of the message
+func (message *{{ .Name }}) ToString() string {
+	return bds05v1ToString(message)
 }
 
-// GetGroundTrackStatus returns the GroundTrackStatus
-func (message *{{ .Name }}) GetGroundTrackStatus() fields.GroundTrackStatus {
-	return message.GroundTrackStatus
+// GetSurveillanceStatus returns the Surveillance Status
+func (message *{{ .Name }}) GetSurveillanceStatus() fields.SurveillanceStatus {
+	return message.SurveillanceStatus
 }
 
-// GetGroundTrack returns the GroundTrack
-func (message *{{ .Name }}) GetGroundTrack() fields.GroundTrack {
-	return message.GroundTrack
+// GetSingleAntennaFlag returns the SingleAntennaFlag
+func (message *{{ .Name }}) GetSingleAntennaFlag() fields.SingleAntennaFlag {
+	return message.SingleAntennaFlag
+}
+
+// GetAltitude returns the Altitude
+func (message *{{ .Name }}) GetAltitude() fields.Altitude {
+	return message.Altitude
 }
 
 // GetTime returns the Time
@@ -135,8 +151,8 @@ func (message *{{ .Name }}) GetEncodedLongitude() fields.EncodedLongitude {
 	return message.EncodedLongitude
 }
 
-// GetHorizontalContainmentRadius returns the HorizontalContainmentRadiusV1
-func (message *{{ .Name }}) GetHorizontalContainmentRadius() fields.HorizontalContainmentRadiusV1 {
+// GetHorizontalContainmentRadius returns the HorizontalContainmentRadius
+func (message *{{ .Name }}) GetHorizontalContainmentRadius() fields.HorizontalContainmentRadius {
 	return message.HorizontalContainmentRadius
 }
 
@@ -145,26 +161,25 @@ func (message *{{ .Name }}) GetNavigationIntegrityCategory() byte {
 	return message.NavigationIntegrityCategory
 }
 
-// ToString returns a basic, but readable, representation of the message
-func (message *{{ .Name }}) ToString() string {
-	return messageBDS06V1ToString(message)
-}
-
-// read{{ .Name }} reads a message at the format BDS 0,6
+// read{{ .Name }} reads a message at the format BDS 0,5{{ if .IsBaro }}	
 func read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
-
+{{ else }}
+func read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
+{{ end }}
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
 	if formatTypeCode != adsb.{{ .Name }}.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format {{ .Name }}", formatTypeCode)
 	}
-
-	hcr, nic := getHCRAndNICForV1(formatTypeCode, nicSupplementA)
-
+{{ if .IsBaro }}
+	hcr, nic := getHCRAndNICForV1Barometric(formatTypeCode, nicSupplementA)
+{{ else }}
+	hcr, nic := getHCRAndNICForV1GNSS(formatTypeCode)
+{{ end }}
 	return &{{ .Name }}{
-		Movement:                    fields.ReadMovement(data),
-		GroundTrackStatus:           fields.ReadGroundTrackStatus(data),
-		GroundTrack:                 fields.ReadGroundTrack(data),
+		SurveillanceStatus:          fields.ReadSurveillanceStatus(data),
+		SingleAntennaFlag:           fields.ReadSingleAntennaFlag(data),
+		Altitude:                    fields.ReadAltitude(data),
 		Time:                        fields.ReadTime(data),
 		CPRFormat:                   fields.ReadCompactPositionReportingFormat(data),
 		EncodedLatitude:             fields.ReadEncodedLatitude(data),

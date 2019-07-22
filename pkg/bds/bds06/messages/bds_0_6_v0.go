@@ -1,10 +1,8 @@
 package messages
 
 import (
-	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/bds06/fields"
-	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
 // MessageBDS06V0 is the basic interface that ADSB messages at the format BDS 0,6 Version 0 are expected to implement

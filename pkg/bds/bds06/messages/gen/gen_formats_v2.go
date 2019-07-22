@@ -15,20 +15,15 @@ import (
 )
 
 func main() {
+	generateFile("format_05_v2.go", "Format05V2")
+	generateFile("format_06_v2.go", "Format06V2")
+	generateFile("format_07_v2.go", "Format07V2")
+	generateFile("format_08_v2.go", "Format08V2")
+}
 
-	type FormatParameter struct {
-		Name string
-	}
-
-	formatParameters := []FormatParameter{
-		{"Format05V2"},
-		{"Format06V2"},
-		{"Format07V2"},
-		{"Format08V2"},
-	}
-
+func generateFile(fileName string, name string) {
 	// Open the target file
-	f, err := os.Create("formats_05_to_08_v2.go")
+	f, err := os.Create(fileName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,16 +40,15 @@ func main() {
 	err = builderTemplate.Execute(
 		f,
 		struct {
-			Timestamp        time.Time
-			FormatParameters []FormatParameter
+			Timestamp time.Time
+			Name      string
 		}{
-			Timestamp:        time.Now(),
-			FormatParameters: formatParameters,
+			Timestamp: time.Now(),
+			Name:      name,
 		})
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }
 
 func die(err error) {
@@ -77,7 +71,6 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/bds06/fields"
 )
 
-{{ range .FormatParameters }}
 // ------------------------------------------------------------------------------------
 //
 //                                {{ .Name }}
@@ -180,6 +173,4 @@ func read{{ .Name }}(nicSupplementA bool, nicSupplementC bool, data []byte) (*{{
 		NavigationIntegrityCategory:   nic,
 	}, nil
 }
-
-{{ end }}
 `))

@@ -15,13 +15,22 @@ import (
 )
 
 func main() {
-	generateFile("format_05_v0.go", "Format05V0")
-	generateFile("format_06_v0.go", "Format06V0")
-	generateFile("format_07_v0.go", "Format07V0")
-	generateFile("format_08_v0.go", "Format08V0")
+	generateFile("format_09_v0.go", "Format09V0", true)
+	generateFile("format_10_v0.go", "Format10V0", true)
+	generateFile("format_11_v0.go", "Format11V0", true)
+	generateFile("format_12_v0.go", "Format12V0", true)
+	generateFile("format_13_v0.go", "Format13V0", true)
+	generateFile("format_14_v0.go", "Format14V0", true)
+	generateFile("format_15_v0.go", "Format15V0", true)
+	generateFile("format_16_v0.go", "Format16V0", true)
+	generateFile("format_17_v0.go", "Format17V0", true)
+	generateFile("format_18_v0.go", "Format18V0", true)
+	generateFile("format_20_v0.go", "Format20V0", false)
+	generateFile("format_21_v0.go", "Format21V0", false)
+	generateFile("format_22_v0.go", "Format22V0", false)
 }
 
-func generateFile(fileName string, name string) {
+func generateFile(fileName string, name string, isBaro bool) {
 	// Open the target file
 	f, err := os.Create(fileName)
 	if err != nil {
@@ -42,9 +51,11 @@ func generateFile(fileName string, name string) {
 		struct {
 			Timestamp time.Time
 			Name      string
+			IsBaro    bool
 		}{
 			Timestamp: time.Now(),
 			Name:      name,
+			IsBaro:    isBaro,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -68,7 +79,7 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds"
-	"github.com/twuillemin/modes/pkg/bds/bds06/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds05/fields"
 )
 
 // ------------------------------------------------------------------------------------
@@ -77,17 +88,17 @@ import (
 //
 // ------------------------------------------------------------------------------------
 
-// {{ .Name }} is a message at the format BDS 0,6
+// {{ .Name }} is a message at the format BDS 0,5 for ADSB V0
 type {{ .Name }} struct {
-	Movement                  fields.Movement
-	GroundTrackStatus         fields.GroundTrackStatus
-	GroundTrack               fields.GroundTrack
+	SurveillanceStatus        fields.SurveillanceStatus
+	SingleAntennaFlag         fields.SingleAntennaFlag
+	Altitude                  fields.Altitude
 	Time                      fields.Time
 	CPRFormat                 fields.CompactPositionReportingFormat
 	EncodedLatitude           fields.EncodedLatitude
 	EncodedLongitude          fields.EncodedLongitude
-	HorizontalProtectionLimit fields.HorizontalProtectionLimit
-	ContainmentRadius         fields.ContainmentRadius
+	HorizontalProtectionLimit fields.HorizontalProtectionLimit{{ if .IsBaro }}Barometric{{ else }}GNSS{{ end }}
+	ContainmentRadius         fields.ContainmentRadius{{ if .IsBaro }}Barometric{{ else }}GNSS{{ end }}
 }
 
 // GetMessageFormat returns the ADSB format of the message
@@ -100,19 +111,24 @@ func (message *{{ .Name }}) GetRegister() bds.Register {
 	return adsb.{{ .Name }}.GetRegister()
 }
 
-// GetMovement returns the Movement
-func (message *{{ .Name }}) GetMovement() fields.Movement {
-	return message.Movement
+// ToString returns a basic, but readable, representation of the message
+func (message *{{ .Name }}) ToString() string {
+	return bds05v0ToString(message)
 }
 
-// GetGroundTrackStatus returns the GroundTrackStatus
-func (message *{{ .Name }}) GetGroundTrackStatus() fields.GroundTrackStatus {
-	return message.GroundTrackStatus
+// GetSurveillanceStatus returns the Surveillance Status
+func (message *{{ .Name }}) GetSurveillanceStatus() fields.SurveillanceStatus {
+	return message.SurveillanceStatus
 }
 
-// GetGroundTrack returns the GroundTrack
-func (message *{{ .Name }}) GetGroundTrack() fields.GroundTrack {
-	return message.GroundTrack
+// GetSingleAntennaFlag returns the SingleAntennaFlag
+func (message *{{ .Name }}) GetSingleAntennaFlag() fields.SingleAntennaFlag {
+	return message.SingleAntennaFlag
+}
+
+// GetAltitude returns the Altitude
+func (message *{{ .Name }}) GetAltitude() fields.Altitude {
+	return message.Altitude
 }
 
 // GetTime returns the Time
@@ -145,12 +161,7 @@ func (message *{{ .Name }}) GetContainmentRadius() fields.ContainmentRadius {
 	return message.ContainmentRadius
 }
 
-// ToString returns a basic, but readable, representation of the message
-func (message *{{ .Name }}) ToString() string {
-	return messageBDS06V0ToString(message)
-}
-
-// read{{ .Name }} reads a message at the format BDS 0,6
+// read{{ .Name }} reads a message at the format BDS 0,5
 func read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
@@ -159,16 +170,19 @@ func read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format {{ .Name }}", formatTypeCode)
 	}
 
+	horizontalProtectionLimit := hpl{{ if .IsBaro }}Barometric{{ else }}GNSS{{ end }}ByFormat[formatTypeCode]
+	containmentRadius := cr{{ if .IsBaro }}Barometric{{ else }}GNSS{{ end }}ByFormat[formatTypeCode]
+
 	return &{{ .Name }}{
-		Movement:                  fields.ReadMovement(data),
-		GroundTrackStatus:         fields.ReadGroundTrackStatus(data),
-		GroundTrack:               fields.ReadGroundTrack(data),
+		SurveillanceStatus:        fields.ReadSurveillanceStatus(data),
+		SingleAntennaFlag:         fields.ReadSingleAntennaFlag(data),
+		Altitude:                  fields.ReadAltitude(data),
 		Time:                      fields.ReadTime(data),
 		CPRFormat:                 fields.ReadCompactPositionReportingFormat(data),
 		EncodedLatitude:           fields.ReadEncodedLatitude(data),
 		EncodedLongitude:          fields.ReadEncodedLongitude(data),
-		HorizontalProtectionLimit: hplByFormat[formatTypeCode],
-		ContainmentRadius:         crByFormat[formatTypeCode],
+		HorizontalProtectionLimit: horizontalProtectionLimit,
+		ContainmentRadius:         containmentRadius,
 	}, nil
 }
 `))
