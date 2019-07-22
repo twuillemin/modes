@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds62/fields"
 	"github.com/twuillemin/modes/pkg/common"
 )
@@ -28,19 +30,14 @@ type Format29Subtype1 struct {
 	LNAVModeEngaged                      fields.LNAVModeEngaged
 }
 
-// GetName returns the name of the message
-func (message *Format29Subtype1) GetName() string {
-	return bds62Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format29Subtype1) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format29V2
 }
 
-// GetBDS returns the binary data format
-func (message *Format29Subtype1) GetBDS() string {
-	return bds62Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format29Subtype1) GetFormatTypeCode() byte {
-	return 29
+// GetRegister returns the register of the message
+func (message *Format29Subtype1) GetRegister() bds.Register {
+	return adsb.Format29V2.GetRegister()
 }
 
 // GetSubtype returns the Subtype
@@ -50,7 +47,7 @@ func (message *Format29Subtype1) GetSubtype() fields.Subtype {
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format29Subtype1) ToString() string {
-	return fmt.Sprintf("Message:                                       %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                                       %v\n"+
 		"Subtype:                                       %v\n"+
 		"Selected Altitude Type:                        %v\n"+
 		"Selected Altitude :                            %v\n"+
@@ -67,9 +64,7 @@ func (message *Format29Subtype1) ToString() string {
 		"Approach Mode Engaged:                         %v\n"+
 		"LNAV Mode Engaged:                             %v\n"+
 		"TCAS / ACAS Operational :                      %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format29V2.ToString(),
 		message.GetSubtype().ToString(),
 		message.SelectedAltitudeType.ToString(),
 		message.SelectedAltitude.ToString(),
@@ -97,6 +92,11 @@ func printStatusBit(status fields.StatusMCPFCUBits, bit common.Printable) string
 
 // readFormat29Subtype1 reads a message at the format BDS 6,2
 func readFormat29Subtype1(data []byte) (*Format29Subtype1, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format29V2.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format29", formatTypeCode)
+	}
 
 	return &Format29Subtype1{
 		Subtype:                              fields.ReadSubtypeV2(data),

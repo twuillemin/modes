@@ -1,6 +1,9 @@
 package messages
 
 import (
+	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	fields2 "github.com/twuillemin/modes/pkg/bds/bds08/fields"
 )
 
@@ -10,19 +13,14 @@ type Format03 struct {
 	AircraftIdentification fields2.AircraftIdentification
 }
 
-// GetName returns the name of the message
-func (message *Format03) GetName() string {
-	return bds08Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format03) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format03V0OrMore
 }
 
-// GetBDS returns the binary data format
-func (message *Format03) GetBDS() string {
-	return bds08Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format03) GetFormatTypeCode() byte {
-	return 3
+// GetRegister returns the register of the message
+func (message *Format03) GetRegister() bds.Register {
+	return adsb.Format03V0OrMore.GetRegister()
 }
 
 // ToString returns a basic, but readable, representation of the message
@@ -42,6 +40,11 @@ func (message *Format03) GetAircraftIdentification() fields2.AircraftIdentificat
 
 // readFormat03 reads a message at the format BDS 0,8
 func readFormat03(data []byte) (*Format03, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format03V0OrMore.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format03", formatTypeCode)
+	}
 
 	return &Format03{
 		AircraftCategory:       fields2.ReadAircraftCategorySetB(data),

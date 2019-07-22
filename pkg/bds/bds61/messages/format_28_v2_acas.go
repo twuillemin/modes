@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds61/fields"
 )
 
@@ -11,19 +13,14 @@ type Format28V2ACAS struct {
 	ACASData []byte
 }
 
-// GetName returns the name of the message
-func (message *Format28V2ACAS) GetName() string {
-	return bds61Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format28V2ACAS) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format28V2
 }
 
-// GetBDS returns the binary data format
-func (message *Format28V2ACAS) GetBDS() string {
-	return bds61Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format28V2ACAS) GetFormatTypeCode() byte {
-	return 28
+// GetRegister returns the register of the message
+func (message *Format28V2ACAS) GetRegister() bds.Register {
+	return adsb.Format28V2.GetRegister()
 }
 
 // GetSubtype returns the Subtype
@@ -38,18 +35,21 @@ func (message *Format28V2ACAS) GetACASData() []byte {
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format28V2ACAS) ToString() string {
-	return fmt.Sprintf("Message:                   %v - %v (BDS: %v)\n"+
+	return fmt.Sprintf("Message:                   %v\n"+
 		"Subtype:                   %v\n"+
 		"ACAS Data                  : %02X %02X %02X %02X %02X %02X",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format28V2.ToString(),
 		message.GetSubtype().ToString(),
 		message.ACASData[0], message.ACASData[1], message.ACASData[2], message.ACASData[3], message.ACASData[4], message.ACASData[5])
 }
 
 // readFormat28V2ACAS reads a message at the format BDS 6,1
 func readFormat28V2ACAS(data []byte) (*Format28V2ACAS, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format28V2.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format28", formatTypeCode)
+	}
 
 	// Copy data to not keep a reference to the given data
 	acasData := make([]byte, 6)

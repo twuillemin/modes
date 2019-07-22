@@ -3,21 +3,17 @@ package messages
 import (
 	"errors"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds61/fields"
-	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
 // MessageBDS61 is the basic interface that ADSB messages at the format BDS 6,1 are expected to implement
 type MessageBDS61 interface {
-	common.BDSMessage
-	// GetFormatTypeCode returns the Format Type Code
-	GetFormatTypeCode() byte
+	adsb.Message
+
 	// GetSubtype returns the Subtype
 	GetSubtype() fields.Subtype
 }
-
-var bds61Code = "BDS 6,1"
-var bds61Name = "Extended squitter emergency/priority status"
 
 // ReadBDS61 reads a message at the format BDS 6,1. This format was extended from ADSB V1 to ADSB V2
 //
@@ -30,7 +26,7 @@ var bds61Name = "Extended squitter emergency/priority status"
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS61(adsbLevel common.ADSBLevel, data []byte) (MessageBDS61, common.ADSBLevel, error) {
+func ReadBDS61(adsbLevel adsb.Level, data []byte) (MessageBDS61, adsb.Level, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -49,28 +45,28 @@ func ReadBDS61(adsbLevel common.ADSBLevel, data []byte) (MessageBDS61, common.AD
 
 	switch adsbLevel {
 
-	case common.Level0OrMore:
+	case adsb.Level0OrMore:
 		switch subType {
 		case 1:
 			// Mode A Data for subtype 1 are only provided for ADSB Level 2
 			if possibleModeAData {
-				adsbLevelToUse = common.Level2
+				adsbLevelToUse = adsb.Level2
 			}
 		case 2:
 			// Subtype 2 only exists from ADSB V1
-			adsbLevelToUse = common.Level1OrMore
+			adsbLevelToUse = adsb.Level1OrMore
 		}
 
-	case common.Level1OrMore:
+	case adsb.Level1OrMore:
 		// Mode A Data for subtype 1 are only provided for ADSB Level 2
 		if subType == 1 && possibleModeAData {
-			adsbLevelToUse = common.Level2
+			adsbLevelToUse = adsb.Level2
 		}
 	}
 
 	switch adsbLevelToUse {
 
-	case common.Level0OrMore, common.Level0Exactly:
+	case adsb.Level0OrMore, adsb.Level0Exactly:
 		if subType == 0 {
 			message, err := readFormat28NoInformation(data)
 			return message, adsbLevelToUse, err
@@ -79,7 +75,7 @@ func ReadBDS61(adsbLevel common.ADSBLevel, data []byte) (MessageBDS61, common.AD
 			return message, adsbLevelToUse, err
 		}
 
-	case common.Level1OrMore, common.Level1Exactly:
+	case adsb.Level1OrMore, adsb.Level1Exactly:
 		if subType == 0 {
 			message, err := readFormat28NoInformation(data)
 			return message, adsbLevelToUse, err
@@ -91,7 +87,7 @@ func ReadBDS61(adsbLevel common.ADSBLevel, data []byte) (MessageBDS61, common.AD
 			return message, adsbLevelToUse, err
 		}
 
-	case common.Level2:
+	case adsb.Level2:
 		if subType == 0 {
 			message, err := readFormat28NoInformation(data)
 			return message, adsbLevelToUse, err
@@ -105,5 +101,4 @@ func ReadBDS61(adsbLevel common.ADSBLevel, data []byte) (MessageBDS61, common.AD
 	}
 
 	return nil, adsbLevelToUse, fmt.Errorf("the subtype %v of Emergency/Priority Status is not supported", formatTypeCode)
-
 }

@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds61/fields"
 )
 
@@ -11,19 +13,14 @@ type Format28V0 struct {
 	EmergencyPriorityStatus fields.EmergencyPriorityStatus
 }
 
-// GetName returns the name of the message
-func (message *Format28V0) GetName() string {
-	return bds61Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format28V0) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format28V0
 }
 
-// GetBDS returns the binary data format
-func (message *Format28V0) GetBDS() string {
-	return bds61Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format28V0) GetFormatTypeCode() byte {
-	return 28
+// GetRegister returns the register of the message
+func (message *Format28V0) GetRegister() bds.Register {
+	return adsb.Format28V0.GetRegister()
 }
 
 // GetSubtype returns the Subtype
@@ -38,18 +35,21 @@ func (message *Format28V0) GetEmergencyPriorityStatus() fields.EmergencyPriority
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format28V0) ToString() string {
-	return fmt.Sprintf("Message:                   %v - %v (BDS: %v)\n"+
+	return fmt.Sprintf("Message:                   %v\n"+
 		"Subtype:                   %v\n"+
 		"Emergency Priority Status: %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format28V0.ToString(),
 		message.GetSubtype().ToString(),
 		message.GetEmergencyPriorityStatus().ToString())
 }
 
 // ReadFormat28V0 reads a message at the format BDS 6,1
 func ReadFormat28V0(data []byte) (*Format28V0, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format28V0.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format28", formatTypeCode)
+	}
 
 	return &Format28V0{
 		Subtype:                 fields.ReadSubtypeV0(data),

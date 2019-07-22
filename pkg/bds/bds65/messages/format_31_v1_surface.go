@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds65/fields"
 	"github.com/twuillemin/modes/pkg/common"
 )
@@ -20,19 +22,14 @@ type Format31V1Surface struct {
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
 }
 
-// GetName returns the name of the message
-func (message *Format31V1Surface) GetName() string {
-	return bds65Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format31V1Surface) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format31V1
 }
 
-// GetBDS returns the binary data format
-func (message *Format31V1Surface) GetBDS() string {
-	return bds65Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format31V1Surface) GetFormatTypeCode() byte {
-	return 31
+// GetRegister returns the register of the message
+func (message *Format31V1Surface) GetRegister() bds.Register {
+	return adsb.Format31V1.GetRegister()
 }
 
 // GetSubtype returns the subtype of the Operational Status Sub Type
@@ -42,7 +39,7 @@ func (message *Format31V1Surface) GetSubtype() fields.Subtype {
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V1Surface) ToString() string {
-	return fmt.Sprintf("Message:                                 %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                                 %v\n"+
 		"Subtype:                                 %v\n"+
 		"Airborne Capability Class:\n%v\n"+
 		"Aircraft Length And Width                %v\n"+
@@ -53,9 +50,7 @@ func (message Format31V1Surface) ToString() string {
 		"Surveillance Integrity Level:\n%v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format31V1.ToString(),
 		message.Subtype.ToString(),
 		common.PrefixMultiLine(message.SurfaceCapabilityClass.ToString(), "    "),
 		message.LengthAndWidth.ToString(),
@@ -70,6 +65,11 @@ func (message Format31V1Surface) ToString() string {
 
 // ReadFormat31V1Surface reads a message at the format Format31V1Surface
 func ReadFormat31V1Surface(data []byte) (*Format31V1Surface, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format31V0.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format31V1", formatTypeCode)
+	}
 
 	return &Format31V1Surface{
 		Subtype:                              fields.ReadSubtypeV1(data),

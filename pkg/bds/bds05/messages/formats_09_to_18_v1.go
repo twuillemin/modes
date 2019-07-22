@@ -23,7 +23,7 @@ func (message *Format09To18V1) GetName() string {
 	return bds05Name
 }
 
-// GetBDS returns the binary data format
+// GetRegister returns the binary data format
 func (message *Format09To18V1) GetBDS() string {
 	return bds05Code
 }

@@ -3,15 +3,18 @@ package messages
 import (
 	"errors"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds06/fields"
-	"github.com/twuillemin/modes/pkg/bds/common"
 )
+
+//go:generate go run gen/gen_formats_v0.go
+//go:generate go run gen/gen_formats_v1.go
+//go:generate go run gen/gen_formats_v2.go
 
 // MessageBDS06 is the basic interface that ADSB messages at the format BDS 0,6 are expected to implement
 type MessageBDS06 interface {
-	common.BDSMessage
-	// GetFormatTypeCode returns the Format Type Code
-	GetFormatTypeCode() byte
+	adsb.Message
+
 	// GetMovement returns the Movement
 	GetMovement() fields.Movement
 	// GetGroundTrackStatus returns the GroundTrackStatus
@@ -27,9 +30,6 @@ type MessageBDS06 interface {
 	// GetEncodedLongitude returns the EncodedLongitude
 	GetEncodedLongitude() fields.EncodedLongitude
 }
-
-var bds06Code = "BDS 0,6"
-var bds06Name = "Extended squitter surface position"
 
 // ReadBDS06 reads a message at the format BDS 0,6. As there is no information in this message for guessing the
 // correct ADSB version, the lowest adsbLevel given is used and returned.
@@ -52,10 +52,10 @@ var bds06Name = "Extended squitter surface position"
 //
 // Returns the message read, the given ADSBLevel or an error
 func ReadBDS06(
-	adsbLevel common.ADSBLevel,
+	adsbLevel adsb.Level,
 	nicSupplementA bool,
 	nicSupplementC bool,
-	data []byte) (MessageBDS06, common.ADSBLevel, error) {
+	data []byte) (MessageBDS06, adsb.Level, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -68,16 +68,54 @@ func ReadBDS06(
 	}
 
 	switch adsbLevel {
-	case common.Level0Exactly, common.Level0OrMore:
-		message, err := readFormat05To08V0(data)
-		return message, adsbLevel, err
+	case adsb.Level0Exactly, adsb.Level0OrMore:
+		switch formatTypeCode {
+		case 5:
+			message, err := readFormat05V0(data)
+			return message, adsbLevel, err
+		case 6:
+			message, err := readFormat06V0(data)
+			return message, adsbLevel, err
+		case 7:
+			message, err := readFormat07V0(data)
+			return message, adsbLevel, err
+		case 8:
+			message, err := readFormat08V0(data)
+			return message, adsbLevel, err
+		}
 
-	case common.Level1Exactly, common.Level1OrMore:
-		message, err := readFormat05To08V1(nicSupplementA, data)
-		return message, adsbLevel, err
-	// case common.Level2Exactly, common.Level2OrMore:
-	default:
-		message, err := readFormat05To08V2(nicSupplementA, nicSupplementC, data)
-		return message, adsbLevel, err
+	case adsb.Level1Exactly, adsb.Level1OrMore:
+		switch formatTypeCode {
+		case 5:
+			message, err := readFormat05V1(nicSupplementA, data)
+			return message, adsbLevel, err
+		case 6:
+			message, err := readFormat06V1(nicSupplementA, data)
+			return message, adsbLevel, err
+		case 7:
+			message, err := readFormat07V1(nicSupplementA, data)
+			return message, adsbLevel, err
+		case 8:
+			message, err := readFormat08V1(nicSupplementA, data)
+			return message, adsbLevel, err
+		}
+
+	case adsb.Level2:
+		switch formatTypeCode {
+		case 5:
+			message, err := readFormat05V2(nicSupplementA, nicSupplementC, data)
+			return message, adsbLevel, err
+		case 6:
+			message, err := readFormat06V2(nicSupplementA, nicSupplementC, data)
+			return message, adsbLevel, err
+		case 7:
+			message, err := readFormat07V2(nicSupplementA, nicSupplementC, data)
+			return message, adsbLevel, err
+		case 8:
+			message, err := readFormat08V2(nicSupplementA, nicSupplementC, data)
+			return message, adsbLevel, err
+		}
 	}
+
+	return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,6 format", formatTypeCode)
 }

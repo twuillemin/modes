@@ -90,6 +90,7 @@ func ReadMessage(
 	case 29:
 		return messages62.ReadBDS62(adsbLevel, data)
 	case 31:
+		bds := common.BDS05
 		return messages65.ReadBDS65(adsbLevel, data)
 	}
 

@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds65/fields"
 	"github.com/twuillemin/modes/pkg/common"
 )
@@ -21,19 +23,14 @@ type Format31V2Airborne struct {
 	SourceIntegrityLevelSupplement       fields.SourceIntegrityLevelSupplement
 }
 
-// GetName returns the name of the message
-func (message *Format31V2Airborne) GetName() string {
-	return bds65Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format31V2Airborne) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format31V2
 }
 
-// GetBDS returns the binary data format
-func (message *Format31V2Airborne) GetBDS() string {
-	return bds65Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format31V2Airborne) GetFormatTypeCode() byte {
-	return 31
+// GetRegister returns the register of the message
+func (message *Format31V2Airborne) GetRegister() bds.Register {
+	return adsb.Format31V2.GetRegister()
 }
 
 // GetSubtype returns the subtype of the Operational Status Sub Type
@@ -43,7 +40,7 @@ func (message *Format31V2Airborne) GetSubtype() fields.Subtype {
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V2Airborne) ToString() string {
-	return fmt.Sprintf("Message:                                 %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                                 %v\n"+
 		"Subtype:                                 %v\n"+
 		"Airborne Capability Class:\n%v\n"+
 		"Operational Mode:\n%v\n"+
@@ -55,9 +52,7 @@ func (message Format31V2Airborne) ToString() string {
 		"Source Integrity Level Supplement:       %v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format31V2.ToString(),
 		message.GetSubtype().ToString(),
 		common.PrefixMultiLine(message.AirborneCapabilityClass.ToString(), "    "),
 		common.PrefixMultiLine(message.OperationalMode.ToString(), "    "),
@@ -73,6 +68,11 @@ func (message Format31V2Airborne) ToString() string {
 
 // ReadFormat31V2Airborne reads a message at the format Format31V2Airborne
 func ReadFormat31V2Airborne(data []byte) (*Format31V2Airborne, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format31V0.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format31V2", formatTypeCode)
+	}
 
 	return &Format31V2Airborne{
 		Subtype:                              fields.ReadSubtypeV2(data),
