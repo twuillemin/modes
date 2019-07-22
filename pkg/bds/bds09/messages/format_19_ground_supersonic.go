@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds09/fields"
 )
 
@@ -21,14 +23,14 @@ type Format19GroundSupersonic struct {
 	DifferenceGNSSBaro            fields.DifferenceGNSSBaro
 }
 
-// GetName returns the name of the message
-func (message *Format19GroundSupersonic) GetName() string {
-	return bds09Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format19GroundSupersonic) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format19V0OrMore
 }
 
-// GetBDS returns the binary data format
-func (message *Format19GroundSupersonic) GetBDS() string {
-	return bds09Code
+// GetRegister returns the register of the message
+func (message *Format19GroundSupersonic) GetRegister() bds.Register {
+	return adsb.Format19V0OrMore.GetRegister()
 }
 
 // GetFormatTypeCode returns the Format Type Code
@@ -83,7 +85,7 @@ func (message *Format19GroundSupersonic) GetDifferenceGNSSBaro() fields.Differen
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format19GroundSupersonic) ToString() string {
-	return fmt.Sprintf("Message:                         %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                         %v\n"+
 		"Subtype:                         %v\n"+
 		"Intent Change:                   %v\n"+
 		"IFR Capability:                  %v\n"+
@@ -97,9 +99,7 @@ func (message Format19GroundSupersonic) ToString() string {
 		"Vertical Rate:                   %v\n"+
 		"Difference GNSS Baro Sign:       %v\n"+
 		"Difference GNSS Baro:            %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format19V0OrMore.ToString(),
 		message.GetSubtype().ToString(),
 		message.IntentChange.ToString(),
 		message.IFRCapability.ToString(),
@@ -117,6 +117,11 @@ func (message Format19GroundSupersonic) ToString() string {
 
 // readFormat19GroundSupersonic reads a message at the format BDS 6,5
 func readFormat19GroundSupersonic(data []byte) (*Format19GroundSupersonic, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format19V0OrMore.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format19", formatTypeCode)
+	}
 
 	return &Format19GroundSupersonic{
 		IntentChange:                  fields.ReadIntentChange(data),

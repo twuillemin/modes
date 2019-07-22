@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds61/fields"
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
@@ -13,19 +15,14 @@ type Format28V2Status struct {
 	ModeACode               uint16
 }
 
-// GetName returns the name of the message
-func (message *Format28V2Status) GetName() string {
-	return bds61Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format28V2Status) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format28V2
 }
 
-// GetBDS returns the binary data format
-func (message *Format28V2Status) GetBDS() string {
-	return bds61Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format28V2Status) GetFormatTypeCode() byte {
-	return 28
+// GetRegister returns the register of the message
+func (message *Format28V2Status) GetRegister() bds.Register {
+	return adsb.Format28V2.GetRegister()
 }
 
 // GetSubtype returns the Subtype
@@ -40,13 +37,11 @@ func (message *Format28V2Status) GetEmergencyPriorityStatus() fields.EmergencyPr
 
 // ToString returns a basic, but readable, representation of the message
 func (message *Format28V2Status) ToString() string {
-	return fmt.Sprintf("Message:                   %v - %v (BDS: %v)\n"+
+	return fmt.Sprintf("Message:                   %v\n"+
 		"Subtype:                   %v\n"+
 		"Emergency Priority Status: %v\n"+
 		"Mode A Code:               %v\n",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format28V2.ToString(),
 		message.GetSubtype().ToString(),
 		message.GetEmergencyPriorityStatus().ToString(),
 		message.ModeACode)
@@ -54,6 +49,11 @@ func (message *Format28V2Status) ToString() string {
 
 // readFormat28V2Status reads a message at the format BDS 6,1
 func readFormat28V2Status(data []byte) (*Format28V2Status, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format28V2.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format28", formatTypeCode)
+	}
 
 	byte1 := data[1] & 0x1F
 	byte2 := data[2]

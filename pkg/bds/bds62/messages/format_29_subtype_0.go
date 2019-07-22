@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds62/fields"
 )
 
@@ -24,19 +26,14 @@ type Format29Subtype0 struct {
 	EmergencyPriorityStatus                fields.EmergencyPriorityStatus
 }
 
-// GetName returns the name of the message
-func (message *Format29Subtype0) GetName() string {
-	return bds62Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format29Subtype0) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format29V1OrMore
 }
 
-// GetBDS returns the binary data format
-func (message *Format29Subtype0) GetBDS() string {
-	return bds62Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format29Subtype0) GetFormatTypeCode() byte {
-	return 29
+// GetRegister returns the register of the message
+func (message *Format29Subtype0) GetRegister() bds.Register {
+	return adsb.Format29V1OrMore.GetRegister()
 }
 
 // GetSubtype returns the Subtype
@@ -44,14 +41,9 @@ func (message *Format29Subtype0) GetSubtype() fields.Subtype {
 	return message.Subtype
 }
 
-// GetEmergencyPriorityStatus returns the EmergencyPriorityStatus
-func (message *Format29Subtype0) GetEmergencyPriorityStatus() fields.EmergencyPriorityStatus {
-	return message.EmergencyPriorityStatus
-}
-
 // ToString returns a basic, but readable, representation of the message
 func (message *Format29Subtype0) ToString() string {
-	return fmt.Sprintf("Message:                                      %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                                      %v\n"+
 		"Subtype:                                      %v\n"+
 		"Vertical Data Available / Source Indicator:   %v\n"+
 		"Target Altitude Type:                         %v\n"+
@@ -67,9 +59,7 @@ func (message *Format29Subtype0) ToString() string {
 		"Surveillance Integrity Level:                 %v\n"+
 		"Capability / Mode Codes:                      %v\n"+
 		"Emergency / Priority Status:                  %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format29V1OrMore.ToString(),
 		message.GetSubtype().ToString(),
 		message.VerticalDataAvailableSourceIndicator.ToString(),
 		message.TargetAltitudeType.ToString(),
@@ -84,11 +74,16 @@ func (message *Format29Subtype0) ToString() string {
 		message.NICBaro.ToString(),
 		message.SurveillanceIntegrityLevel.ToString(),
 		message.CapabilityModeCode.ToString(),
-		message.GetEmergencyPriorityStatus().ToString())
+		message.EmergencyPriorityStatus.ToString())
 }
 
 // readFormat29Subtype0 reads a message at the format BDS 6,2
 func readFormat29Subtype0(data []byte) (*Format29Subtype0, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format29V1OrMore.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format29", formatTypeCode)
+	}
 
 	return &Format29Subtype0{
 		Subtype:                                fields.ReadSubtypeV1(data),

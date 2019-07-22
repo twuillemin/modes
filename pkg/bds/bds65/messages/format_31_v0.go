@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds65/fields"
 )
 
@@ -18,19 +20,14 @@ type Format31V0 struct {
 	SurfaceOperationalCapabilityStatus         fields.SurfaceOperationalCapabilityStatus
 }
 
-// GetName returns the name of the message
-func (message *Format31V0) GetName() string {
-	return bds65Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format31V0) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format31V0
 }
 
-// GetBDS returns the binary data format
-func (message *Format31V0) GetBDS() string {
-	return bds65Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format31V0) GetFormatTypeCode() byte {
-	return 31
+// GetRegister returns the register of the message
+func (message *Format31V0) GetRegister() bds.Register {
+	return adsb.Format31V0.GetRegister()
 }
 
 // GetSubtype returns the subtype of the Operational Status Sub Type
@@ -40,7 +37,7 @@ func (message *Format31V0) GetSubtype() fields.Subtype {
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format31V0) ToString() string {
-	return fmt.Sprintf("Message:                                        %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                                        %v\n"+
 		"Subtype:                                        %v\n"+
 		"En Route Operational Capabilities:              %v\n"+
 		"En Route Operational Capability Status:         %v\n"+
@@ -50,9 +47,7 @@ func (message Format31V0) ToString() string {
 		"Approach/Landing Operational Capability Status: %v\n"+
 		"Surface Operational Capabilities:               %v\n"+
 		"Surface Operational Capability Status:          %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format31V0.ToString(),
 		message.GetSubtype().ToString(),
 		message.EnRouteOperationalCapabilities.ToString(),
 		message.EnRouteOperationalCapabilityStatus.ToString(),
@@ -66,6 +61,11 @@ func (message Format31V0) ToString() string {
 
 // ReadFormat31V0 reads a message at the format BDS 6,5
 func ReadFormat31V0(data []byte) (*Format31V0, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format31V0.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format31V0", formatTypeCode)
+	}
 
 	return &Format31V0{
 		Subtype:                                    fields.ReadSubtypeV0(data),

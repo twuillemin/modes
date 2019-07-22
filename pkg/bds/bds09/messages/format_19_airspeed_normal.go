@@ -2,6 +2,8 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	"github.com/twuillemin/modes/pkg/bds/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds09/fields"
 )
 
@@ -21,19 +23,14 @@ type Format19AirspeedNormal struct {
 	DifferenceGNSSBaro            fields.DifferenceGNSSBaro
 }
 
-// GetName returns the name of the message
-func (message *Format19AirspeedNormal) GetName() string {
-	return bds09Name
+// GetMessageFormat returns the ADSB format of the message
+func (message *Format19AirspeedNormal) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format19V0OrMore
 }
 
-// GetBDS returns the binary data format
-func (message *Format19AirspeedNormal) GetBDS() string {
-	return bds09Code
-}
-
-// GetFormatTypeCode returns the Format Type Code
-func (message *Format19AirspeedNormal) GetFormatTypeCode() byte {
-	return 19
+// GetRegister returns the register of the message
+func (message *Format19AirspeedNormal) GetRegister() bds.Register {
+	return adsb.Format19V0OrMore.GetRegister()
 }
 
 // GetSubtype returns the code of the Operational Status Sub Type
@@ -83,7 +80,7 @@ func (message *Format19AirspeedNormal) GetDifferenceGNSSBaro() fields.Difference
 
 // ToString returns a basic, but readable, representation of the message
 func (message Format19AirspeedNormal) ToString() string {
-	return fmt.Sprintf("Message:                         %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                         %v\n"+
 		"Subtype:                         %v\n"+
 		"Intent Change:                   %v\n"+
 		"IFR Capability:                  %v\n"+
@@ -97,9 +94,7 @@ func (message Format19AirspeedNormal) ToString() string {
 		"Vertical Rate:                   %v\n"+
 		"Difference GNSS Baro Sign:       %v\n"+
 		"Difference GNSS Baro:            %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		adsb.Format19V0OrMore.ToString(),
 		message.GetSubtype().ToString(),
 		message.IntentChange.ToString(),
 		message.IFRCapability.ToString(),
@@ -117,6 +112,11 @@ func (message Format19AirspeedNormal) ToString() string {
 
 // readFormat19AirspeedNormal reads a message at the format BDS 6,5
 func readFormat19AirspeedNormal(data []byte) (*Format19AirspeedNormal, error) {
+
+	formatTypeCode := (data[0] & 0xF8) >> 3
+	if formatTypeCode != adsb.Format19V0OrMore.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format19", formatTypeCode)
+	}
 
 	return &Format19AirspeedNormal{
 		IntentChange:                  fields.ReadIntentChange(data),

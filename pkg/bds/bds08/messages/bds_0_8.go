@@ -3,31 +3,25 @@ package messages
 import (
 	"errors"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds08/fields"
-	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
 // MessageBDS08 is the basic interface that ADSB messages at the format BDS 0,8 are expected to implement
 type MessageBDS08 interface {
-	common.BDSMessage
-	// GetFormatTypeCode returns the Format Type Code
-	GetFormatTypeCode() byte
+	adsb.Message
+
 	// GetAircraftCategory returns the aircraft category
 	GetAircraftCategory() fields.AircraftCategory
 	// GetAircraftIdentification returns the identity of the aircraft
 	GetAircraftIdentification() fields.AircraftIdentification
 }
 
-var bds08Code = "BDS 0,8"
-var bds08Name = "Extended squitter aircraft identification and category"
-
 func bds08ToString(message MessageBDS08) string {
-	return fmt.Sprintf("Message:                 %v - %v (%v)\n"+
+	return fmt.Sprintf("Message:                 %v\n"+
 		"Aircraft Category:       %v (%v)\n"+
 		"Aircraft Identification: %v",
-		message.GetFormatTypeCode(),
-		message.GetName(),
-		message.GetBDS(),
+		message.GetMessageFormat().ToString(),
 		message.GetAircraftCategory().ToString(),
 		message.GetAircraftCategory().GetCategorySetName(),
 		message.GetAircraftIdentification())
@@ -41,7 +35,7 @@ func bds08ToString(message MessageBDS08) string {
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS08(adsbLevel common.ADSBLevel, data []byte) (MessageBDS08, common.ADSBLevel, error) {
+func ReadBDS08(adsbLevel adsb.Level, data []byte) (MessageBDS08, adsb.Level, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")

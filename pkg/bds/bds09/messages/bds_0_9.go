@@ -3,15 +3,14 @@ package messages
 import (
 	"errors"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds09/fields"
-	"github.com/twuillemin/modes/pkg/bds/common"
 )
 
 // MessageBDS09 is the basic interface that ADSB messages at the format BDS 0,9 are expected to implement
 type MessageBDS09 interface {
-	common.BDSMessage
-	// GetFormatTypeCode returns the Format Type Code
-	GetFormatTypeCode() byte
+	adsb.Message
+
 	// GetSubtype returns the Airborne Velocity Subtype
 	GetSubtype() fields.Subtype
 	// GetIntentChange returns the IntentChange
@@ -32,9 +31,6 @@ type MessageBDS09 interface {
 	GetDifferenceGNSSBaro() fields.DifferenceGNSSBaro
 }
 
-var bds09Code = "BDS 0,9"
-var bds09Name = "Extended squitter airborne velocity"
-
 // ReadBDS09 reads a message at the format BDS 0,9. As this format does not have changes from ADSB V0 to
 // ADSB V2, the returned ADSBLevel is always the given one.
 //
@@ -43,7 +39,7 @@ var bds09Name = "Extended squitter airborne velocity"
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS09(adsbLevel common.ADSBLevel, data []byte) (MessageBDS09, common.ADSBLevel, error) {
+func ReadBDS09(adsbLevel adsb.Level, data []byte) (MessageBDS09, adsb.Level, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
