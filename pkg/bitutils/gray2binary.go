@@ -1,40 +1,43 @@
 package bitutils
 
 // GrayToBinary converts the given bits (b0 being the MSB and b7 the LSB) from gray code to "classical" binary
-func GrayToBinary(b0, b1, b2, b3, b4, b5, b6, b7 bool) uint8 {
+func GrayToBinary(b0, b1, b2, b3, b4, b5, b6, b7 bool) byte {
 
-	num := uint8(0)
+	gray := byte(0)
 	if b0 {
-		num |= 0x80
+		gray |= 0x80
 	}
 	if b1 {
-		num |= 0x40
+		gray |= 0x40
 	}
 	if b2 {
-		num |= 0x20
+		gray |= 0x20
 	}
 	if b3 {
-		num |= 0x10
+		gray |= 0x10
 	}
 	if b4 {
-		num |= 0x08
+		gray |= 0x08
 	}
 	if b5 {
-		num |= 0x04
+		gray |= 0x04
 	}
 	if b6 {
-		num |= 0x02
+		gray |= 0x02
 	}
 	if b7 {
-		num |= 0x01
+		gray |= 0x01
 	}
 
-	mask := num >> 1
+	result := byte(0)
 
-	for mask != 0 {
-		num = num ^ mask
-		mask = num >> 1
+	for i := 7; i >= 0; i-- {
+		index := uint(i)
+		previousComputedBit := (0x01 << (index + 1)) & result
+		currentInputBit := (0x01 << index) & gray
+		currentResultBit := previousComputedBit>>1 ^ currentInputBit
+		result = result | currentResultBit
 	}
 
-	return num
+	return result
 }
