@@ -33,7 +33,7 @@ func (versionNumber VersionNumber) ToString() string {
 // ReadVersionNumber reads the VersionNumber from a 56 bits data field
 func ReadVersionNumber(data []byte) VersionNumber {
 
-	bits := (data[5] % 0xE0) >> 5
+	bits := (data[5] & 0xE0) >> 5
 
 	return VersionNumber(bits)
 }

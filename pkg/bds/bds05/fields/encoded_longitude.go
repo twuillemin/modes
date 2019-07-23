@@ -18,7 +18,7 @@ func (encodedLongitude EncodedLongitude) ToString() string {
 // ReadEncodedLongitude reads the EncodedLongitude from a 56 bits data field
 func ReadEncodedLongitude(data []byte) EncodedLongitude {
 
-	b2 := data[4] % 0x01
+	b2 := data[4] & 0x01
 	b1 := data[5]
 	b0 := data[6]
 

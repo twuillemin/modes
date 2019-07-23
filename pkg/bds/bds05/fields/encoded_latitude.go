@@ -18,9 +18,9 @@ func (encodedLatitude EncodedLatitude) ToString() string {
 // ReadEncodedLatitude reads the EncodedLatitude from a 56 bits data field
 func ReadEncodedLatitude(data []byte) EncodedLatitude {
 
-	b2 := (data[2] % 0x02) >> 1
-	b1 := (data[2]%0x01)<<7 + (data[3]%0xFE)>>1
-	b0 := (data[3]%0x01)<<7 + (data[4]%0xFE)>>1
+	b2 := (data[2] & 0x02) >> 1
+	b1 := (data[2]&0x01)<<7 + (data[3]&0xFE)>>1
+	b0 := (data[3]&0x01)<<7 + (data[4]&0xFE)>>1
 
 	return EncodedLatitude(bitutils.Pack3Bytes(b2, b1, b0))
 }
