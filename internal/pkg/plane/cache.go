@@ -30,6 +30,7 @@ func CheckoutPlane(timestamp uint32, address common.ICAOAddress) *Plane {
 		Identification:     "",
 		FirstSeenTimestamp: timestamp,
 		LastSeenTimestamp:  timestamp,
+		Altitude:           0,
 		EvenCPRLatitude:    0,
 		EvenCPRLongitude:   0,
 		EventCPRTimestamp:  0,

@@ -8,11 +8,14 @@ import (
 	bds05Fields "github.com/twuillemin/modes/pkg/bds/bds05/fields"
 	bds05Messages "github.com/twuillemin/modes/pkg/bds/bds05/messages"
 	bds08Messages "github.com/twuillemin/modes/pkg/bds/bds08/messages"
+	bds09Fields "github.com/twuillemin/modes/pkg/bds/bds09/fields"
+	bds09Messages "github.com/twuillemin/modes/pkg/bds/bds09/messages"
 	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
 	modeSCommon "github.com/twuillemin/modes/pkg/modes/common"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
 	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
+	"math"
 )
 
 func ProcessSingleLine(str string) {
@@ -144,6 +147,67 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 			plane.OddCPRTimestamp = timestamp
 		}
 
+		plane.Altitude = message05.GetAltitude().AltitudeInFeet
+
+		planeUpdated = true
+	}
+
+	// If message with altitude - normal plane
+	if message09, ok := messageADSB.(bds09Messages.MessageBDS09); ok {
+
+		if format19, okFormat := message09.(*bds09Messages.Format19GroundNormal); okFormat {
+			if format19.VelocityEWNormal.GetStatus() == bds09Fields.VelocityStatusRegular && format19.VelocityNSNormal.GetStatus() == bds09Fields.VelocityStatusRegular {
+				plane.AirSpeed = getHypotenuse(format19.VelocityEWNormal.GetVelocity(), format19.VelocityNSNormal.GetVelocity())
+				plane.AirSpeedValid = true
+			} else {
+				plane.AirSpeed = 0
+				plane.AirSpeedValid = false
+			}
+		}
+
+		if format19, okFormat := message09.(*bds09Messages.Format19GroundSupersonic); okFormat {
+			if format19.VelocityEWSupersonic.GetStatus() == bds09Fields.VelocityStatusRegular && format19.VelocityNSSupersonic.GetStatus() == bds09Fields.VelocityStatusRegular {
+				plane.AirSpeed = getHypotenuse(format19.VelocityEWSupersonic.GetVelocity(), format19.VelocityNSSupersonic.GetVelocity())
+				plane.AirSpeedValid = true
+			} else {
+				plane.AirSpeed = 0
+				plane.AirSpeedValid = false
+			}
+		}
+
+		if format19, okFormat := message09.(*bds09Messages.Format19AirspeedNormal); okFormat {
+			if format19.AirspeedNormal.GetStatus() == bds09Fields.VelocityStatusRegular {
+				plane.AirSpeed = format19.AirspeedNormal.GetAirspeed()
+				plane.AirSpeedValid = true
+			} else {
+				plane.AirSpeed = 0
+				plane.AirSpeedValid = false
+			}
+		}
+
+		if format19, okFormat := message09.(*bds09Messages.Format19AirspeedSupersonic); okFormat {
+			if format19.AirspeedSupersonic.GetStatus() == bds09Fields.VelocityStatusRegular {
+				plane.AirSpeed = format19.AirspeedSupersonic.GetAirspeed()
+				plane.AirSpeedValid = true
+			} else {
+				plane.AirSpeed = 0
+				plane.AirSpeedValid = false
+			}
+		}
+
+		// Vertical rate is always present
+		if message09.GetVerticalRate().GetStatus() == bds09Fields.VerticalRateStatusRegular {
+			if message09.GetVerticalRateSign() == bds09Fields.VRSUp {
+				plane.VerticalRate = message09.GetVerticalRate().GetVerticalRate()
+			} else {
+				plane.VerticalRate = -message09.GetVerticalRate().GetVerticalRate()
+			}
+			plane.VerticalRateValid = true
+		} else {
+			plane.VerticalRate = 0
+			plane.VerticalRateValid = false
+		}
+
 		planeUpdated = true
 	}
 
@@ -158,4 +222,8 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 	if planeUpdated {
 		fmt.Printf("==>%v\n", plane.ToString())
 	}
+}
+
+func getHypotenuse(x, y int) int {
+	return int(math.Floor(math.Sqrt(float64(x*x + y*y))))
 }

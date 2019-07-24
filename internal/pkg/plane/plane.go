@@ -12,6 +12,7 @@ import (
 type Plane struct {
 	ICAOAddress        common.ICAOAddress
 	ADSBLevel          adsb.Level
+	Altitude           int
 	Identification     string
 	FirstSeenTimestamp uint32
 	LastSeenTimestamp  uint32
@@ -21,27 +22,52 @@ type Plane struct {
 	OddCPRLatitude     uint32
 	OddCPRLongitude    uint32
 	OddCPRTimestamp    uint32
+	AirSpeed           int
+	AirSpeedValid      bool
+	VerticalRate       int
+	VerticalRateValid  bool
 }
 
 // ToString returns a very simple representation of the plane
 func (plane *Plane) ToString() string {
 
-	id := ""
-	if len(plane.Identification) > 0 {
-		id = plane.Identification
-	} else {
-		id = plane.ICAOAddress.ToString()
-	}
-
 	lat, long, err := plane.GetExactPosition()
 	coord := ""
 	if err == nil {
-		coord = fmt.Sprintf("lat: %v, long: %v", lat, long)
+
+		distance := "N/A"
+		if dist, errDist := plane.computeGroundDistanceDistanceWithReference(); errDist == nil {
+			distance = fmt.Sprintf("%v", dist)
+		}
+
+		coord = fmt.Sprintf("lat: %8.5f, long: %8.5f, distance: %v km", lat, long, distance)
 	} else {
 		coord = err.Error()
 	}
 
-	return fmt.Sprintf("%v [%v] %v", id, plane.ADSBLevel.ToString(), coord)
+	altitude := "N/A"
+	if plane.Altitude > 0 {
+		altitude = fmt.Sprintf("%v", plane.Altitude)
+	}
+
+	airSpeed := "N/A"
+	if plane.AirSpeedValid {
+		airSpeed = fmt.Sprintf("%v", plane.AirSpeed)
+	}
+
+	verticalRate := "N/A"
+	if plane.VerticalRateValid {
+		verticalRate = fmt.Sprintf("%v", plane.VerticalRate)
+	}
+
+	return fmt.Sprintf("Plane: %v, Flight: %v, ADSB: %v, Position: %v, Altitude: %v feet, AirSpeed: %v knot, VerticalSpeed: %v ft/min",
+		plane.ICAOAddress.ToString(),
+		plane.Identification,
+		plane.ADSBLevel.ToString(),
+		coord,
+		altitude,
+		airSpeed,
+		verticalRate)
 }
 
 // GetExactPosition returns the exact position (based on two measure) of the plane position
@@ -133,4 +159,44 @@ func getNumberOfEvenLongitude(lat float64) float64 {
 	nl := 2 * math.Pi / (math.Acos(1 - a/b))
 
 	return math.Floor(nl)
+}
+
+var referenceLatitude float64
+var referenceLongitude float64
+
+// SetReferenceLatitudeLongitude defines the position that can be used to determine the distance
+//
+// params:
+//    - latitude: the reference latitude
+//    - longitude: the reference longitude
+func SetReferenceLatitudeLongitude(latitude float64, longitude float64) {
+	referenceLatitude = latitude
+	referenceLongitude = longitude
+}
+
+// computeGroundDistanceDistanceWithReference computes the distance in km with the defined reference point
+func (plane *Plane) computeGroundDistanceDistanceWithReference() (int, error) {
+
+	if referenceLatitude == 0 && referenceLongitude == 0 {
+		return 0.0, errors.New("no reference defined for computing ground distance")
+	}
+
+	planeLatitude, planeLongitude, err := plane.GetExactPosition()
+	if err != nil {
+		return 0, err
+	}
+
+	lat1 := referenceLatitude * math.Pi / 180
+	lat2 := planeLatitude * math.Pi / 180
+
+	difLatitude := (planeLatitude - referenceLatitude) * math.Pi / 180
+	difLongitude := (planeLongitude - referenceLongitude) * math.Pi / 180
+
+	a := (math.Sin(difLatitude/2) * math.Sin(difLatitude/2)) + (math.Cos(lat1) * math.Cos(lat2) * math.Sin(difLongitude/2) * math.Sin(difLongitude/2))
+
+	angularDistance := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+
+	metricDistance := 6371000 * angularDistance
+
+	return int(math.Floor(metricDistance / 1000)), nil
 }
