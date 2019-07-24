@@ -1,8 +1,9 @@
-package reader
+package common
 
 import "fmt"
 
-// ICAOAddress is a 3 bytes ICAO Address, or Interrogator Identifier. The MSB of the address is always 0.
+// ICAOAddress is a 3 bytes ICAO Address, or Interrogator Identifier. The Most Significant Byte of the address
+// is always 0.
 type ICAOAddress uint32
 
 // ToString returns a string representation of an address

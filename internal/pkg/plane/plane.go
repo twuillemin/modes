@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
-	"github.com/twuillemin/modes/pkg/modes/reader"
+	"github.com/twuillemin/modes/pkg/modes/common"
 	"math"
 )
 
 // Plane is the structure keeping track of the current status of a plane
 type Plane struct {
-	ICAOAddress        reader.ICAOAddress
+	ICAOAddress        common.ICAOAddress
 	ADSBLevel          adsb.Level
 	Identification     string
 	FirstSeenTimestamp uint32

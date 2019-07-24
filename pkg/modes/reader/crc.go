@@ -3,6 +3,7 @@ package reader
 import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bitutils"
+	"github.com/twuillemin/modes/pkg/modes/common"
 	"github.com/twuillemin/modes/pkg/modes/messages"
 )
 
@@ -26,8 +27,8 @@ import (
 func CheckCRC(
 	message messages.ModeSMessage,
 	data []byte,
-	allowedAddresses map[ICAOAddress]bool,
-	allowedInterrogatorIdentifiers map[ICAOAddress]bool) (ICAOAddress, error) {
+	allowedAddresses map[common.ICAOAddress]bool,
+	allowedInterrogatorIdentifiers map[common.ICAOAddress]bool) (common.ICAOAddress, error) {
 
 	switch message.GetDownLinkFormat() {
 	case 11:
@@ -41,14 +42,14 @@ func CheckCRC(
 
 func checkCRCDF11(
 	data []byte,
-	allowedInterrogatorIdentifiers map[ICAOAddress]bool) (ICAOAddress, error) {
+	allowedInterrogatorIdentifiers map[common.ICAOAddress]bool) (common.ICAOAddress, error) {
 
 	// For DF11, the ICAO code is not returned (as it is the base of the message). Instead the interrogator id (II)
 	// is used to XOR the parity. So, an interrogator can detect if a message is a reply to its interrogation.
 	contentParity := computeParity(data[:4])
 	messageParity := bitutils.Pack3Bytes(data[4], data[5], data[6])
 
-	interrogatorIdentifier := ICAOAddress(contentParity ^ messageParity)
+	interrogatorIdentifier := common.ICAOAddress(contentParity ^ messageParity)
 
 	// If the interrogator is not valid
 	if len(allowedInterrogatorIdentifiers) > 0 {
@@ -60,10 +61,10 @@ func checkCRCDF11(
 	return interrogatorIdentifier, nil
 }
 
-func checkCRCDF17And18(data []byte) (ICAOAddress, error) {
+func checkCRCDF17And18(data []byte) (common.ICAOAddress, error) {
 
 	// For DF17 and DF18 (extended squitter), the ICAO address is returned as the first 3 bytes of the payload.
-	messageICAO := ICAOAddress(bitutils.Pack3Bytes(data[1], data[2], data[3]))
+	messageICAO := common.ICAOAddress(bitutils.Pack3Bytes(data[1], data[2], data[3]))
 
 	// The parity is XORed against an an Interrogator Id equals to 0
 	contentParity := computeParity(data[:11])
@@ -78,7 +79,7 @@ func checkCRCDF17And18(data []byte) (ICAOAddress, error) {
 
 func checkCRCOther(
 	data []byte,
-	allowedAddresses map[ICAOAddress]bool) (ICAOAddress, error) {
+	allowedAddresses map[common.ICAOAddress]bool) (common.ICAOAddress, error) {
 
 	messageLength := len(data)
 
@@ -86,7 +87,7 @@ func checkCRCOther(
 	contentParity := computeParity(data[:messageLength-3])
 	messageParity := bitutils.Pack3Bytes(data[messageLength-3], data[messageLength-2], data[messageLength-1])
 
-	address := ICAOAddress(contentParity ^ messageParity)
+	address := common.ICAOAddress(contentParity ^ messageParity)
 
 	// If the address is not valid
 	if len(allowedAddresses) > 0 {
