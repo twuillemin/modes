@@ -26,7 +26,7 @@ func main() {
 
 	// If a filename is given, use it and quit
 	if len(*fileName) > 0 {
-		for _, str := range readExampleFile(*fileName) {
+		for _, str := range readFile(*fileName) {
 			processor.ProcessSingleLine(str)
 		}
 		return
@@ -49,7 +49,7 @@ func main() {
 
 }
 
-func readExampleFile(fileName string) []string {
+func readFile(fileName string) []string {
 
 	file, err := os.Open(fileName)
 	if err != nil {

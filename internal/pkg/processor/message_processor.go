@@ -18,6 +18,11 @@ import (
 	"math"
 )
 
+// ProcessSingleLine processes a signle line of data coming from ADSBSpy or from a file. The expected format is
+// like " *8D4BAB4558AB031C446849B72535;1D5D32D0;0A;32AB;" which is the format exported by ADSBSpy.
+//
+// Params:
+//    - str: the line to process
 func ProcessSingleLine(str string) {
 
 	fmt.Printf("Reading: %s\n", str)
