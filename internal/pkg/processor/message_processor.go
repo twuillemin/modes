@@ -5,11 +5,14 @@ import (
 	"github.com/twuillemin/modes/internal/pkg/plane"
 	resolutionAdvisoryMessage "github.com/twuillemin/modes/pkg/acas/ra/messages"
 	"github.com/twuillemin/modes/pkg/adsbspy"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	bds05Fields "github.com/twuillemin/modes/pkg/bds/bds05/fields"
 	bds05Messages "github.com/twuillemin/modes/pkg/bds/bds05/messages"
 	bds08Messages "github.com/twuillemin/modes/pkg/bds/bds08/messages"
 	bds09Fields "github.com/twuillemin/modes/pkg/bds/bds09/fields"
 	bds09Messages "github.com/twuillemin/modes/pkg/bds/bds09/messages"
+	bds65Fields "github.com/twuillemin/modes/pkg/bds/bds65/fields"
+	bds65Messages "github.com/twuillemin/modes/pkg/bds/bds65/messages"
 	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
 	modeSCommon "github.com/twuillemin/modes/pkg/modes/common"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
@@ -41,7 +44,7 @@ func ProcessSingleLine(str string) {
 		return
 	}
 
-	timestamp := uint32(messageADSBSpy.Timestamp)
+	timestamp := messageADSBSpy.Timestamp
 
 	// Check the CRC and get the Address or the Interrogator Identifier
 	address, err := modeSReader.CheckCRC(messageModeS, messageADSBSpy.Message, nil, nil)
@@ -127,11 +130,14 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 	fmt.Printf(" -- ADSB Information --\n")
 
 	// Get the content
-	messageADSB, _, errADSB := adsbReader.ReadADSBMessage(plane.ADSBLevel, false, false, data)
+	messageADSB, detectedADSBLevel, errADSB := adsbReader.ReadADSBMessage(plane.ADSBLevel, plane.NICSupplementA, plane.NICSupplementC, data)
 	if errADSB != nil {
 		fmt.Println(errADSB)
 		return
 	}
+
+	// Update the plane ADSBLevel
+	plane.ADSBLevel = detectedADSBLevel
 
 	if messageADSB == nil {
 		return
@@ -222,6 +228,25 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 			plane.Identification = string(message08.GetAircraftIdentification())
 			planeUpdated = true
 		}
+	}
+
+	// If message with operational status
+	if message31, ok := messageADSB.(bds65Messages.MessageBDS65); ok {
+		if message31.GetMessageFormat() == adsb.Format31V1 {
+			if message31v1Airborne, ok31v1Airborne := message31.(*bds65Messages.Format31V1Airborne); ok31v1Airborne {
+				plane.NICSupplementA = message31v1Airborne.NICSupplement == bds65Fields.NICAOne
+			} else if message31v1Surface, ok31v1Surface := message31.(*bds65Messages.Format31V1Surface); ok31v1Surface {
+				plane.NICSupplementA = message31v1Surface.NICSupplement == bds65Fields.NICAOne
+			}
+		} else if message31.GetMessageFormat() == adsb.Format31V2 {
+			if message31v2Airborne, ok31v2Airborne := message31.(*bds65Messages.Format31V2Airborne); ok31v2Airborne {
+				plane.NICSupplementA = message31v2Airborne.NICSupplementA == bds65Fields.NICAOne
+			} else if message31v2Surface, ok31v2Surface := message31.(*bds65Messages.Format31V2Surface); ok31v2Surface {
+				plane.NICSupplementA = message31v2Airborne.NICSupplementA == bds65Fields.NICAOne
+				plane.NICSupplementC = message31v2Surface.SurfaceCapabilityClass.NICSupplementC == bds65Fields.NICCSZero
+			}
+		}
+		planeUpdated = true
 	}
 
 	if planeUpdated {

@@ -26,6 +26,8 @@ type Plane struct {
 	AirSpeedValid      bool
 	VerticalRate       int
 	VerticalRateValid  bool
+	NICSupplementA     bool
+	NICSupplementC     bool
 }
 
 // ToString returns a very simple representation of the plane

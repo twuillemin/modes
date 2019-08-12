@@ -37,6 +37,8 @@ func CheckoutPlane(timestamp uint32, address common.ICAOAddress) *Plane {
 		OddCPRLatitude:     0,
 		OddCPRLongitude:    0,
 		OddCPRTimestamp:    0,
+		NICSupplementA:     false,
+		NICSupplementC:     false,
 	}
 
 	planes[address] = newPlane
