@@ -33,12 +33,12 @@ type Format08V2 struct {
 
 // GetMessageFormat returns the ADSB format of the message
 func (message *Format08V2) GetMessageFormat() adsb.MessageFormat {
-	return adsb.Format01V0OrMore
+	return adsb.Format08V2
 }
 
 // GetRegister returns the register of the message
 func (message *Format08V2) GetRegister() bds.Register {
-	return adsb.Format01V0OrMore.GetRegister()
+	return adsb.Format08V2.GetRegister()
 }
 
 // GetMovement returns the Movement
