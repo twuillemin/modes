@@ -9,15 +9,17 @@ import (
 )
 
 // Format31V2Surface is a message at the format BDS 6,5 the ADSB V2 / Surface
+//
+// Specified in Doc 9871 / C.2.3.10
 type Format31V2Surface struct {
 	Subtype                              fields.SubtypeV2
 	SurfaceCapabilityClass               fields.SurfaceCapabilityClassV2
 	LengthAndWidth                       fields.LengthWidth
-	SurfaceOperationalMode               fields.SurfaceOperationalMode
+	OperationalMode                      fields.SurfaceOperationalMode
 	VersionNumber                        fields.VersionNumber
-	NICSupplement                        fields.NICSupplementA
+	NICSupplementA                       fields.NICSupplementA
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV2
-	SSourceIntegrityLevel                fields.SourceIntegrityLevel
+	SourceIntegrityLevel                 fields.SourceIntegrityLevel
 	TrackAngleHeading                    fields.TrackAngleHeading
 	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
 	SourceIntegrityLevelSupplement       fields.SourceIntegrityLevelSupplement
@@ -56,11 +58,11 @@ func (message Format31V2Surface) ToString() string {
 		message.Subtype.ToString(),
 		common.PrefixMultiLine(message.SurfaceCapabilityClass.ToString(), "    "),
 		message.LengthAndWidth.ToString(),
-		common.PrefixMultiLine(message.SurfaceOperationalMode.ToString(), "    "),
+		common.PrefixMultiLine(message.OperationalMode.ToString(), "    "),
 		message.VersionNumber.ToString(),
-		message.NICSupplement.ToString(),
+		message.NICSupplementA.ToString(),
 		message.NavigationalAccuracyCategoryPosition.ToString(),
-		message.SSourceIntegrityLevel.ToString(),
+		message.SourceIntegrityLevel.ToString(),
 		message.SourceIntegrityLevelSupplement.ToString(),
 		message.TrackAngleHeading.ToString(),
 		message.HorizontalReferenceDirection.ToString())
@@ -78,11 +80,11 @@ func ReadFormat31V2Surface(data []byte) (*Format31V2Surface, error) {
 		Subtype:                              fields.ReadSubtypeV2(data),
 		SurfaceCapabilityClass:               fields.ReadSurfaceCapabilityClassV2(data),
 		LengthAndWidth:                       fields.ReadAircraftLengthAndWidth(data),
-		SurfaceOperationalMode:               fields.ReadSurfaceOperationalMode(data),
+		OperationalMode:                      fields.ReadSurfaceOperationalMode(data),
 		VersionNumber:                        fields.ReadVersionNumber(data),
-		NICSupplement:                        fields.ReadNICSupplementA(data),
+		NICSupplementA:                       fields.ReadNICSupplementA(data),
 		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV2(data),
-		SSourceIntegrityLevel:                fields.ReadSourceIntegrityLevel(data),
+		SourceIntegrityLevel:                 fields.ReadSourceIntegrityLevel(data),
 		TrackAngleHeading:                    fields.ReadTrackAngleHeading(data),
 		HorizontalReferenceDirection:         fields.ReadHorizontalReferenceDirection(data),
 		SourceIntegrityLevelSupplement:       fields.ReadSourceIntegrityLevelSupplement(data),

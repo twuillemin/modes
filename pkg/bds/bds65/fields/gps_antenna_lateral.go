@@ -27,9 +27,9 @@ const (
 )
 
 // ToString returns a basic, but readable, representation of the field
-func (supplement GPSAntennaLateral) ToString() string {
+func (data GPSAntennaLateral) ToString() string {
 
-	switch supplement {
+	switch data {
 	case GLATNoData:
 		return "0 - no data"
 	case GLATLeft2Meters:
@@ -47,7 +47,7 @@ func (supplement GPSAntennaLateral) ToString() string {
 	case GLATRight6Meters:
 		return "7 - direction right, 6 meters"
 	default:
-		return fmt.Sprintf("%v - Unknown code", supplement)
+		return fmt.Sprintf("%v - Unknown code", data)
 	}
 }
 

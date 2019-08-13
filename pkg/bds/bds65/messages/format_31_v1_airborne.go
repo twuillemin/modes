@@ -9,6 +9,8 @@ import (
 )
 
 // Format31V1Airborne is a message at the format BDS 6,5 the ADSB V1 / Airborne
+//
+// Specified in Doc 9871 / B.2.3.10
 type Format31V1Airborne struct {
 	Subtype                              fields.SubtypeV1
 	AirborneCapabilityClass              fields.AirborneCapabilityClassV1

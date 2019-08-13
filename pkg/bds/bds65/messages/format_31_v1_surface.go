@@ -9,6 +9,8 @@ import (
 )
 
 // Format31V1Surface is a message at the format BDS 6,5 the ADSB V1 / Surface
+//
+// Specified in Doc 9871 / B.2.3.10
 type Format31V1Surface struct {
 	Subtype                              fields.SubtypeV1
 	SurfaceCapabilityClass               fields.SurfaceCapabilityClassV1

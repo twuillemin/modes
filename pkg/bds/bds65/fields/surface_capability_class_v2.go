@@ -11,7 +11,7 @@ type SurfaceCapabilityClassV2 struct {
 	ExtendedSquitterIn                   ExtendedSquitterIn
 	B2Low                                B2Low
 	UniversalAccessTransceiverCapability UniversalAccessTransceiverCapability
-	NavigationAccuracyCategory           NavigationAccuracyCategory
+	NavigationAccuracyCategoryVelocity   NavigationAccuracyCategoryVelocity
 	NICSupplementC                       NICSupplementC
 }
 
@@ -26,7 +26,7 @@ func (capability SurfaceCapabilityClassV2) ToString() string {
 		capability.ExtendedSquitterIn.ToString(),
 		capability.B2Low.ToString(),
 		capability.UniversalAccessTransceiverCapability.ToString(),
-		capability.NavigationAccuracyCategory.ToString(),
+		capability.NavigationAccuracyCategoryVelocity.ToString(),
 		capability.NICSupplementC.ToString())
 }
 
@@ -36,7 +36,7 @@ func ReadSurfaceCapabilityClassV2(data []byte) SurfaceCapabilityClassV2 {
 		ExtendedSquitterIn:                   ReadExtendedSquitterIn(data),
 		B2Low:                                ReadB2Low(data),
 		UniversalAccessTransceiverCapability: ReadUniversalAccessTransceiverCapabilitySurface(data),
-		NavigationAccuracyCategory:           ReadNavigationAccuracyCategory(data),
+		NavigationAccuracyCategoryVelocity:   ReadNavigationAccuracyCategoryVelocity(data),
 		NICSupplementC:                       ReadNICSupplementC(data),
 	}
 }
