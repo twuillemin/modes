@@ -105,6 +105,77 @@ func TestReadFormat31V1Surface(t *testing.T) {
 	}
 }
 
+func TestReadFormat31V1SurfaceTooShort(t *testing.T) {
+
+	// Get too short data
+	data := buildValidFormat31V1SurfaceMessage()[:6]
+
+	_, err := ReadFormat31V1Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1SurfaceBadCode(t *testing.T) {
+
+	// Change code to 2
+	data := buildValidFormat31V1SurfaceMessage()
+	data[0] = (data[0] & 0x07) | 0x10
+
+	_, err := ReadFormat31V1Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1SurfaceBadSubType(t *testing.T) {
+
+	// Change subtype to airborne
+	data := buildValidFormat31V1SurfaceMessage()
+	data[0] = data[0] & 0xF8
+
+	_, err := ReadFormat31V1Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1SurfaceBadADSBLevel(t *testing.T) {
+
+	// Set data at ADSB level 0
+	data := buildValidFormat31V1SurfaceMessage()
+	data[5] = data[5] & 0x1F
+
+	_, err := ReadFormat31V1Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1SurfaceBadServiceLevel(t *testing.T) {
+
+	// Set Service Level to 1
+	data := buildValidFormat31V1SurfaceMessage()
+	data[1] = data[1] | 0x04
+
+	_, err := ReadFormat31V1Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1SurfaceBadOMFormat(t *testing.T) {
+
+	// Set Service Format to 1
+	data := buildValidFormat31V1SurfaceMessage()
+	data[3] = data[3] | 0x40
+
+	_, err := ReadFormat31V1Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
 func buildValidFormat31V1SurfaceMessage() []byte {
 	data := make([]byte, 7)
 

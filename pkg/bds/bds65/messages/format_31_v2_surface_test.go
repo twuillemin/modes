@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestReadFormat31V2Surface(t *testing.T) {
+func TestReadFormat31V2SurfaceValid(t *testing.T) {
 
 	msg, err := ReadFormat31V2Surface(buildValidFormat31V2SurfaceMessage())
 	if err != nil {
@@ -141,6 +141,77 @@ func TestReadFormat31V2Surface(t *testing.T) {
 	}
 }
 
+func TestReadFormat31V2SurfaceTooShort(t *testing.T) {
+
+	// Get too short data
+	data := buildValidFormat31V2SurfaceMessage()[:6]
+
+	_, err := ReadFormat31V2Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2SurfaceBadCode(t *testing.T) {
+
+	// Change code to 2
+	data := buildValidFormat31V2SurfaceMessage()
+	data[0] = (data[0] & 0x07) | 0x10
+
+	_, err := ReadFormat31V2Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2SurfaceBadSubType(t *testing.T) {
+
+	// Change subtype to airborne
+	data := buildValidFormat31V2SurfaceMessage()
+	data[0] = data[0] & 0xF8
+
+	_, err := ReadFormat31V2Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2SurfaceBadADSBLevel(t *testing.T) {
+
+	// Set data at ADSB level 0
+	data := buildValidFormat31V2SurfaceMessage()
+	data[5] = data[5] & 0x1F
+
+	_, err := ReadFormat31V2Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2SurfaceBadContent(t *testing.T) {
+
+	// Set Content to 1
+	data := buildValidFormat31V2SurfaceMessage()
+	data[1] = data[1] | 0x40
+
+	_, err := ReadFormat31V2Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2SurfaceBadOMFormat(t *testing.T) {
+
+	// Set Service Format to 1
+	data := buildValidFormat31V2SurfaceMessage()
+	data[3] = data[3] | 0x40
+
+	_, err := ReadFormat31V2Surface(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
 func buildValidFormat31V2SurfaceMessage() []byte {
 	data := make([]byte, 7)
 
@@ -160,8 +231,8 @@ func buildValidFormat31V2SurfaceMessage() []byte {
 	// 1010 1010:  GPS Antenna Lateral: Right (1) 2 meters (01) Longitudinal: 18 m (01010)
 	data[4] = 0xAA
 
-	// 0011 1010: ADSB Version (001) + NIC Supplement A(1) + EPU < 10 m (1010)
-	data[5] = 0x3A
+	// 0101 1010: ADSB Version (010) + NIC Supplement A(1) + EPU < 10 m (1010)
+	data[5] = 0x5A
 
 	// 0011 1110: Reserved (00) + SIL 3 (11) + Track angle (1) + Magnetic North (1) + SIl By Sample (1) + Reserved (0)
 	data[6] = 0x3E

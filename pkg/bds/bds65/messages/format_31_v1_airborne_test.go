@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestReadFormat31V1Airborne(t *testing.T) {
+func TestReadFormat31V1AirborneValid(t *testing.T) {
 
 	msg, err := ReadFormat31V1Airborne(buildValidFormat31V1AirborneMessage())
 	if err != nil {
@@ -108,6 +108,77 @@ func TestReadFormat31V1Airborne(t *testing.T) {
 		t.Errorf("Expected Horizontal Reference Direction \"%v\", got \"%v\"",
 			fields.HRDMagneticNorth.ToString(),
 			msg.HorizontalReferenceDirection.ToString())
+	}
+}
+
+func TestReadFormat31V1AirborneTooShort(t *testing.T) {
+
+	// Get too short data
+	data := buildValidFormat31V1AirborneMessage()[:6]
+
+	_, err := ReadFormat31V1Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1AirborneBadCode(t *testing.T) {
+
+	// Change code to 2
+	data := buildValidFormat31V1AirborneMessage()
+	data[0] = (data[0] & 0x07) | 0x10
+
+	_, err := ReadFormat31V1Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1AirborneBadSubType(t *testing.T) {
+
+	// Change subtype to surface
+	data := buildValidFormat31V1AirborneMessage()
+	data[0] = data[0] | 0x01
+
+	_, err := ReadFormat31V1Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1AirborneBadADSBLevel(t *testing.T) {
+
+	// Set data at ADSB level 0
+	data := buildValidFormat31V1AirborneMessage()
+	data[5] = data[5] & 0x1F
+
+	_, err := ReadFormat31V1Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1AirborneBadServiceLevel(t *testing.T) {
+
+	// Set Service Level to 1
+	data := buildValidFormat31V1AirborneMessage()
+	data[1] = data[1] | 0x04
+
+	_, err := ReadFormat31V1Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V1AirborneBadOMFormat(t *testing.T) {
+
+	// Set Service Format to 1
+	data := buildValidFormat31V1AirborneMessage()
+	data[3] = data[3] | 0x40
+
+	_, err := ReadFormat31V1Airborne(data)
+	if err == nil {
+		t.Error(err)
 	}
 }
 

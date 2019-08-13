@@ -71,13 +71,38 @@ func (message Format31V2Airborne) ToString() string {
 // ReadFormat31V2Airborne reads a message at the format Format31V2Airborne
 func ReadFormat31V2Airborne(data []byte) (*Format31V2Airborne, error) {
 
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
+
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format31V0.GetTypeCode() {
-		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format31V2", formatTypeCode)
+		return nil, fmt.Errorf("the data are given at format %v and can not be read by ReadFormat31V2", formatTypeCode)
+	}
+
+	subType := fields.ReadSubtypeV2(data)
+	if subType != fields.SubtypeV2Airborne {
+		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadFormat31V2Airborne", subType.ToString())
+	}
+
+	// Check the ADSB Level
+	detectedADSBLevel := fields.ReadVersionNumber(data)
+	if detectedADSBLevel != fields.ADSBVersion2 {
+		return nil, fmt.Errorf("the data are given at at %v format and can not be read by ReadFormat31V2Airborne", detectedADSBLevel.ToString())
+	}
+
+	capabilityContent := (data[1] & 0xC0) >> 6
+	if capabilityContent != 0 {
+		return nil, fmt.Errorf("the Capability Content (field Capability Class) must be 0 (%v given)", capabilityContent)
+	}
+
+	operationalModeFormat := (data[3] & 0xC0) >> 6
+	if operationalModeFormat != 0 {
+		return nil, fmt.Errorf("the Operational Mode Format (field Operational Mode) must be 0 (%v given)", operationalModeFormat)
 	}
 
 	return &Format31V2Airborne{
-		Subtype:                              fields.ReadSubtypeV2(data),
+		Subtype:                              subType,
 		AirborneCapabilityClass:              fields.ReadAirborneCapabilityClassV2(data),
 		OperationalMode:                      fields.ReadAirborneOperationalMode(data),
 		VersionNumber:                        fields.ReadVersionNumber(data),

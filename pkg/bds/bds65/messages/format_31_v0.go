@@ -62,9 +62,19 @@ func (message Format31V0) ToString() string {
 // ReadFormat31V0 reads a message at the format BDS 6,5
 func ReadFormat31V0(data []byte) (*Format31V0, error) {
 
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
+
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format31V0.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format31V0", formatTypeCode)
+	}
+
+	// Check the ADSB Level
+	detectedADSBLevel := fields.ReadVersionNumber(data)
+	if detectedADSBLevel != fields.ADSBVersion0 {
+		return nil, fmt.Errorf("the data are given at at %v format that can not be read by ReadFormat31V0", detectedADSBLevel)
 	}
 
 	return &Format31V0{

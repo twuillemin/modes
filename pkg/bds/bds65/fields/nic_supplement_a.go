@@ -29,6 +29,6 @@ func (supplement NICSupplementA) ToString() string {
 
 // ReadNICSupplementA reads the NICSupplementA from a 56 bits data field
 func ReadNICSupplementA(data []byte) NICSupplementA {
-	bits := (data[5] & 0x20) >> 5
+	bits := (data[5] & 0x10) >> 4
 	return NICSupplementA(bits)
 }

@@ -68,13 +68,38 @@ func (message Format31V1Surface) ToString() string {
 // ReadFormat31V1Surface reads a message at the format Format31V1Surface
 func ReadFormat31V1Surface(data []byte) (*Format31V1Surface, error) {
 
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
+
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format31V0.GetTypeCode() {
-		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format31V1", formatTypeCode)
+		return nil, fmt.Errorf("the data are given at format %v and can not be read by ReadFormat31V1Surface", formatTypeCode)
+	}
+
+	subType := fields.ReadSubtypeV1(data)
+	if subType != fields.SubtypeV1Surface {
+		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadFormat31V1Surface", subType.ToString())
+	}
+
+	// Check the ADSB Level
+	detectedADSBLevel := fields.ReadVersionNumber(data)
+	if detectedADSBLevel != fields.ADSBVersion1 {
+		return nil, fmt.Errorf("the data are given at %v format and can not be read by ReadFormat31V1Surface", detectedADSBLevel.ToString())
+	}
+
+	serviceLevel := (data[1]&0xC0)>>4 + (data[1]&0x0C)>>2
+	if serviceLevel != 0 {
+		return nil, fmt.Errorf("the ServiceLevel (field Capability Class) must be 0 (%v given)", serviceLevel)
+	}
+
+	operationalModeFormat := (data[3] & 0xC0) >> 6
+	if operationalModeFormat != 0 {
+		return nil, fmt.Errorf("the Operational Mode Format (field Operational Mode) must be 0 (%v given)", operationalModeFormat)
 	}
 
 	return &Format31V1Surface{
-		Subtype:                              fields.ReadSubtypeV1(data),
+		Subtype:                              subType,
 		SurfaceCapabilityClass:               fields.ReadSurfaceCapabilityClassV1(data),
 		LengthAndWidth:                       fields.ReadAircraftLengthAndWidth(data),
 		OperationalMode:                      fields.ReadOperationalMode(data),

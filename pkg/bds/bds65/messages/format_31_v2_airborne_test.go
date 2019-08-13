@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestReadFormat31V2Airborne(t *testing.T) {
+func TestReadFormat31V2AirborneValid(t *testing.T) {
 
 	msg, err := ReadFormat31V2Airborne(buildValidFormat31V2AirborneMessage())
 	if err != nil {
@@ -135,6 +135,77 @@ func TestReadFormat31V2Airborne(t *testing.T) {
 	}
 }
 
+func TestReadFormat31V2AirborneTooShort(t *testing.T) {
+
+	// Get too short data
+	data := buildValidFormat31V2AirborneMessage()[:6]
+
+	_, err := ReadFormat31V2Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2AirborneBadCode(t *testing.T) {
+
+	// Change code to 2
+	data := buildValidFormat31V2AirborneMessage()
+	data[0] = (data[0] & 0x07) | 0x10
+
+	_, err := ReadFormat31V2Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2AirborneBadSubType(t *testing.T) {
+
+	// Change subtype to surface
+	data := buildValidFormat31V2AirborneMessage()
+	data[0] = data[0] | 0x01
+
+	_, err := ReadFormat31V2Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2AirborneBadADSBLevel(t *testing.T) {
+
+	// Set data at ADSB level 0
+	data := buildValidFormat31V2AirborneMessage()
+	data[5] = data[5] & 0x1F
+
+	_, err := ReadFormat31V2Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2AirborneBadContent(t *testing.T) {
+
+	// Set Content to 1
+	data := buildValidFormat31V2AirborneMessage()
+	data[1] = data[1] | 0x40
+
+	_, err := ReadFormat31V2Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat31V2AirborneBadOMFormat(t *testing.T) {
+
+	// Set Service Format to 1
+	data := buildValidFormat31V2AirborneMessage()
+	data[3] = data[3] | 0x40
+
+	_, err := ReadFormat31V2Airborne(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
 func buildValidFormat31V2AirborneMessage() []byte {
 	data := make([]byte, 7)
 
@@ -155,8 +226,8 @@ func buildValidFormat31V2AirborneMessage() []byte {
 	// 0000 0000:  Reserved (0000 0000)
 	data[4] = 0x00
 
-	// 0011 1010: ADSB Version (001) + NIC Supplement A(1) + EPU < 10 m (1010)
-	data[5] = 0x3A
+	// 0101 1010: ADSB Version (010) + NIC Supplement A(1) + EPU < 10 m (1010)
+	data[5] = 0x5A
 
 	// 1011 1110: GVA<45m (10) + SIL 3 (11) + NICbaro verified (1) + Magnetic North (1) + SIl By Sample (1) + Reserved (0)
 	data[6] = 0xBE
