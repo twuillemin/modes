@@ -3,6 +3,9 @@ package messages
 //go:generate go run gen/gen_formats_v0.go
 //go:generate go run gen/gen_formats_v1.go
 //go:generate go run gen/gen_formats_v2.go
+//go:generate go run gen/gen_tests_v0.go
+//go:generate go run gen/gen_tests_v1.go
+//go:generate go run gen/gen_tests_v2.go
 
 import (
 	"errors"

@@ -65,6 +65,7 @@ func ReadAltitude(data []byte) Altitude {
 		// positive decimal integer “N” shall be encoded to report pressure-altitude in the range [(25 N – 1 000)
 		// plus or minus 12.5 ft]. The coding of 3.1.2.6.5.4 c) shall be used to report pressure-altitude
 		// above 50 187.5 ft.
+		// Annexe 10, volume IV, 3.1.2.6.5.4
 		n := uint16(0)
 		n |= uint16(data[1]&0xFE) << 3
 		n |= uint16(data[2]&0xF0) >> 4
@@ -78,7 +79,8 @@ func ReadAltitude(data []byte) Altitude {
 
 	// Otherwise, altitude is reported in 100 foot increment
 	// The altitude shall be coded according to the pattern for Mode C replies of 3.1.1.7.12.2.3.
-	// Starting with bit 20 the sequence shall be C1, A1, C2, A2, C4, A4, ZERO, B1, ZERO, B2, D2, B4, D4.
+	// Starting with bit 20 the sequence shall be C1, A1, C2, A2, C4, A4, <<ZERO>>, B1, ZERO, B2, D2, B4, D4.
+	// The M bit <<ZERO>> is ignored for ADSB
 	c1 := (data[1] & 0x80) != 0
 	a1 := (data[1] & 0x40) != 0
 	c2 := (data[1] & 0x20) != 0
