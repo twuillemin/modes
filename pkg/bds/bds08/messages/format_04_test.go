@@ -7,16 +7,16 @@ import (
 	"testing"
 )
 
-func TestReadFormat01Valid(t *testing.T) {
+func TestReadFormat04Valid(t *testing.T) {
 
-	msg, err := readFormat01(buildValidFormat01Message())
+	msg, err := readFormat04(buildValidFormat04Message())
 	if err != nil {
 		t.Error(err)
 	}
 
-	if msg.GetMessageFormat() != adsb.Format01V0OrMore {
+	if msg.GetMessageFormat() != adsb.Format04V0OrMore {
 		t.Errorf("Expected Format \"%v\", got \"%v\"",
-			adsb.Format01V0OrMore.ToString(),
+			adsb.Format04V0OrMore.ToString(),
 			msg.GetMessageFormat().ToString())
 	}
 
@@ -26,9 +26,9 @@ func TestReadFormat01Valid(t *testing.T) {
 			msg.GetRegister().GetId())
 	}
 
-	if msg.AircraftCategory != fields.ACSDReserved2 {
+	if msg.AircraftCategory != fields.ACSAHighVortex {
 		t.Errorf("Expected category \"%v\", got \"%v\"",
-			fields.ACSDReserved2,
+			fields.ACSAHighVortex,
 			msg.AircraftCategory.ToString())
 	}
 
@@ -43,34 +43,34 @@ func TestReadFormat01Valid(t *testing.T) {
 	}
 }
 
-func TestReadFormat01TooShort(t *testing.T) {
+func TestReadFormat04TooShort(t *testing.T) {
 
 	// Get too short data
-	data := buildValidFormat01Message()[:6]
+	data := buildValidFormat04Message()[:6]
 
-	_, err := readFormat01(data)
+	_, err := readFormat04(data)
 	if err == nil {
 		t.Error(err)
 	}
 }
 
-func TestReadFormat01BadCode(t *testing.T) {
+func TestReadFormat04BadCode(t *testing.T) {
 
-	// Change code to 9
-	data := buildValidFormat01Message()
+	// Change code to 11
+	data := buildValidFormat04Message()
 	data[0] = (data[0] & 0x07) | 0x80
 
-	_, err := readFormat01(data)
+	_, err := readFormat04(data)
 	if err == nil {
 		t.Error(err)
 	}
 }
 
-func buildValidFormat01Message() []byte {
+func buildValidFormat04Message() []byte {
 	data := make([]byte, 7)
 
-	// 0000 1010: code 1 (00001) + category D / Reserved (010)
-	data[0] = 0x0A
+	// 0010 0100: code 1 (00100) + set A / High vortex (100)
+	data[0] = 0x24
 
 	// 0000 0100: A (000001) + B (00[0010])
 	data[1] = 0x04
