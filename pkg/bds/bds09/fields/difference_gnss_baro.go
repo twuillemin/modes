@@ -19,7 +19,7 @@ const (
 // DifferenceGNSSBaro is the Velocity EW Normal definition
 //
 // Specified in Doc 9871 / Table A-2-9
-type DifferenceGNSSBaro uint16
+type DifferenceGNSSBaro byte
 
 // GetStatus returns the status of the velocity
 func (DifferenceGNSSBaro DifferenceGNSSBaro) GetStatus() DifferenceGNSSBaroStatus {
@@ -37,7 +37,7 @@ func (DifferenceGNSSBaro DifferenceGNSSBaro) ToString() string {
 
 	if DifferenceGNSSBaro == 0 {
 		return "no information"
-	} else if DifferenceGNSSBaro >= 511 {
+	} else if DifferenceGNSSBaro >= 127 {
 		return ">3137.5 ft"
 	} else {
 		return fmt.Sprintf("%v ft", DifferenceGNSSBaro.GetDifferenceGNSSBaro())
@@ -50,7 +50,7 @@ func (DifferenceGNSSBaro DifferenceGNSSBaro) GetDifferenceGNSSBaro() int {
 
 	if DifferenceGNSSBaro == 0 {
 		return 0
-	} else if DifferenceGNSSBaro >= 511 {
+	} else if DifferenceGNSSBaro >= 127 {
 		return 3150
 	} else {
 		return (int(DifferenceGNSSBaro) - 1) * 25

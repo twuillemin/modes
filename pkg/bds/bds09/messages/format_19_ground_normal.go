@@ -110,12 +110,21 @@ func (message Format19GroundNormal) ToString() string {
 		message.DifferenceGNSSBaro.ToString())
 }
 
-// readFormat19GroundNormal reads a message at the format BDS 6,5
+// readFormat19GroundNormal reads a message at the format BDS 0,9
 func readFormat19GroundNormal(data []byte) (*Format19GroundNormal, error) {
+
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format19V0OrMore.GetTypeCode() {
-		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format19", formatTypeCode)
+		return nil, fmt.Errorf("the data are given at format %v and can not be read by readFormat19GroundNormal", formatTypeCode)
+	}
+
+	subType := fields.ReadAirborneVelocitySubtype(data)
+	if subType != fields.SubtypeGroundSpeedNormal {
+		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by readFormat19GroundNormal", subType.ToString())
 	}
 
 	return &Format19GroundNormal{
