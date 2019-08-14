@@ -11,7 +11,7 @@ func TestReadFormat31V1AirborneValid(t *testing.T) {
 
 	msg, err := ReadFormat31V1Airborne(buildValidFormat31V1AirborneMessage())
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	if msg.GetMessageFormat() != adsb.Format31V1 {

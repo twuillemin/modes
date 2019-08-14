@@ -11,7 +11,7 @@ func TestReadFormat31V1Surface(t *testing.T) {
 
 	msg, err := ReadFormat31V1Surface(buildValidFormat31V1SurfaceMessage())
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	if msg.GetMessageFormat() != adsb.Format31V1 {

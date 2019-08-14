@@ -10,7 +10,7 @@ func TestReadFormat31V0Valid(t *testing.T) {
 
 	msg, err := ReadFormat31V0(buildValidFormat31V0Message())
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
 	if msg.GetMessageFormat() != adsb.Format31V0 {
