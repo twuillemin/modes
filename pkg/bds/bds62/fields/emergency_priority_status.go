@@ -53,6 +53,6 @@ func (capability EmergencyPriorityStatus) ToString() string {
 
 // ReadEmergencyPriorityStatus reads the EmergencyPriorityStatus from a 56 bits data field
 func ReadEmergencyPriorityStatus(data []byte) EmergencyPriorityStatus {
-	bits := data[6] & 0x0E
+	bits := data[6] & 0x07
 	return EmergencyPriorityStatus(bits)
 }

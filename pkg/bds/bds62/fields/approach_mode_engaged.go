@@ -29,6 +29,6 @@ func (status ApproachModeEngaged) ToString() string {
 
 // ReadApproachModeEngaged reads the ApproachModeEngaged from a 56 bits data field
 func ReadApproachModeEngaged(data []byte) ApproachModeEngaged {
-	bits := (data[6] & 0x01) >> 4
+	bits := (data[6] & 0x10) >> 4
 	return ApproachModeEngaged(bits)
 }

@@ -90,16 +90,25 @@ func printStatusBit(status fields.StatusMCPFCUBits, bit common.Printable) string
 	return bit.ToString()
 }
 
-// readFormat29Subtype1 reads a message at the format BDS 6,2
-func readFormat29Subtype1(data []byte) (*Format29Subtype1, error) {
+// ReadFormat29Subtype1 reads a message at the format BDS 6,2
+func ReadFormat29Subtype1(data []byte) (*Format29Subtype1, error) {
+
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format29V2.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format29", formatTypeCode)
 	}
 
+	subType := fields.ReadSubtypeV2(data)
+	if subType != fields.SubtypeV2Subtype1 {
+		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadFormat29Subtype1", subType.ToString())
+	}
+
 	return &Format29Subtype1{
-		Subtype:                              fields.ReadSubtypeV2(data),
+		Subtype:                              subType,
 		SourceIntegrityLevelSupplement:       fields.ReadSourceIntegrityLevelSupplement(data),
 		SelectedAltitudeType:                 fields.ReadSelectedAltitudeType(data),
 		SelectedAltitude:                     fields.ReadSelectedAltitude(data),

@@ -29,6 +29,6 @@ func (status SelectedHeadingSign) ToString() string {
 
 // ReadSelectedHeadingSign reads the SelectedHeadingSign from a 56 bits data field
 func ReadSelectedHeadingSign(data []byte) SelectedHeadingSign {
-	bits := (data[3] & 0x02) >> 2
+	bits := (data[3] & 0x02) >> 1
 	return SelectedHeadingSign(bits)
 }

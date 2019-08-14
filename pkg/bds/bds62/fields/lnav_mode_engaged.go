@@ -29,6 +29,6 @@ func (status LNAVModeEngaged) ToString() string {
 
 // ReadLNAVModeEngaged reads the LNAVModeEngaged from a 56 bits data field
 func ReadLNAVModeEngaged(data []byte) LNAVModeEngaged {
-	bits := (data[6] & 0x40) >> 2
+	bits := (data[6] & 0x04) >> 2
 	return LNAVModeEngaged(bits)
 }

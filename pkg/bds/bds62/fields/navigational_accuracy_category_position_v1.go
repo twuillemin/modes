@@ -86,6 +86,6 @@ func (category NavigationalAccuracyCategoryPositionV1) ToString() string {
 
 // ReadNavigationalAccuracyCategoryPositionV1 reads the NavigationalAccuracyCategoryPositionV1 from a 56 bits data field
 func ReadNavigationalAccuracyCategoryPositionV1(data []byte) NavigationalAccuracyCategoryPositionV1 {
-	bits := (data[4]&0x01)<<3 + (data[5]&0xE)>>5
+	bits := (data[4]&0x01)<<3 + (data[5]&0xE0)>>5
 	return NavigationalAccuracyCategoryPositionV1(bits)
 }

@@ -37,6 +37,6 @@ func (capability CapabilityModeCode) ToString() string {
 
 // ReadCapabilityModeCode reads the CapabilityModeCode from a 56 bits data field
 func ReadCapabilityModeCode(data []byte) CapabilityModeCode {
-	bits := (data[6] & 0x18) << 3
+	bits := (data[6] & 0x18) >> 3
 	return CapabilityModeCode(bits)
 }

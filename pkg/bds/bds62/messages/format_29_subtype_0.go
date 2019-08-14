@@ -77,16 +77,25 @@ func (message *Format29Subtype0) ToString() string {
 		message.EmergencyPriorityStatus.ToString())
 }
 
-// readFormat29Subtype0 reads a message at the format BDS 6,2
-func readFormat29Subtype0(data []byte) (*Format29Subtype0, error) {
+// ReadFormat29Subtype0 reads a message at the format BDS 6,2
+func ReadFormat29Subtype0(data []byte) (*Format29Subtype0, error) {
+
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format29V1OrMore.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format29", formatTypeCode)
 	}
 
+	subType := fields.ReadSubtypeV1(data)
+	if subType != fields.SubtypeV1Subtype0 {
+		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadFormat29Subtype0", subType.ToString())
+	}
+
 	return &Format29Subtype0{
-		Subtype:                                fields.ReadSubtypeV1(data),
+		Subtype:                                subType,
 		VerticalDataAvailableSourceIndicator:   fields.ReadVerticalDataAvailableSourceIndicator(data),
 		TargetAltitudeType:                     fields.ReadTargetAltitudeType(data),
 		TargetAltitudeCapability:               fields.ReadTargetAltitudeCapability(data),

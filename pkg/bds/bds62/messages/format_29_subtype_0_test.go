@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func TestReadFormat31V1AirborneValid(t *testing.T) {
+func TestReadFormat29Subtype0Valid(t *testing.T) {
 
-	msg, err := readFormat29Subtype0(buildValidFormat29Subtype0Message())
+	msg, err := ReadFormat29Subtype0(buildValidFormat29Subtype0Message())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -67,8 +67,8 @@ func TestReadFormat31V1AirborneValid(t *testing.T) {
 			msg.HorizontalDataAvailableSourceIndicator.ToString())
 	}
 
-	if msg.TargetHeadingTrackAngle.GetTargetHeadingTrackAngle() != 259 {
-		t.Errorf("Expected Target Heading Track Angle to be 259, got \"%v\"",
+	if msg.TargetHeadingTrackAngle.GetTargetHeadingTrackAngle() != 359 {
+		t.Errorf("Expected Target Heading Track Angle to be 359, got \"%v\"",
 			msg.TargetHeadingTrackAngle)
 	}
 
@@ -113,6 +113,45 @@ func TestReadFormat31V1AirborneValid(t *testing.T) {
 			fields.EPSDownedAircraft.ToString(),
 			msg.EmergencyPriorityStatus.ToString())
 	}
+
+	if len(msg.ToString()) <= 0 {
+		t.Error("Expected a printable message, but get nothing")
+	}
+}
+
+func TestReadFormat29Subtype0TooShort(t *testing.T) {
+
+	// Shorten the data
+	data := buildValidFormat29Subtype0Message()[:6]
+
+	_, err := ReadFormat29Subtype0(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat29Subtype0BadFormat(t *testing.T) {
+
+	// Change code to 2
+	data := buildValidFormat29Subtype0Message()
+	data[0] = (data[0] & 0x07) | 0x10
+
+	_, err := ReadFormat29Subtype0(data)
+	if err == nil {
+		t.Error(err)
+	}
+}
+
+func TestReadFormat29Subtype0BadSubtype(t *testing.T) {
+
+	// Change subtype to 2
+	data := buildValidFormat29Subtype0Message()
+	data[0] = data[0] | 0x04
+
+	_, err := ReadFormat29Subtype0(data)
+	if err == nil {
+		t.Error(err)
+	}
 }
 
 func buildValidFormat29Subtype0Message() []byte {
@@ -131,7 +170,7 @@ func buildValidFormat29Subtype0Message() []byte {
 	// 1111 0110: Target altitude ([1 0101 0101] 1) + HorizontalData: FMS (11) + TargetHeading: 359(1 0110 [0111])
 	data[3] = 0xF6
 
-	// 0111 1101:  TargetHeading: 259([1 0110] 0111) + TrackIndicator: angle (1) + Horizontal Indicator:Capturing (10)
+	// 0111 1101:  TargetHeading: 359([1 0110] 0111) + TrackIndicator: angle (1) + Horizontal Indicator:Capturing (10)
 	// + NACp: EPU < 10 m and VEPU < 15 m (1 [010])
 	data[4] = 0x7D
 

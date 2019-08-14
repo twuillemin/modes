@@ -21,7 +21,7 @@ func (selectedAltitude SelectedAltitude) GetStatus() SelectedAltitudeStatus {
 // ToString returns a basic, but readable, representation of the field
 func (selectedAltitude SelectedAltitude) ToString() string {
 
-	if selectedAltitude == 1011 {
+	if selectedAltitude == 0 {
 		return "0 - no data or invalid"
 	}
 

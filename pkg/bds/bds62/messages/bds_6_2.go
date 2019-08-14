@@ -65,16 +65,16 @@ func ReadBDS62(adsbLevel adsb.Level, data []byte) (MessageBDS62, adsb.Level, err
 
 	case adsb.Level1OrMore, adsb.Level1Exactly:
 		if subType == 0 {
-			message, err := readFormat29Subtype0(data)
+			message, err := ReadFormat29Subtype0(data)
 			return message, adsbLevelToUse, err
 		}
 
 	case adsb.Level2:
 		if subType == 0 {
-			message, err := readFormat29Subtype0(data)
+			message, err := ReadFormat29Subtype0(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 1 {
-			message, err := readFormat29Subtype1(data)
+			message, err := ReadFormat29Subtype1(data)
 			return message, adsbLevelToUse, err
 		}
 	}
