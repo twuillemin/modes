@@ -1,6 +1,8 @@
 package fields
 
 // AircraftIdentification is the identification (the name) of an aircraft
+//
+// Specified in Annex 10, Volume IV, Table 3-8
 type AircraftIdentification string
 
 var identificationCharacterCoding = []byte{

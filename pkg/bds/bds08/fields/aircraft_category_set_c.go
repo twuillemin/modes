@@ -3,6 +3,8 @@ package fields
 import "fmt"
 
 // AircraftCategorySetC defines the type of the AircraftCategory
+//
+// Specified in Doc 9871 / Table A-2-8
 type AircraftCategorySetC byte
 
 const (

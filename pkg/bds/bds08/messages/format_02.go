@@ -41,6 +41,10 @@ func (message *Format02) GetAircraftIdentification() fields2.AircraftIdentificat
 // readFormat02 reads a message at the format BDS 0,8
 func readFormat02(data []byte) (*Format02, error) {
 
+	if len(data) != 7 {
+		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
+	}
+
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format02V0OrMore.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format02", formatTypeCode)
