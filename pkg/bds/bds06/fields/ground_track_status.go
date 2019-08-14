@@ -29,6 +29,6 @@ func (status GroundTrackStatus) ToString() string {
 
 // ReadGroundTrackStatus reads the GroundTrackStatus from a 56 bits data field
 func ReadGroundTrackStatus(data []byte) GroundTrackStatus {
-	bits := (data[1] & 0x04) >> 2
+	bits := (data[1] & 0x08) >> 3
 	return GroundTrackStatus(bits)
 }

@@ -10,6 +10,9 @@ import (
 //go:generate go run gen/gen_formats_v0.go
 //go:generate go run gen/gen_formats_v1.go
 //go:generate go run gen/gen_formats_v2.go
+//go:generate go run gen/gen_tests_v0.go
+//go:generate go run gen/gen_tests_v1.go
+//go:generate go run gen/gen_tests_v2.go
 
 // MessageBDS06 is the basic interface that ADSB messages at the format BDS 0,6 are expected to implement
 type MessageBDS06 interface {

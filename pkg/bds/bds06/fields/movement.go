@@ -54,17 +54,17 @@ func (movement Movement) GetMovement() float32 {
 	if movement == 0 || movement == 1 || movement > 124 {
 		return 0
 	} else if 2 <= movement && movement <= 8 {
-		return 0.2315 + float32(2-movement)*0.2315
+		return 0.2315 + float32(movement-2)*0.2315
 	} else if 9 <= movement && movement <= 12 {
-		return 1.852 + float32(9-movement)*0.463
+		return 1.852 + float32(movement-9)*0.463
 	} else if 13 <= movement && movement <= 38 {
-		return 3.704 + float32(13-movement)*0.926
+		return 3.704 + float32(movement-13)*0.926
 	} else if 39 <= movement && movement <= 93 {
-		return 27.78 + float32(39-movement)*1.852
+		return 27.78 + float32(movement-39)*1.852
 	} else if 94 <= movement && movement <= 108 {
-		return 129.64 + float32(94-movement)*3.704
+		return 129.64 + float32(movement-94)*3.704
 	} else if 109 <= movement && movement <= 123 {
-		return 185.2 + float32(109-movement)*9.26
+		return 185.2 + float32(movement-109)*9.26
 	}
 
 	// Movement max
@@ -73,6 +73,6 @@ func (movement Movement) GetMovement() float32 {
 
 // ReadMovement reads the Movement from a 56 bits data field
 func ReadMovement(data []byte) Movement {
-	bits := (data[0]&0x07)<<3 + (data[1]&0xF0)>>4
+	bits := (data[0]&0x07)<<4 + (data[1]&0xF0)>>4
 	return Movement(bits)
 }
