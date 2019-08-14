@@ -24,6 +24,10 @@ func TestReadFormat31V0Valid(t *testing.T) {
 			bds.BDS65.GetId(),
 			msg.GetRegister().GetId())
 	}
+
+	if len(msg.ToString()) <= 0 {
+		t.Error("Expected a printable message, but get nothing")
+	}
 }
 
 func TestReadFormat31V0TooShort(t *testing.T) {

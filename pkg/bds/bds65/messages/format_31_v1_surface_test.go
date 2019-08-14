@@ -103,6 +103,10 @@ func TestReadFormat31V1Surface(t *testing.T) {
 			fields.HRDMagneticNorth.ToString(),
 			msg.HorizontalReferenceDirection.ToString())
 	}
+
+	if len(msg.ToString()) <= 0 {
+		t.Error("Expected a printable message, but get nothing")
+	}
 }
 
 func TestReadFormat31V1SurfaceTooShort(t *testing.T) {

@@ -139,6 +139,10 @@ func TestReadFormat31V2SurfaceValid(t *testing.T) {
 			fields.SILSBySample.ToString(),
 			msg.SourceIntegrityLevelSupplement.ToString())
 	}
+
+	if len(msg.ToString()) <= 0 {
+		t.Error("Expected a printable message, but get nothing")
+	}
 }
 
 func TestReadFormat31V2SurfaceTooShort(t *testing.T) {
