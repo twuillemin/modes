@@ -150,8 +150,8 @@ func (message *{{ .Name }}) ToString() string {
 	return messageBDS06V1ToString(message)
 }
 
-// read{{ .Name }} reads a message at the format BDS 0,6
-func read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
+// Read{{ .Name }} reads a message at the format {{ .Name }}
+func Read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
 
 	if len(data) != 7 {
 		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))

@@ -10,6 +10,7 @@ import (
 //go:generate go run gen/gen_formats_v0.go
 //go:generate go run gen/gen_formats_v1.go
 //go:generate go run gen/gen_formats_v2.go
+//go:generate go run gen/gen_tests_bds_0_6.go
 //go:generate go run gen/gen_tests_v0.go
 //go:generate go run gen/gen_tests_v1.go
 //go:generate go run gen/gen_tests_v2.go
@@ -74,48 +75,48 @@ func ReadBDS06(
 	case adsb.Level0Exactly, adsb.Level0OrMore:
 		switch formatTypeCode {
 		case 5:
-			message, err := readFormat05V0(data)
+			message, err := ReadFormat05V0(data)
 			return message, adsbLevel, err
 		case 6:
-			message, err := readFormat06V0(data)
+			message, err := ReadFormat06V0(data)
 			return message, adsbLevel, err
 		case 7:
-			message, err := readFormat07V0(data)
+			message, err := ReadFormat07V0(data)
 			return message, adsbLevel, err
 		case 8:
-			message, err := readFormat08V0(data)
+			message, err := ReadFormat08V0(data)
 			return message, adsbLevel, err
 		}
 
 	case adsb.Level1Exactly, adsb.Level1OrMore:
 		switch formatTypeCode {
 		case 5:
-			message, err := readFormat05V1(nicSupplementA, data)
+			message, err := ReadFormat05V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 6:
-			message, err := readFormat06V1(nicSupplementA, data)
+			message, err := ReadFormat06V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 7:
-			message, err := readFormat07V1(nicSupplementA, data)
+			message, err := ReadFormat07V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 8:
-			message, err := readFormat08V1(nicSupplementA, data)
+			message, err := ReadFormat08V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		}
 
 	case adsb.Level2:
 		switch formatTypeCode {
 		case 5:
-			message, err := readFormat05V2(nicSupplementA, nicSupplementC, data)
+			message, err := ReadFormat05V2(nicSupplementA, nicSupplementC, data)
 			return message, adsbLevel, err
 		case 6:
-			message, err := readFormat06V2(nicSupplementA, nicSupplementC, data)
+			message, err := ReadFormat06V2(nicSupplementA, nicSupplementC, data)
 			return message, adsbLevel, err
 		case 7:
-			message, err := readFormat07V2(nicSupplementA, nicSupplementC, data)
+			message, err := ReadFormat07V2(nicSupplementA, nicSupplementC, data)
 			return message, adsbLevel, err
 		case 8:
-			message, err := readFormat08V2(nicSupplementA, nicSupplementC, data)
+			message, err := ReadFormat08V2(nicSupplementA, nicSupplementC, data)
 			return message, adsbLevel, err
 		}
 	}

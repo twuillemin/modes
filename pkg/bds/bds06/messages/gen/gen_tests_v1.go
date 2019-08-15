@@ -73,10 +73,10 @@ import (
 
 func TestRead{{ .Name }}Valid(t *testing.T) {
 
-	data := buildValidBDS06Message()
+	data := buildValidBDS06V1Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, err := read{{ .Name }}(false, data)
+	msg, err := Read{{ .Name }}(false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -87,16 +87,16 @@ func TestRead{{ .Name }}Valid(t *testing.T) {
 			msg.GetMessageFormat().ToString())
 	}
 
-	isBDS06Valid(t, msg)
+	isBDS06V1Valid(t, msg)
 }
 
 func TestRead{{ .Name }}TooShort(t *testing.T) {
 
 	// Get too short data
-	data := buildValidBDS06Message()[:6]
+	data := buildValidBDS06V1Message()[:6]
 	data[0] = data[0] | {{ .MessageCode }}
 
-	_, err := read{{ .Name }}(false, data)
+	_, err := Read{{ .Name }}(false, data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -105,10 +105,10 @@ func TestRead{{ .Name }}TooShort(t *testing.T) {
 func TestRead{{ .Name }}BadCode(t *testing.T) {
 
 	// Message code 1
-	data := buildValidBDS06Message()
+	data := buildValidBDS06V1Message()
 	data[0] = data[0] | 0x01
 
-	_, err := read{{ .Name }}(false, data)
+	_, err := Read{{ .Name }}(false, data)
 	if err == nil {
 		t.Error(err)
 	}
