@@ -24,7 +24,7 @@ type AddressAnnounced struct {
 func ReadAddressAnnounced(message common.MessageData) AddressAnnounced {
 
 	return AddressAnnounced{
-		Address: bitutils.Pack3Bytes(message.Payload[0], message.Payload[0], message.Payload[2]),
+		Address: bitutils.Pack3Bytes(message.Payload[0], message.Payload[1], message.Payload[2]),
 	}
 }
 

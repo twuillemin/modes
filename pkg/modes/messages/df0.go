@@ -12,6 +12,8 @@ import (
 // -------------------------------------------------------------------------------------
 
 // MessageDF0 is a message at the format DF0
+//
+// Specified in Annex 10, Volume IV, 3.1.2.8.2
 type MessageDF0 struct {
 	common.MessageData
 	VerticalStatus      fields.VerticalStatus

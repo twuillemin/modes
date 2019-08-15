@@ -46,8 +46,8 @@ func main() {
 
 	reader := bufio.NewReader(conn)
 	for {
-		if line, readErr := reader.ReadBytes('\n'); readErr == nil {
-			processor.ProcessSingleLine(string(line))
+		if fileLine, readErr := reader.ReadBytes('\n'); readErr == nil {
+			processor.ProcessSingleLine(string(fileLine))
 		} else {
 			log.Fatal(readErr)
 		}

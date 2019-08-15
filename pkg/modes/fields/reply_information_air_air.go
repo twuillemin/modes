@@ -63,7 +63,7 @@ const (
 // ReadReplyInformationAirAir reads the RI field from a message
 func ReadReplyInformationAirAir(message common.MessageData) ReplyInformationAirAir {
 
-	replyInformation := ((message.Payload[0] & 0x03) << 2) | ((message.Payload[1] & 0x080) >> 7)
+	replyInformation := ((message.Payload[0] & 0x07) << 1) | ((message.Payload[1] & 0x80) >> 7)
 
 	return ReplyInformationAirAir(replyInformation)
 }

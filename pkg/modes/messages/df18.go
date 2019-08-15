@@ -37,7 +37,7 @@ func ParseDF18(message common.MessageData) (*MessageDF18, error) {
 	//     DF     CF   |        AA       |        AA       |        AA       |    ME   |   PI
 	// 1 0 0 1 0 c c c | a a a a a a a a | a a a a a a a a | a a a a a a a a | 56 bits | 24bits
 
-	if message.DownLinkFormat != 17 {
+	if message.DownLinkFormat != 18 {
 		return nil, errors.New("DF18 message must have a DownLinkFormat of 18")
 	}
 	if len(message.Payload) != 10 {

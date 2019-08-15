@@ -53,6 +53,6 @@ func ReadSubtype(data []byte) Subtype {
 }
 
 // ToSubtype returns the ADSB generic subtype
-func (code Subtype) ToSubtype() adsb.Subtype {
-	return code
+func (subtype Subtype) ToSubtype() adsb.Subtype {
+	return subtype
 }
