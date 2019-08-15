@@ -14,9 +14,9 @@ func TestReadFormat02Valid(t *testing.T) {
 		t.Error(err)
 	}
 
-	if msg.GetMessageFormat() != adsb.Format02V0OrMore {
+	if msg.GetMessageFormat() != adsb.Format02 {
 		t.Errorf("Expected Format \"%v\", got \"%v\"",
-			adsb.Format02V0OrMore.ToString(),
+			adsb.Format02.ToString(),
 			msg.GetMessageFormat().ToString())
 	}
 
@@ -69,7 +69,7 @@ func TestReadFormat02BadCode(t *testing.T) {
 func buildValidFormat02Message() []byte {
 	data := make([]byte, 7)
 
-	// 0001 0010: code 1 (00010) + category C / Surface Service Vehicle (010)
+	// 0001 0010: code 1 (00010) + category C / SubtypeSurface Service Vehicle (010)
 	data[0] = 0x12
 
 	// 0000 0100: A (000001) + B (00[0010])

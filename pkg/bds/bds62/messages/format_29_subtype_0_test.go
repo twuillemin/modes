@@ -14,9 +14,9 @@ func TestReadFormat29Subtype0Valid(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if msg.GetMessageFormat() != adsb.Format29V1OrMore {
+	if msg.GetMessageFormat() != adsb.Format29 {
 		t.Errorf("Expected Format \"%v\", got \"%v\"",
-			adsb.Format29V1OrMore.ToString(),
+			adsb.Format29.ToString(),
 			msg.GetMessageFormat().ToString())
 	}
 
@@ -26,9 +26,9 @@ func TestReadFormat29Subtype0Valid(t *testing.T) {
 			msg.GetRegister().GetId())
 	}
 
-	if msg.GetSubtype() != fields.SubtypeV1Subtype0 {
+	if msg.GetSubtype() != fields.Subtype0 {
 		t.Errorf("Expected Subtype \"%v\", got \"%v\"",
-			fields.SubtypeV1Subtype0.ToString(),
+			fields.Subtype0.ToString(),
 			msg.GetSubtype().ToString())
 	}
 
@@ -97,7 +97,7 @@ func TestReadFormat29Subtype0Valid(t *testing.T) {
 	}
 
 	if msg.SurveillanceIntegrityLevel != fields.SUILLevel3 {
-		t.Errorf("Expected Surveillance Integrity Level \"%v\", got \"%v\"",
+		t.Errorf("Expected Surveillance Integrity ReaderLevel \"%v\", got \"%v\"",
 			fields.SUILLevel3.ToString(),
 			msg.SurveillanceIntegrityLevel.ToString())
 	}

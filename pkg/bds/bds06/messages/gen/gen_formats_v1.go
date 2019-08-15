@@ -15,13 +15,13 @@ import (
 )
 
 func main() {
-	generateFile("format_05_v1.go", "Format05V1")
-	generateFile("format_06_v1.go", "Format06V1")
-	generateFile("format_07_v1.go", "Format07V1")
-	generateFile("format_08_v1.go", "Format08V1")
+	generateFile("format_05_v1.go", "Format05V1", "Format05")
+	generateFile("format_06_v1.go", "Format06V1", "Format06")
+	generateFile("format_07_v1.go", "Format07V1", "Format07")
+	generateFile("format_08_v1.go", "Format08V1", "Format08")
 }
 
-func generateFile(fileName string, name string) {
+func generateFile(fileName string, name string, formatName string) {
 	// Open the target file
 	f, err := os.Create(fileName)
 	if err != nil {
@@ -40,11 +40,13 @@ func generateFile(fileName string, name string) {
 	err = builderTemplate.Execute(
 		f,
 		struct {
-			Timestamp time.Time
-			Name      string
+			Timestamp  time.Time
+			Name       string
+			FormatName string
 		}{
-			Timestamp: time.Now(),
-			Name:      name,
+			Timestamp:  time.Now(),
+			Name:       name,
+			FormatName: formatName,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -91,66 +93,81 @@ type {{ .Name }} struct {
 }
 
 // GetMessageFormat returns the ADSB format of the message
-func (message *{{ .Name }}) GetMessageFormat() adsb.MessageFormat {
-	return adsb.{{ .Name }}
+func (message {{ .Name }}) GetMessageFormat() adsb.MessageFormat {
+	return adsb.{{ .FormatName }}
 }
 
 // GetRegister returns the register of the message
-func (message *{{ .Name }}) GetRegister() bds.Register {
-	return adsb.{{ .Name }}.GetRegister()
+func (message {{ .Name }}) GetRegister() bds.Register {
+	return adsb.{{ .FormatName }}.GetRegister()
+}
+
+// GetSubtype returns the subtype of the message if any
+func (message {{ .Name }}) GetSubtype() adsb.Subtype{
+	return nil
+}
+
+// GetMinimumADSBLevel returns the minimum ADSB Level for the message
+func (message {{ .Name }}) GetMinimumADSBLevel() adsb.MessageLevel{
+	return adsb.MessageLevel1
+}
+
+// GetMaximumADSBLevel returns the maximum ADSB Level for the message
+func (message {{ .Name }}) GetMaximumADSBLevel() adsb.MessageLevel{
+	return adsb.MessageLevel1
 }
 
 // GetMovement returns the Movement
-func (message *{{ .Name }}) GetMovement() fields.Movement {
+func (message {{ .Name }}) GetMovement() fields.Movement {
 	return message.Movement
 }
 
 // GetGroundTrackStatus returns the GroundTrackStatus
-func (message *{{ .Name }}) GetGroundTrackStatus() fields.GroundTrackStatus {
+func (message {{ .Name }}) GetGroundTrackStatus() fields.GroundTrackStatus {
 	return message.GroundTrackStatus
 }
 
 // GetGroundTrack returns the GroundTrack
-func (message *{{ .Name }}) GetGroundTrack() fields.GroundTrack {
+func (message {{ .Name }}) GetGroundTrack() fields.GroundTrack {
 	return message.GroundTrack
 }
 
 // GetTime returns the Time
-func (message *{{ .Name }}) GetTime() fields.Time {
+func (message {{ .Name }}) GetTime() fields.Time {
 	return message.Time
 }
 
 // GetCPRFormat returns the CompactPositionReportingFormat
-func (message *{{ .Name }}) GetCPRFormat() fields.CompactPositionReportingFormat {
+func (message {{ .Name }}) GetCPRFormat() fields.CompactPositionReportingFormat {
 	return message.CPRFormat
 }
 
 // GetEncodedLatitude returns the EncodedLatitude
-func (message *{{ .Name }}) GetEncodedLatitude() fields.EncodedLatitude {
+func (message {{ .Name }}) GetEncodedLatitude() fields.EncodedLatitude {
 	return message.EncodedLatitude
 }
 
 // GetEncodedLongitude returns the EncodedLongitude
-func (message *{{ .Name }}) GetEncodedLongitude() fields.EncodedLongitude {
+func (message {{ .Name }}) GetEncodedLongitude() fields.EncodedLongitude {
 	return message.EncodedLongitude
 }
 
 // GetHorizontalContainmentRadius returns the HorizontalContainmentRadiusV1
-func (message *{{ .Name }}) GetHorizontalContainmentRadius() fields.HorizontalContainmentRadiusV1 {
+func (message {{ .Name }}) GetHorizontalContainmentRadius() fields.HorizontalContainmentRadiusV1 {
 	return message.HorizontalContainmentRadius
 }
 
 // GetNavigationIntegrityCategory returns the Navigation Integrity Category
-func (message *{{ .Name }}) GetNavigationIntegrityCategory() byte {
+func (message {{ .Name }}) GetNavigationIntegrityCategory() byte {
 	return message.NavigationIntegrityCategory
 }
 
 // ToString returns a basic, but readable, representation of the message
-func (message *{{ .Name }}) ToString() string {
+func (message {{ .Name }}) ToString() string {
 	return messageBDS06V1ToString(message)
 }
 
-// Read{{ .Name }} reads a message at the format {{ .Name }}
+// Read{{ .Name }} reads a message at the format {{ .Name }} for ADSB V1
 func Read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
 
 	if len(data) != 7 {
@@ -158,7 +175,7 @@ func Read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
-	if formatTypeCode != adsb.{{ .Name }}.GetTypeCode() {
+	if formatTypeCode != adsb.{{ .FormatName }}.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format {{ .Name }}", formatTypeCode)
 	}
 

@@ -7,16 +7,8 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/bds65/fields"
 )
 
-// MessageBDS65 is the basic interface that ADSB messages at the format BDS 6,5 are expected to implement
-type MessageBDS65 interface {
-	adsb.Message
-
-	// GetSubtype returns the subtype of the Operational Status Sub Type
-	GetSubtype() fields.Subtype
-}
-
 // ReadBDS65 reads a message at the format BDS 6,5
-func ReadBDS65(adsbLevel adsb.Level, data []byte) (MessageBDS65, adsb.Level, error) {
+func ReadBDS65(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -33,53 +25,53 @@ func ReadBDS65(adsbLevel adsb.Level, data []byte) (MessageBDS65, adsb.Level, err
 	detectedADSBLevel := fields.ReadVersionNumber(data)
 
 	// If the version is fixed but different from the read one, return an error
-	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.Level1Exactly || adsbLevel == adsb.Level2)) ||
-		(detectedADSBLevel == fields.ADSBVersion1 && (adsbLevel == adsb.Level0Exactly || adsbLevel == adsb.Level2)) ||
-		(detectedADSBLevel == fields.ADSBVersion2 && (adsbLevel == adsb.Level0Exactly || adsbLevel == adsb.Level1Exactly)) {
+	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.ReaderLevel1Exactly || adsbLevel == adsb.ReaderLevel2)) ||
+		(detectedADSBLevel == fields.ADSBVersion1 && (adsbLevel == adsb.ReaderLevel0Exactly || adsbLevel == adsb.ReaderLevel2)) ||
+		(detectedADSBLevel == fields.ADSBVersion2 && (adsbLevel == adsb.ReaderLevel0Exactly || adsbLevel == adsb.ReaderLevel1Exactly)) {
 
 		return nil, adsbLevel, fmt.Errorf("the request ADSB level (%v) is not coherent with the level detected in the message (%v)", adsbLevel, detectedADSBLevel)
 	}
 
 	// If the detected level is lower then the possible level
-	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.Level1OrMore || adsbLevel == adsb.Level2)) ||
-		(detectedADSBLevel == fields.ADSBVersion1 && adsbLevel == adsb.Level2) {
+	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.ReaderLevel1OrMore || adsbLevel == adsb.ReaderLevel2)) ||
+		(detectedADSBLevel == fields.ADSBVersion1 && adsbLevel == adsb.ReaderLevel2) {
 
 		return nil, adsbLevel, fmt.Errorf("the request ADSB level (%v or more) is not higher with the level detected in the message (%v)", adsbLevel, detectedADSBLevel)
 	}
 
 	// As the level is not supposed to change, use Exact version
-	resultingADSBLevel := adsb.Level0Exactly
+	resultingADSBLevel := adsb.ReaderLevel0Exactly
 	if detectedADSBLevel == fields.ADSBVersion1 {
-		resultingADSBLevel = adsb.Level1Exactly
+		resultingADSBLevel = adsb.ReaderLevel1Exactly
 	} else if detectedADSBLevel == fields.ADSBVersion2 {
-		resultingADSBLevel = adsb.Level2
+		resultingADSBLevel = adsb.ReaderLevel2
 	}
 
 	switch resultingADSBLevel {
 
-	case adsb.Level0Exactly:
-		message, err := ReadFormat31V0(data)
+	case adsb.ReaderLevel0Exactly:
+		message, err := ReadFormat31Reserved(data)
 		return message, resultingADSBLevel, err
 
-	case adsb.Level1Exactly:
+	case adsb.ReaderLevel1Exactly:
 		switch subType {
 		case 0:
-			message, err := ReadFormat31V1Airborne(data)
+			message, err := ReadFormat31AirborneV1(data)
 			return message, resultingADSBLevel, err
 		case 1:
-			message, err := ReadFormat31V1Surface(data)
+			message, err := ReadFormat31SurfaceV1(data)
 			return message, resultingADSBLevel, err
 		default:
 			return nil, resultingADSBLevel, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)
 		}
 
-	case adsb.Level2:
+	case adsb.ReaderLevel2:
 		switch subType {
 		case 0:
-			message, err := ReadFormat31V2Airborne(data)
+			message, err := ReadFormat31AirborneV2(data)
 			return message, resultingADSBLevel, err
 		case 1:
-			message, err := ReadFormat31V2Surface(data)
+			message, err := ReadFormat31SurfaceV2(data)
 			return message, resultingADSBLevel, err
 		default:
 			return nil, resultingADSBLevel, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)

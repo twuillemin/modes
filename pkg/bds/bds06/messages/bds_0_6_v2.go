@@ -2,6 +2,7 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds06/fields"
 )
 
@@ -56,7 +57,7 @@ func messageBDS06V2ToString(message MessageBDS06V2) string {
 		"Compact Position Reporting Format: %v\n"+
 		"Encoded Latitude:                  %v\n"+
 		"Encoded Longitude:                 %v",
-		message.GetMessageFormat().ToString(),
+		adsb.GetMessageFormatInformation(message),
 		message.GetHorizontalContainmentRadius().ToString(),
 		message.GetNavigationIntegrityCategory(),
 		message.GetMovement().ToString(),

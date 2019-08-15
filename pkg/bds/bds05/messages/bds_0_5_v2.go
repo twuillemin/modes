@@ -2,6 +2,7 @@ package messages
 
 import (
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds05/fields"
 )
 
@@ -27,7 +28,7 @@ func bds05v2ToString(message MessageBDS05V2) string {
 		"Altitude:                          %v\n"+
 		"Encoded Latitude:                  %v\n"+
 		"Encoded Longitude:                 %v",
-		message.GetMessageFormat().ToString(),
+		adsb.GetMessageFormatInformation(message),
 		message.GetSurveillanceStatus().ToString(),
 		message.GetHorizontalContainmentRadius().ToString(),
 		message.GetNavigationIntegrityCategory(),

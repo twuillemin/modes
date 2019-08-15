@@ -21,7 +21,7 @@ func bds08ToString(message MessageBDS08) string {
 	return fmt.Sprintf("Message:                 %v\n"+
 		"Aircraft Category:       %v (%v)\n"+
 		"Aircraft Identification: %v",
-		message.GetMessageFormat().ToString(),
+		adsb.GetMessageFormatInformation(message),
 		message.GetAircraftCategory().ToString(),
 		message.GetAircraftCategory().GetCategorySetName(),
 		message.GetAircraftIdentification())
@@ -35,7 +35,7 @@ func bds08ToString(message MessageBDS08) string {
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS08(adsbLevel adsb.Level, data []byte) (MessageBDS08, adsb.Level, error) {
+func ReadBDS08(adsbLevel adsb.ReaderLevel, data []byte) (MessageBDS08, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")

@@ -7,11 +7,11 @@ import (
 
 var planes = make(map[common.ICAOAddress]*Plane)
 
-var defaultADSBLevel = adsb.Level0OrMore
+var defaultADSBLevel = adsb.ReaderLevel0OrMore
 
 // SetDefaultADSBLevel defines the level used by default at place creation. By default, the conservative
-// Level 0 or more is used
-func SetDefaultADSBLevel(level adsb.Level) {
+// ReaderLevel 0 or more is used
+func SetDefaultADSBLevel(level adsb.ReaderLevel) {
 	defaultADSBLevel = level
 }
 

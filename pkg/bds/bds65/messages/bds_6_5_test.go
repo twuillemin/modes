@@ -7,81 +7,81 @@ import (
 
 func TestDetectAndReadReadFormat31V0Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS65(adsb.Level0OrMore, buildValidFormat31V0Message())
+	msg, adsbResult, err := ReadBDS65(adsb.ReaderLevel0OrMore, buildValidFormat31ReservedMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := msg.(*Format31V0); !ok {
-		t.Errorf("expected a message of type Format31V0, but got %v instead", msg.GetMessageFormat().ToString())
+	if _, ok := msg.(*Format31Reserved); !ok {
+		t.Errorf("expected a message of type Format31Reserved, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level0Exactly {
-		t.Errorf("expected adsbLevel to be returned as Level0Exactly, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel0Exactly {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel0Exactly, but got %v instead", adsbResult.ToString())
 	}
 }
 
-func TestDetectAndReadReadFormat31V1AirborneValid(t *testing.T) {
+func TestDetectAndReadReadFormat31AirborneV1Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS65(adsb.Level0OrMore, buildValidFormat31V1AirborneMessage())
+	msg, adsbResult, err := ReadBDS65(adsb.ReaderLevel0OrMore, buildValidFormat31AirborneV1Message())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := msg.(*Format31V1Airborne); !ok {
-		t.Errorf("expected a message of type Format31V1Airborne, but got %v instead", msg.GetMessageFormat().ToString())
+	if _, ok := msg.(*Format31AirborneV1); !ok {
+		t.Errorf("expected a message of type Format31AirborneV1, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level1Exactly {
-		t.Errorf("expected adsbLevel to be returned as Level1Exactly, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel1Exactly {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel1Exactly, but got %v instead", adsbResult.ToString())
 	}
 }
 
-func TestDetectAndReadReadFormat31V1SurfaceValid(t *testing.T) {
+func TestDetectAndReadReadFormat31SurfaceV1Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS65(adsb.Level0OrMore, buildValidFormat31V1SurfaceMessage())
+	msg, adsbResult, err := ReadBDS65(adsb.ReaderLevel0OrMore, buildValidFormat31SurfaceV1Message())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := msg.(*Format31V1Surface); !ok {
-		t.Errorf("expected a message of type Format31V1Surface, but got %v instead", msg.GetMessageFormat().ToString())
+	if _, ok := msg.(*Format31SurfaceV1); !ok {
+		t.Errorf("expected a message of type Format31SurfaceV1, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level1Exactly {
-		t.Errorf("expected adsbLevel to be returned as Level1Exactly, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel1Exactly {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel1Exactly, but got %v instead", adsbResult.ToString())
 	}
 }
 
-func TestDetectAndReadReadFormat31V2AirborneValid(t *testing.T) {
+func TestDetectAndReadReadFormat31AirborneV2Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS65(adsb.Level0OrMore, buildValidFormat31V2AirborneMessage())
+	msg, adsbResult, err := ReadBDS65(adsb.ReaderLevel0OrMore, buildValidFormat31AirborneV2Message())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := msg.(*Format31V2Airborne); !ok {
-		t.Errorf("expected a message of type Format31V2Airborne, but got %v instead", msg.GetMessageFormat().ToString())
+	if _, ok := msg.(*Format31AirborneV2); !ok {
+		t.Errorf("expected a message of type Format31AirborneV2, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level2 {
-		t.Errorf("expected adsbLevel to be returned as Level2, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel2 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel2, but got %v instead", adsbResult.ToString())
 	}
 }
 
-func TestDetectAndReadReadFormat31V2SurfaceValid(t *testing.T) {
+func TestDetectAndReadReadFormat31SurfaceV2Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS65(adsb.Level0OrMore, buildValidFormat31V2SurfaceMessage())
+	msg, adsbResult, err := ReadBDS65(adsb.ReaderLevel0OrMore, buildValidFormat31SurfaceV2Message())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := msg.(*Format31V2Surface); !ok {
-		t.Errorf("expected a message of type Format31V2Surface, but got %v instead", msg.GetMessageFormat().ToString())
+	if _, ok := msg.(*Format31SurfaceV2); !ok {
+		t.Errorf("expected a message of type Format31SurfaceV2, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level2 {
-		t.Errorf("expected adsbLevel to be returned as Level2, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel2 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel2, but got %v instead", adsbResult.ToString())
 	}
 }
 
 func TestDetectBadFormat(t *testing.T) {
 
 	// make a Format 05 message
-	data := buildValidFormat31V2SurfaceMessage()
+	data := buildValidFormat31SurfaceV2Message()
 	data[0] = (data[0] & 0x07) | 0x28
 
-	_, _, err := ReadBDS65(adsb.Level0OrMore, data)
+	_, _, err := ReadBDS65(adsb.ReaderLevel0OrMore, data)
 	if err == nil {
 		t.Fatal("Expected an error while reading a message with format 5, but message was read")
 	}

@@ -14,23 +14,6 @@ import (
 	"time"
 )
 
-/*func main() {
-	generateFile("format_09_v2_test.go", "Format09V2", "0x48", "false, ")
-	generateFile("format_10_v2_test.go", "Format10V2", "0x50", "false, ")
-	generateFile("format_11_v2_test.go", "Format11V2", "0x58", "false, ")
-	generateFile("format_12_v2_test.go", "Format12V2", "0x60", "false, ")
-	generateFile("format_13_v2_test.go", "Format13V2", "0x68", "false, ")
-	generateFile("format_14_v2_test.go", "Format14V2", "0x70", "false, ")
-	generateFile("format_15_v2_test.go", "Format15V2", "0x78", "false, ")
-	generateFile("format_16_v2_test.go", "Format16V2", "0x80", "false, ")
-	generateFile("format_17_v2_test.go", "Format17V2", "0x88", "false, ")
-	generateFile("format_18_v2_test.go", "Format18V2", "0x90", "false, ")
-	generateFile("format_20_v2_test.go", "Format20V2", "0xA0", "")
-	generateFile("format_21_v2_test.go", "Format21V2", "0xA8", "")
-	generateFile("format_22_v2_test.go", "Format22V2", "0xB0", "")
-}
-*/
-
 func main() {
 	// Open the target file
 	f, err := os.Create("bds_0_6_test.go")
@@ -96,14 +79,14 @@ func TestDetectAndRead{{ .Name }}V0Valid(t *testing.T) {
 	data := buildValidBDS06V0Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS06(adsb.Level0OrMore, false, false, data)
+	msg, adsbResult, err := ReadBDS06(adsb.ReaderLevel0OrMore, false, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V0); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V0, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level0OrMore {
+	if adsbResult != adsb.ReaderLevel0OrMore {
 		t.Errorf("expected adsbLevel to be returned as Level0OrMore, but got %v instead", adsbResult.ToString())
 	}
 }
@@ -113,14 +96,14 @@ func TestDetectAndRead{{ .Name }}V1Valid(t *testing.T) {
 	data := buildValidBDS06V1Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS06(adsb.Level1OrMore, false, false, data)
+	msg, adsbResult, err := ReadBDS06(adsb.ReaderLevel1OrMore, false, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V1); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V1, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level1OrMore {
+	if adsbResult != adsb.ReaderLevel1OrMore {
 		t.Errorf("expected adsbLevel to be returned as Level0OrMore, but got %v instead", adsbResult.ToString())
 	}
 }
@@ -130,14 +113,14 @@ func TestDetectAndRead{{ .Name }}V2Valid(t *testing.T) {
 	data := buildValidBDS06V2Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS06(adsb.Level2, false, false, data)
+	msg, adsbResult, err := ReadBDS06(adsb.ReaderLevel2, false, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V2); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V2, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.Level2 {
+	if adsbResult != adsb.ReaderLevel2 {
 		t.Errorf("expected adsbLevel to be returned as Level2, but got %v instead", adsbResult.ToString())
 	}
 }
@@ -149,7 +132,7 @@ func TestDetectBadFormat(t *testing.T) {
 	data := buildValidBDS06V0Message()
 	data[0] = (data[0] & 0x07) | 0x08
 
-	_, _, err := ReadBDS06(adsb.Level0OrMore, false, false, data)
+	_, _, err := ReadBDS06(adsb.ReaderLevel0OrMore, false, false, data)
 	if err == nil {
 		t.Fatal("Expected an error while reading a message with format 01, but message was read")
 	}

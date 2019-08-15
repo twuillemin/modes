@@ -48,7 +48,7 @@ type MessageBDS05 interface {
 //    - nicSupplementA: The nic supplement A bit coming from previous Format Code 31 message if any. If none, 0 is fine
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS05(adsbLevel adsb.Level, nicSupplementA bool, data []byte) (MessageBDS05, adsb.Level, error) {
+func ReadBDS05(adsbLevel adsb.ReaderLevel, nicSupplementA bool, data []byte) (MessageBDS05, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -58,7 +58,7 @@ func ReadBDS05(adsbLevel adsb.Level, nicSupplementA bool, data []byte) (MessageB
 
 	switch adsbLevel {
 
-	case adsb.Level0Exactly, adsb.Level0OrMore:
+	case adsb.ReaderLevel0Exactly, adsb.ReaderLevel0OrMore:
 		switch formatTypeCode {
 		case 9:
 			message, err := ReadFormat09V0(data)
@@ -101,7 +101,7 @@ func ReadBDS05(adsbLevel adsb.Level, nicSupplementA bool, data []byte) (MessageB
 			return message, adsbLevel, err
 		}
 
-	case adsb.Level1Exactly, adsb.Level1OrMore:
+	case adsb.ReaderLevel1Exactly, adsb.ReaderLevel1OrMore:
 		switch formatTypeCode {
 		case 9:
 			message, err := ReadFormat09V1(nicSupplementA, data)
@@ -144,7 +144,7 @@ func ReadBDS05(adsbLevel adsb.Level, nicSupplementA bool, data []byte) (MessageB
 			return message, adsbLevel, err
 		}
 
-	case adsb.Level2:
+	case adsb.ReaderLevel2:
 		switch formatTypeCode {
 		case 9:
 			message, err := ReadFormat09V2(nicSupplementA, data)

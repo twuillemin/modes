@@ -26,13 +26,13 @@ import (
 //                      Note: This value does is only present since ADSB V2
 //    - message: The body of the message. The message must be 7 bytes long
 //
-// Return the parsed message, the detected ADSB Level and an optional error. The detected ADSB Level will generally be
+// Return the parsed message, the detected ADSB ReaderLevel and an optional error. The detected ADSB ReaderLevel will generally be
 // the same as the given one, except if the decoded message has information to change it.
 func ReadADSBMessage(
-	adsbLevel adsb.Level,
+	adsbLevel adsb.ReaderLevel,
 	nicSupplementA bool,
 	nicSupplementC bool,
-	data []byte) (adsb.Message, adsb.Level, error) {
+	data []byte) (adsb.Message, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for ADSB message must be 7 bytes long")

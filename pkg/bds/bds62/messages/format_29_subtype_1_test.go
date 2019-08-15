@@ -14,9 +14,9 @@ func TestReadFormat29Subtype1Valid(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if msg.GetMessageFormat() != adsb.Format29V2 {
+	if msg.GetMessageFormat() != adsb.Format29 {
 		t.Errorf("Expected Format \"%v\", got \"%v\"",
-			adsb.Format29V1OrMore.ToString(),
+			adsb.Format29.ToString(),
 			msg.GetMessageFormat().ToString())
 	}
 
@@ -26,14 +26,14 @@ func TestReadFormat29Subtype1Valid(t *testing.T) {
 			msg.GetRegister().GetId())
 	}
 
-	if msg.GetSubtype() != fields.SubtypeV2Subtype1 {
+	if msg.GetSubtype() != fields.Subtype1 {
 		t.Errorf("Expected Subtype \"%v\", got \"%v\"",
-			fields.SubtypeV2Subtype1.ToString(),
+			fields.Subtype1.ToString(),
 			msg.GetSubtype().ToString())
 	}
 
 	if msg.SourceIntegrityLevelSupplement != fields.SILSBySample {
-		t.Errorf("Expected Source Integrity Level Supplement \"%v\", got \"%v\"",
+		t.Errorf("Expected Source Integrity ReaderLevel Supplement \"%v\", got \"%v\"",
 			fields.SILSBySample.ToString(),
 			msg.SourceIntegrityLevelSupplement.ToString())
 	}
@@ -84,7 +84,7 @@ func TestReadFormat29Subtype1Valid(t *testing.T) {
 	}
 
 	if msg.SourceIntegrityLevel != fields.SILLevel3 {
-		t.Errorf("Expected Source Integrity Level \"%v\", got \"%v\"",
+		t.Errorf("Expected Source Integrity ReaderLevel \"%v\", got \"%v\"",
 			fields.SILLevel3.ToString(),
 			msg.SourceIntegrityLevel.ToString())
 	}

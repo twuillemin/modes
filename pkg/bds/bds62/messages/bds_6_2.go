@@ -4,16 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
-	"github.com/twuillemin/modes/pkg/bds/bds62/fields"
 )
-
-// MessageBDS62 is the basic interface that ADSB messages at the format BDS 6,2 are expected to implement
-type MessageBDS62 interface {
-	adsb.Message
-
-	// GetSubtype returns the Subtype
-	GetSubtype() fields.Subtype
-}
 
 // ReadBDS62 reads a message at the format BDS 6,2. This format was created in ADSB V1, and extended in ADSB V2
 //
@@ -26,7 +17,7 @@ type MessageBDS62 interface {
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS62(adsbLevel adsb.Level, data []byte) (MessageBDS62, adsb.Level, error) {
+func ReadBDS62(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -44,32 +35,32 @@ func ReadBDS62(adsbLevel adsb.Level, data []byte) (MessageBDS62, adsb.Level, err
 
 	switch adsbLevel {
 
-	case adsb.Level0OrMore:
+	case adsb.ReaderLevel0OrMore:
 		switch subType {
 		case 0:
 			// Subtype 0 only exists from ADSB V1
-			adsbLevelToUse = adsb.Level1OrMore
+			adsbLevelToUse = adsb.ReaderLevel1OrMore
 		case 1:
 			// Subtype 1 only exists from ADSB V2
-			adsbLevelToUse = adsb.Level2
+			adsbLevelToUse = adsb.ReaderLevel2
 		}
 
-	case adsb.Level1OrMore:
-		// Mode A Data for subtype 1 are only provided for ADSB Level 2
+	case adsb.ReaderLevel1OrMore:
+		// Mode A Data for subtype 1 are only provided for ADSB ReaderLevel 2
 		if subType == 1 {
-			adsbLevelToUse = adsb.Level2
+			adsbLevelToUse = adsb.ReaderLevel2
 		}
 	}
 
 	switch adsbLevelToUse {
 
-	case adsb.Level1OrMore, adsb.Level1Exactly:
+	case adsb.ReaderLevel1OrMore, adsb.ReaderLevel1Exactly:
 		if subType == 0 {
 			message, err := ReadFormat29Subtype0(data)
 			return message, adsbLevelToUse, err
 		}
 
-	case adsb.Level2:
+	case adsb.ReaderLevel2:
 		if subType == 0 {
 			message, err := ReadFormat29Subtype0(data)
 			return message, adsbLevelToUse, err

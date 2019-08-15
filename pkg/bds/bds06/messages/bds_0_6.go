@@ -49,17 +49,17 @@ type MessageBDS06 interface {
 //    - nicSupplementA: The NIC Supplement-A comes from the Aircraft  Operational  Status - Message Type Format 31 (see
 //                      C.2.3.10.20). If no previous Type Format 31 message was received before calling this function, a
 //                      default value of 0 can be used.
-//    - nicSupplementC: The NIC Supplement-C comes from the Surface Capability Class (CC) Code  Subfield  of  the
+//    - nicSupplementC: The NIC Supplement-C comes from the SubtypeSurface Capability Class (CC) Code  Subfield  of  the
 //                      Aircraft  Operational  Status - Message Type Format 31 (see  C.2.3.10.20). If no previous Type
 //                      Format 31 message was received before calling this function, a default value of 0 can be used.
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
 func ReadBDS06(
-	adsbLevel adsb.Level,
+	adsbLevel adsb.ReaderLevel,
 	nicSupplementA bool,
 	nicSupplementC bool,
-	data []byte) (MessageBDS06, adsb.Level, error) {
+	data []byte) (MessageBDS06, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -72,7 +72,7 @@ func ReadBDS06(
 	}
 
 	switch adsbLevel {
-	case adsb.Level0Exactly, adsb.Level0OrMore:
+	case adsb.ReaderLevel0Exactly, adsb.ReaderLevel0OrMore:
 		switch formatTypeCode {
 		case 5:
 			message, err := ReadFormat05V0(data)
@@ -88,7 +88,7 @@ func ReadBDS06(
 			return message, adsbLevel, err
 		}
 
-	case adsb.Level1Exactly, adsb.Level1OrMore:
+	case adsb.ReaderLevel1Exactly, adsb.ReaderLevel1OrMore:
 		switch formatTypeCode {
 		case 5:
 			message, err := ReadFormat05V1(nicSupplementA, data)
@@ -104,7 +104,7 @@ func ReadBDS06(
 			return message, adsbLevel, err
 		}
 
-	case adsb.Level2:
+	case adsb.ReaderLevel2:
 		switch formatTypeCode {
 		case 5:
 			message, err := ReadFormat05V2(nicSupplementA, nicSupplementC, data)

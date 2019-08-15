@@ -15,22 +15,22 @@ import (
 )
 
 func main() {
-	generateFile("format_09_v0.go", "Format09V0", true)
-	generateFile("format_10_v0.go", "Format10V0", true)
-	generateFile("format_11_v0.go", "Format11V0", true)
-	generateFile("format_12_v0.go", "Format12V0", true)
-	generateFile("format_13_v0.go", "Format13V0", true)
-	generateFile("format_14_v0.go", "Format14V0", true)
-	generateFile("format_15_v0.go", "Format15V0", true)
-	generateFile("format_16_v0.go", "Format16V0", true)
-	generateFile("format_17_v0.go", "Format17V0", true)
-	generateFile("format_18_v0.go", "Format18V0", true)
-	generateFile("format_20_v0.go", "Format20V0", false)
-	generateFile("format_21_v0.go", "Format21V0", false)
-	generateFile("format_22_v0.go", "Format22V0", false)
+	generateFile("format_09_v0.go", "Format09V0", "Format09", true)
+	generateFile("format_10_v0.go", "Format10V0", "Format10", true)
+	generateFile("format_11_v0.go", "Format11V0", "Format11", true)
+	generateFile("format_12_v0.go", "Format12V0", "Format12", true)
+	generateFile("format_13_v0.go", "Format13V0", "Format13", true)
+	generateFile("format_14_v0.go", "Format14V0", "Format14", true)
+	generateFile("format_15_v0.go", "Format15V0", "Format15", true)
+	generateFile("format_16_v0.go", "Format16V0", "Format16", true)
+	generateFile("format_17_v0.go", "Format17V0", "Format17", true)
+	generateFile("format_18_v0.go", "Format18V0", "Format18", true)
+	generateFile("format_20_v0.go", "Format20V0", "Format20", false)
+	generateFile("format_21_v0.go", "Format21V0", "Format21", false)
+	generateFile("format_22_v0.go", "Format22V0", "Format22", false)
 }
 
-func generateFile(fileName string, name string, isBaro bool) {
+func generateFile(fileName string, name string, formatName string, isBaro bool) {
 	// Open the target file
 	f, err := os.Create(fileName)
 	if err != nil {
@@ -49,13 +49,15 @@ func generateFile(fileName string, name string, isBaro bool) {
 	err = builderTemplate.Execute(
 		f,
 		struct {
-			Timestamp time.Time
-			Name      string
-			IsBaro    bool
+			Timestamp  time.Time
+			Name       string
+			FormatName string
+			IsBaro     bool
 		}{
-			Timestamp: time.Now(),
-			Name:      name,
-			IsBaro:    isBaro,
+			Timestamp:  time.Now(),
+			Name:       name,
+			FormatName: formatName,
+			IsBaro:     isBaro,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -102,63 +104,78 @@ type {{ .Name }} struct {
 }
 
 // GetMessageFormat returns the ADSB format of the message
-func (message *{{ .Name }}) GetMessageFormat() adsb.MessageFormat {
-	return adsb.{{ .Name }}
+func (message {{ .Name }}) GetMessageFormat() adsb.MessageFormat {
+	return adsb.{{ .FormatName }}
 }
 
 // GetRegister returns the register of the message
-func (message *{{ .Name }}) GetRegister() bds.Register {
-	return adsb.{{ .Name }}.GetRegister()
+func (message {{ .Name }}) GetRegister() bds.Register {
+	return adsb.{{ .FormatName }}.GetRegister()
 }
 
-// ToString returns a basic, but readable, representation of the message
-func (message *{{ .Name }}) ToString() string {
-	return bds05v0ToString(message)
+// GetSubtype returns the subtype of the message if any
+func (message {{ .Name }}) GetSubtype() adsb.Subtype{
+	return nil
+}
+
+// GetMinimumADSBLevel returns the minimum ADSB Level for the message
+func (message {{ .Name }}) GetMinimumADSBLevel() adsb.MessageLevel{
+	return adsb.MessageLevel0
+}
+
+// GetMaximumADSBLevel returns the maximum ADSB Level for the message
+func (message {{ .Name }}) GetMaximumADSBLevel() adsb.MessageLevel{
+	return adsb.MessageLevel0
 }
 
 // GetSurveillanceStatus returns the Surveillance Status
-func (message *{{ .Name }}) GetSurveillanceStatus() fields.SurveillanceStatus {
+func (message {{ .Name }}) GetSurveillanceStatus() fields.SurveillanceStatus {
 	return message.SurveillanceStatus
 }
 
 // GetSingleAntennaFlag returns the SingleAntennaFlag
-func (message *{{ .Name }}) GetSingleAntennaFlag() fields.SingleAntennaFlag {
+func (message {{ .Name }}) GetSingleAntennaFlag() fields.SingleAntennaFlag {
 	return message.SingleAntennaFlag
 }
 
 // GetAltitude returns the Altitude
-func (message *{{ .Name }}) GetAltitude() fields.Altitude {
+func (message {{ .Name }}) GetAltitude() fields.Altitude {
 	return message.Altitude
 }
 
 // GetTime returns the Time
-func (message *{{ .Name }}) GetTime() fields.Time {
+func (message {{ .Name }}) GetTime() fields.Time {
 	return message.Time
 }
 
 // GetCPRFormat returns the CompactPositionReportingFormat
-func (message *{{ .Name }}) GetCPRFormat() fields.CompactPositionReportingFormat {
+func (message {{ .Name }}) GetCPRFormat() fields.CompactPositionReportingFormat {
 	return message.CPRFormat
 }
 
 // GetEncodedLatitude returns the EncodedLatitude
-func (message *{{ .Name }}) GetEncodedLatitude() fields.EncodedLatitude {
+func (message {{ .Name }}) GetEncodedLatitude() fields.EncodedLatitude {
 	return message.EncodedLatitude
 }
 
 // GetEncodedLongitude returns the EncodedLongitude
-func (message *{{ .Name }}) GetEncodedLongitude() fields.EncodedLongitude {
+func (message {{ .Name }}) GetEncodedLongitude() fields.EncodedLongitude {
 	return message.EncodedLongitude
 }
 
 // GetHorizontalProtectionLimit returns the HorizontalProtectionLimit
-func (message *{{ .Name }}) GetHorizontalProtectionLimit() fields.HorizontalProtectionLimit {
+func (message {{ .Name }}) GetHorizontalProtectionLimit() fields.HorizontalProtectionLimit {
 	return message.HorizontalProtectionLimit
 }
 
 // GetContainmentRadius returns the ContainmentRadius
-func (message *{{ .Name }}) GetContainmentRadius() fields.ContainmentRadius {
+func (message {{ .Name }}) GetContainmentRadius() fields.ContainmentRadius {
 	return message.ContainmentRadius
+}
+
+// ToString returns a basic, but readable, representation of the message
+func (message {{ .Name }}) ToString() string {
+	return bds05v0ToString(message)
 }
 
 // Read{{ .Name }} reads a message at the format {{ .Name }}
@@ -169,7 +186,7 @@ func Read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
-	if formatTypeCode != adsb.{{ .Name }}.GetTypeCode() {
+	if formatTypeCode != adsb.{{ .FormatName }}.GetTypeCode() {
 		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format {{ .Name }}", formatTypeCode)
 	}
 

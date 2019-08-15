@@ -16,13 +16,19 @@ import (
 func main() {
 
 	// By default, planes are ADSB level 2 compliant (Europe...)
-	plane.SetDefaultADSBLevel(adsb.Level2)
+	plane.SetDefaultADSBLevel(adsb.ReaderLevel2)
 	plane.SetReferenceLatitudeLongitude(34.670619, 33.029099)
 
+	line := flag.String("line", "", "a single line to be processed. Format is ADSBSpy format.")
 	fileName := flag.String("file", "", "the name of the file to be processed")
 	airSpyServer := flag.String("adsb_spy_server", "localhost", "the name of the ADSBSpy server (default: localhost)")
 	airSpyPort := flag.Int("adsb_spy_port", 47806, "the port of the ADSBSpy server (default: 47806)")
 	flag.Parse()
+
+	if len(*line) > 0 {
+		processor.ProcessSingleLine(*line)
+		return
+	}
 
 	// If a filename is given, use it and quit
 	if len(*fileName) > 0 {

@@ -14,9 +14,9 @@ func TestReadFormat03Valid(t *testing.T) {
 		t.Error(err)
 	}
 
-	if msg.GetMessageFormat() != adsb.Format03V0OrMore {
+	if msg.GetMessageFormat() != adsb.Format03 {
 		t.Errorf("Expected Format \"%v\", got \"%v\"",
-			adsb.Format03V0OrMore.ToString(),
+			adsb.Format03.ToString(),
 			msg.GetMessageFormat().ToString())
 	}
 

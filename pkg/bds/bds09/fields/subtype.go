@@ -1,6 +1,9 @@
 package fields
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+)
 
 // Subtype is the Airborne Velocity Subtype Code definition
 //
@@ -49,4 +52,9 @@ func (code Subtype) ToString() string {
 func ReadSubtype(data []byte) Subtype {
 	bits := data[0] & 0x07
 	return Subtype(bits)
+}
+
+// ToSubtype returns the ADSB generic subtype
+func (code Subtype) ToSubtype() adsb.Subtype {
+	return code
 }

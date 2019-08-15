@@ -4,16 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
-	"github.com/twuillemin/modes/pkg/bds/bds61/fields"
 )
-
-// MessageBDS61 is the basic interface that ADSB messages at the format BDS 6,1 are expected to implement
-type MessageBDS61 interface {
-	adsb.Message
-
-	// GetSubtype returns the Subtype
-	GetSubtype() fields.Subtype
-}
 
 // ReadBDS61 reads a message at the format BDS 6,1. This format was extended from ADSB V1 to ADSB V2
 //
@@ -26,7 +17,7 @@ type MessageBDS61 interface {
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS61(adsbLevel adsb.Level, data []byte) (MessageBDS61, adsb.Level, error) {
+func ReadBDS61(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -45,57 +36,57 @@ func ReadBDS61(adsbLevel adsb.Level, data []byte) (MessageBDS61, adsb.Level, err
 
 	switch adsbLevel {
 
-	case adsb.Level0OrMore:
+	case adsb.ReaderLevel0OrMore:
 		switch subType {
 		case 1:
-			// Mode A Data for subtype 1 are only provided for ADSB Level 2
+			// Mode A Data for subtype 1 are only provided for ADSB ReaderLevel 2
 			if possibleModeAData {
-				adsbLevelToUse = adsb.Level2
+				adsbLevelToUse = adsb.ReaderLevel2
 			}
 		case 2:
 			// Subtype 2 only exists from ADSB V1
-			adsbLevelToUse = adsb.Level1OrMore
+			adsbLevelToUse = adsb.ReaderLevel1OrMore
 		}
 
-	case adsb.Level1OrMore:
-		// Mode A Data for subtype 1 are only provided for ADSB Level 2
+	case adsb.ReaderLevel1OrMore:
+		// Mode A Data for subtype 1 are only provided for ADSB ReaderLevel 2
 		if subType == 1 && possibleModeAData {
-			adsbLevelToUse = adsb.Level2
+			adsbLevelToUse = adsb.ReaderLevel2
 		}
 	}
 
 	switch adsbLevelToUse {
 
-	case adsb.Level0OrMore, adsb.Level0Exactly:
+	case adsb.ReaderLevel0OrMore, adsb.ReaderLevel0Exactly:
 		if subType == 0 {
-			message, err := readFormat28NoInformation(data)
+			message, err := ReadFormat28NoInformation(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 1 {
-			message, err := ReadFormat28V0(data)
+			message, err := ReadFormat28StatusV0(data)
 			return message, adsbLevelToUse, err
 		}
 
-	case adsb.Level1OrMore, adsb.Level1Exactly:
+	case adsb.ReaderLevel1OrMore, adsb.ReaderLevel1Exactly:
 		if subType == 0 {
-			message, err := readFormat28NoInformation(data)
+			message, err := ReadFormat28NoInformation(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 1 {
-			message, err := readFormat28V1Status(data)
+			message, err := ReadFormat28StatusV1(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 2 {
-			message, err := readFormat28V1ACAS(data)
+			message, err := ReadFormat28ACAS(data)
 			return message, adsbLevelToUse, err
 		}
 
-	case adsb.Level2:
+	case adsb.ReaderLevel2:
 		if subType == 0 {
-			message, err := readFormat28NoInformation(data)
+			message, err := ReadFormat28NoInformation(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 1 {
-			message, err := readFormat28V2Status(data)
+			message, err := ReadFormat28StatusV2(data)
 			return message, adsbLevelToUse, err
 		} else if subType == 2 {
-			message, err := readFormat28V2ACAS(data)
+			message, err := ReadFormat28ACAS(data)
 			return message, adsbLevelToUse, err
 		}
 	}

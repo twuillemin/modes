@@ -166,7 +166,7 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 	// If message with altitude - normal plane
 	if message09, ok := messageADSB.(bds09Messages.MessageBDS09); ok {
 
-		if format19, okFormat := message09.(*bds09Messages.Format19GroundNormal); okFormat {
+		if format19, okFormat := message09.(*bds09Messages.Format19GroundSpeedNormal); okFormat {
 			if format19.VelocityEWNormal.GetStatus() == bds09Fields.VelocityStatusRegular && format19.VelocityNSNormal.GetStatus() == bds09Fields.VelocityStatusRegular {
 				plane.AirSpeed = getHypotenuse(format19.VelocityEWNormal.GetVelocity(), format19.VelocityNSNormal.GetVelocity())
 				plane.AirSpeedValid = true
@@ -176,7 +176,7 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 			}
 		}
 
-		if format19, okFormat := message09.(*bds09Messages.Format19GroundSupersonic); okFormat {
+		if format19, okFormat := message09.(*bds09Messages.Format19GroundSpeedSupersonic); okFormat {
 			if format19.VelocityEWSupersonic.GetStatus() == bds09Fields.VelocityStatusRegular && format19.VelocityNSSupersonic.GetStatus() == bds09Fields.VelocityStatusRegular {
 				plane.AirSpeed = getHypotenuse(format19.VelocityEWSupersonic.GetVelocity(), format19.VelocityNSSupersonic.GetVelocity())
 				plane.AirSpeedValid = true
@@ -186,7 +186,7 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 			}
 		}
 
-		if format19, okFormat := message09.(*bds09Messages.Format19AirspeedNormal); okFormat {
+		if format19, okFormat := message09.(*bds09Messages.Format19AirSpeedNormal); okFormat {
 			if format19.AirspeedNormal.GetStatus() == bds09Fields.VelocityStatusRegular {
 				plane.AirSpeed = format19.AirspeedNormal.GetAirspeed()
 				plane.AirSpeedValid = true
@@ -196,7 +196,7 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 			}
 		}
 
-		if format19, okFormat := message09.(*bds09Messages.Format19AirspeedSupersonic); okFormat {
+		if format19, okFormat := message09.(*bds09Messages.Format19AirSpeedSupersonic); okFormat {
 			if format19.AirspeedSupersonic.GetStatus() == bds09Fields.VelocityStatusRegular {
 				plane.AirSpeed = format19.AirspeedSupersonic.GetAirspeed()
 				plane.AirSpeedValid = true
@@ -231,20 +231,16 @@ func processADSBMessage(timestamp uint32, plane *plane.Plane, data []byte) {
 	}
 
 	// If message with operational status
-	if message31, ok := messageADSB.(bds65Messages.MessageBDS65); ok {
-		if message31.GetMessageFormat() == adsb.Format31V1 {
-			if message31v1Airborne, ok31v1Airborne := message31.(*bds65Messages.Format31V1Airborne); ok31v1Airborne {
-				plane.NICSupplementA = message31v1Airborne.NICSupplement == bds65Fields.NICAOne
-			} else if message31v1Surface, ok31v1Surface := message31.(*bds65Messages.Format31V1Surface); ok31v1Surface {
-				plane.NICSupplementA = message31v1Surface.NICSupplement == bds65Fields.NICAOne
-			}
-		} else if message31.GetMessageFormat() == adsb.Format31V2 {
-			if message31v2Airborne, ok31v2Airborne := message31.(*bds65Messages.Format31V2Airborne); ok31v2Airborne {
-				plane.NICSupplementA = message31v2Airborne.NICSupplementA == bds65Fields.NICAOne
-			} else if message31v2Surface, ok31v2Surface := message31.(*bds65Messages.Format31V2Surface); ok31v2Surface {
-				plane.NICSupplementA = message31v2Airborne.NICSupplementA == bds65Fields.NICAOne
-				plane.NICSupplementC = message31v2Surface.SurfaceCapabilityClass.NICSupplementC == bds65Fields.NICCSZero
-			}
+	if messageADSB.GetMessageFormat() == adsb.Format31 {
+		if message31v1Airborne, ok31v1Airborne := messageADSB.(*bds65Messages.Format31AirborneV1); ok31v1Airborne {
+			plane.NICSupplementA = message31v1Airborne.NICSupplement == bds65Fields.NICAOne
+		} else if message31v1Surface, ok31v1Surface := messageADSB.(*bds65Messages.Format31SurfaceV1); ok31v1Surface {
+			plane.NICSupplementA = message31v1Surface.NICSupplement == bds65Fields.NICAOne
+		} else if message31v2Airborne, ok31v2Airborne := messageADSB.(*bds65Messages.Format31AirborneV2); ok31v2Airborne {
+			plane.NICSupplementA = message31v2Airborne.NICSupplementA == bds65Fields.NICAOne
+		} else if message31v2Surface, ok31v2Surface := messageADSB.(*bds65Messages.Format31SurfaceV2); ok31v2Surface {
+			plane.NICSupplementA = message31v2Airborne.NICSupplementA == bds65Fields.NICAOne
+			plane.NICSupplementC = message31v2Surface.SurfaceCapabilityClass.NICSupplementC == bds65Fields.NICCSZero
 		}
 		planeUpdated = true
 	}

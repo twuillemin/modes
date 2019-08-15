@@ -11,8 +11,6 @@ import (
 type MessageBDS09 interface {
 	adsb.Message
 
-	// GetSubtype returns the Airborne Velocity Subtype
-	GetSubtype() fields.Subtype
 	// GetIntentChange returns the IntentChange
 	GetIntentChange() fields.IntentChange
 	// GetIFRCapability returns the IFRCapability
@@ -39,7 +37,7 @@ type MessageBDS09 interface {
 //    - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
-func ReadBDS09(adsbLevel adsb.Level, data []byte) (MessageBDS09, adsb.Level, error) {
+func ReadBDS09(adsbLevel adsb.ReaderLevel, data []byte) (MessageBDS09, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
 		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
@@ -56,19 +54,19 @@ func ReadBDS09(adsbLevel adsb.Level, data []byte) (MessageBDS09, adsb.Level, err
 
 	switch subType {
 	case fields.SubtypeGroundSpeedNormal:
-		message, err := ReadFormat19GroundNormal(data)
+		message, err := ReadFormat19GroundSpeedNormal(data)
 		return message, adsbLevel, err
 	case fields.SubtypeGroundSpeedSupersonic:
-		message, err := ReadFormat19GroundSupersonic(data)
+		message, err := ReadFormat19GroundSpeedSupersonic(data)
 		return message, adsbLevel, err
 	case fields.SubtypeAirspeedNormal:
-		message, err := ReadFormat19AirspeedNormal(data)
+		message, err := ReadFormat19AirSpeedNormal(data)
 		return message, adsbLevel, err
 	case fields.SubtypeAirspeedSupersonic:
-		message, err := ReadFormat19AirspeedSupersonic(data)
+		message, err := ReadFormat19AirSpeedSupersonic(data)
 		return message, adsbLevel, err
 
 	default:
-		return nil, adsbLevel, fmt.Errorf("the subtype %v of Airborne Velocity is not supported", formatTypeCode)
+		return nil, adsbLevel, fmt.Errorf("the subtype %v of SubtypeAirborne Velocity is not supported", formatTypeCode)
 	}
 }

@@ -9,7 +9,6 @@ import (
 
 // Format29Subtype0 is a message at the format BDS 6,2
 type Format29Subtype0 struct {
-	Subtype                                fields.Subtype
 	VerticalDataAvailableSourceIndicator   fields.VerticalDataAvailableSourceIndicator
 	TargetAltitudeType                     fields.TargetAltitudeType
 	TargetAltitudeCapability               fields.TargetAltitudeCapability
@@ -27,22 +26,32 @@ type Format29Subtype0 struct {
 }
 
 // GetMessageFormat returns the ADSB format of the message
-func (message *Format29Subtype0) GetMessageFormat() adsb.MessageFormat {
-	return adsb.Format29V1OrMore
+func (message Format29Subtype0) GetMessageFormat() adsb.MessageFormat {
+	return adsb.Format29
 }
 
 // GetRegister returns the register of the message
-func (message *Format29Subtype0) GetRegister() bds.Register {
-	return adsb.Format29V1OrMore.GetRegister()
+func (message Format29Subtype0) GetRegister() bds.Register {
+	return adsb.Format29.GetRegister()
 }
 
 // GetSubtype returns the Subtype
-func (message *Format29Subtype0) GetSubtype() fields.Subtype {
-	return message.Subtype
+func (message Format29Subtype0) GetSubtype() adsb.Subtype {
+	return fields.Subtype0
+}
+
+// GetMinimumADSBLevel returns the minimum ADSB ReaderLevel for the message
+func (message Format29Subtype0) GetMinimumADSBLevel() adsb.MessageLevel {
+	return adsb.MessageLevel1
+}
+
+// GetMaximumADSBLevel returns the maximum ADSB ReaderLevel for the message
+func (message Format29Subtype0) GetMaximumADSBLevel() adsb.MessageLevel {
+	return adsb.MessageLevel2
 }
 
 // ToString returns a basic, but readable, representation of the message
-func (message *Format29Subtype0) ToString() string {
+func (message Format29Subtype0) ToString() string {
 	return fmt.Sprintf("Message:                                      %v\n"+
 		"Subtype:                                      %v\n"+
 		"Vertical Data Available / Source Indicator:   %v\n"+
@@ -56,10 +65,10 @@ func (message *Format29Subtype0) ToString() string {
 		"Horizontal Mode Indicator:                    %v\n"+
 		"Navigation Accuracy Category - Position:      %v\n"+
 		"Navigation Integrity Category - Baro:         %v\n"+
-		"Surveillance Integrity Level:                 %v\n"+
+		"Surveillance Integrity ReaderLevel:                 %v\n"+
 		"Capability / Mode Codes:                      %v\n"+
 		"Emergency / Priority Status:                  %v",
-		adsb.Format29V1OrMore.ToString(),
+		adsb.GetMessageFormatInformation(&message),
 		message.GetSubtype().ToString(),
 		message.VerticalDataAvailableSourceIndicator.ToString(),
 		message.TargetAltitudeType.ToString(),
@@ -77,7 +86,7 @@ func (message *Format29Subtype0) ToString() string {
 		message.EmergencyPriorityStatus.ToString())
 }
 
-// ReadFormat29Subtype0 reads a message at the format BDS 6,2
+// ReadFormat29Subtype0 reads a message at the format Format 29 / Subtype 0
 func ReadFormat29Subtype0(data []byte) (*Format29Subtype0, error) {
 
 	if len(data) != 7 {
@@ -85,17 +94,16 @@ func ReadFormat29Subtype0(data []byte) (*Format29Subtype0, error) {
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
-	if formatTypeCode != adsb.Format29V1OrMore.GetTypeCode() {
-		return nil, fmt.Errorf("the data are given at format %v and can not be read at the format Format29", formatTypeCode)
+	if formatTypeCode != adsb.Format29.GetTypeCode() {
+		return nil, fmt.Errorf("the data are given at format %v and can not be read by ReadFormat29Subtype0", formatTypeCode)
 	}
 
-	subType := fields.ReadSubtypeV1(data)
-	if subType != fields.SubtypeV1Subtype0 {
+	subType := fields.ReadSubtype(data)
+	if subType != fields.Subtype0 {
 		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadFormat29Subtype0", subType.ToString())
 	}
 
 	return &Format29Subtype0{
-		Subtype:                                subType,
 		VerticalDataAvailableSourceIndicator:   fields.ReadVerticalDataAvailableSourceIndicator(data),
 		TargetAltitudeType:                     fields.ReadTargetAltitudeType(data),
 		TargetAltitudeCapability:               fields.ReadTargetAltitudeCapability(data),

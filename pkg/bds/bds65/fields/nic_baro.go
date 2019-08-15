@@ -8,11 +8,11 @@ import "fmt"
 type NICBaro byte
 
 const (
-	// NICBGilhamNotCrossChecked indicates that the barometric altitude that is being reported in the Airborne
+	// NICBGilhamNotCrossChecked indicates that the barometric altitude that is being reported in the SubtypeAirborne
 	// Position Message is based on a Gilham coded input that has not been cross-checked against another source of
 	// pressure-altitude
 	NICBGilhamNotCrossChecked NICBaro = 0
-	// NICBGilhamCrossCheckedOrNonGilham indicates that the barometric altitude that is being reported in the Airborne
+	// NICBGilhamCrossCheckedOrNonGilham indicates that the barometric altitude that is being reported in the SubtypeAirborne
 	// Position Message is either based on a Gilham code input that has been cross-checked against another source of
 	// pressure-altitude and verified as being consistent, or is based on a non-Gilham coded source
 	NICBGilhamCrossCheckedOrNonGilham NICBaro = 1

@@ -67,7 +67,6 @@ var builderTemplate = template.Must(template.New("").Parse(`// Package messages 
 package messages
 
 import (
-	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"testing"
 )
 
@@ -79,12 +78,6 @@ func TestRead{{ .Name }}Valid(t *testing.T) {
 	msg, err := Read{{ .Name }}(false, false, data)
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	if msg.GetMessageFormat() != adsb.{{ .Name }} {
-		t.Errorf("Expected Format \"%v\", got \"%v\"",
-			adsb.{{ .Name }}.ToString(),
-			msg.GetMessageFormat().ToString())
 	}
 
 	isBDS06V2Valid(t, msg)

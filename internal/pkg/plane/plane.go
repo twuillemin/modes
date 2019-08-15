@@ -11,7 +11,7 @@ import (
 // Plane is the structure keeping track of the current status of a plane
 type Plane struct {
 	ICAOAddress        common.ICAOAddress
-	ADSBLevel          adsb.Level
+	ADSBLevel          adsb.ReaderLevel
 	Altitude           int
 	Identification     string
 	FirstSeenTimestamp uint32
