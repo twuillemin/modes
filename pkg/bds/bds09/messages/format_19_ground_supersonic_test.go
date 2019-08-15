@@ -9,7 +9,7 @@ import (
 
 func TestReadFormat19GroundSupersonicValid(t *testing.T) {
 
-	msg, err := readFormat19GroundSupersonic(buildValidFormat19GroundSupersonicMessage())
+	msg, err := ReadFormat19GroundSupersonic(buildValidFormat19GroundSupersonicMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +105,7 @@ func TestReadFormat19GroundSupersonicTooShort(t *testing.T) {
 	// Get too short data
 	data := buildValidFormat19GroundSupersonicMessage()[:6]
 
-	_, err := readFormat19GroundSupersonic(data)
+	_, err := ReadFormat19GroundSupersonic(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -117,7 +117,7 @@ func TestReadFormat19GroundSupersonicBadCode(t *testing.T) {
 	data := buildValidFormat19GroundSupersonicMessage()
 	data[0] = (data[0] & 0x07) | 0x10
 
-	_, err := readFormat19GroundSupersonic(data)
+	_, err := ReadFormat19GroundSupersonic(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -129,7 +129,7 @@ func TestReadFormat19GroundSupersonicBadSubType(t *testing.T) {
 	data := buildValidFormat19GroundSupersonicMessage()
 	data[0] = data[0] & 0xF8
 
-	_, err := readFormat19GroundSupersonic(data)
+	_, err := ReadFormat19GroundSupersonic(data)
 	if err == nil {
 		t.Error(err)
 	}

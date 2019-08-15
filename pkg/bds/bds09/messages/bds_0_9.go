@@ -52,20 +52,20 @@ func ReadBDS09(adsbLevel adsb.Level, data []byte) (MessageBDS09, adsb.Level, err
 	}
 
 	// Read the subtype
-	subType := fields.ReadAirborneVelocitySubtype(data)
+	subType := fields.ReadSubtype(data)
 
 	switch subType {
 	case fields.SubtypeGroundSpeedNormal:
-		message, err := readFormat19GroundNormal(data)
+		message, err := ReadFormat19GroundNormal(data)
 		return message, adsbLevel, err
 	case fields.SubtypeGroundSpeedSupersonic:
-		message, err := readFormat19GroundSupersonic(data)
+		message, err := ReadFormat19GroundSupersonic(data)
 		return message, adsbLevel, err
 	case fields.SubtypeAirspeedNormal:
-		message, err := readFormat19AirspeedNormal(data)
+		message, err := ReadFormat19AirspeedNormal(data)
 		return message, adsbLevel, err
 	case fields.SubtypeAirspeedSupersonic:
-		message, err := readFormat19AirspeedSupersonic(data)
+		message, err := ReadFormat19AirspeedSupersonic(data)
 		return message, adsbLevel, err
 
 	default:

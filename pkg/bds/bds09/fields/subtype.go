@@ -45,8 +45,8 @@ func (code Subtype) ToString() string {
 	}
 }
 
-// ReadAirborneVelocitySubtype reads the Subtype from a 56 bits data field
-func ReadAirborneVelocitySubtype(data []byte) Subtype {
+// ReadSubtype reads the Subtype from a 56 bits data field
+func ReadSubtype(data []byte) Subtype {
 	bits := data[0] & 0x07
 	return Subtype(bits)
 }

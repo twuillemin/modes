@@ -9,7 +9,7 @@ import (
 
 func TestReadFormat19AirspeedSupersonicValid(t *testing.T) {
 
-	msg, err := readFormat19AirspeedSupersonic(buildValidFormat19AirspeedSupersonicMessage())
+	msg, err := ReadFormat19AirspeedSupersonic(buildValidFormat19AirspeedSupersonicMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +105,7 @@ func TestReadFormat19AirspeedSupersonicTooShort(t *testing.T) {
 	// Get too short data
 	data := buildValidFormat19AirspeedSupersonicMessage()[:6]
 
-	_, err := readFormat19AirspeedSupersonic(data)
+	_, err := ReadFormat19AirspeedSupersonic(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -117,7 +117,7 @@ func TestReadFormat19AirspeedSupersonicBadCode(t *testing.T) {
 	data := buildValidFormat19AirspeedSupersonicMessage()
 	data[0] = (data[0] & 0x07) | 0x10
 
-	_, err := readFormat19AirspeedSupersonic(data)
+	_, err := ReadFormat19AirspeedSupersonic(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -129,7 +129,7 @@ func TestReadFormat19AirspeedSupersonicBadSubType(t *testing.T) {
 	data := buildValidFormat19AirspeedSupersonicMessage()
 	data[0] = data[0] & 0xF8
 
-	_, err := readFormat19AirspeedSupersonic(data)
+	_, err := ReadFormat19AirspeedSupersonic(data)
 	if err == nil {
 		t.Error(err)
 	}

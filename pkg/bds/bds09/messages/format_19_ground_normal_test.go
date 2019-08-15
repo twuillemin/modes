@@ -9,7 +9,7 @@ import (
 
 func TestReadFormat19GroundNormalValid(t *testing.T) {
 
-	msg, err := readFormat19GroundNormal(buildValidFormat19GroundNormalMessage())
+	msg, err := ReadFormat19GroundNormal(buildValidFormat19GroundNormalMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +105,7 @@ func TestReadFormat19GroundNormalTooShort(t *testing.T) {
 	// Get too short data
 	data := buildValidFormat19GroundNormalMessage()[:6]
 
-	_, err := readFormat19GroundNormal(data)
+	_, err := ReadFormat19GroundNormal(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -117,7 +117,7 @@ func TestReadFormat19GroundNormalBadCode(t *testing.T) {
 	data := buildValidFormat19GroundNormalMessage()
 	data[0] = (data[0] & 0x07) | 0x10
 
-	_, err := readFormat19GroundNormal(data)
+	_, err := ReadFormat19GroundNormal(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -129,7 +129,7 @@ func TestReadFormat19GroundNormalBadSubType(t *testing.T) {
 	data := buildValidFormat19GroundNormalMessage()
 	data[0] = data[0] & 0xF8
 
-	_, err := readFormat19GroundNormal(data)
+	_, err := ReadFormat19GroundNormal(data)
 	if err == nil {
 		t.Error(err)
 	}

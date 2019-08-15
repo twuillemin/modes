@@ -110,8 +110,8 @@ func (message Format19AirspeedSupersonic) ToString() string {
 		message.DifferenceGNSSBaro.ToString())
 }
 
-// readFormat19AirspeedSupersonic reads a message at the format BDS 0,9
-func readFormat19AirspeedSupersonic(data []byte) (*Format19AirspeedSupersonic, error) {
+// ReadFormat19AirspeedSupersonic reads a message at the format Format19 / Subtype 4 (Airspeed supersonic)
+func ReadFormat19AirspeedSupersonic(data []byte) (*Format19AirspeedSupersonic, error) {
 
 	if len(data) != 7 {
 		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))
@@ -119,12 +119,12 @@ func readFormat19AirspeedSupersonic(data []byte) (*Format19AirspeedSupersonic, e
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	if formatTypeCode != adsb.Format19V0OrMore.GetTypeCode() {
-		return nil, fmt.Errorf("the data are given at format %v and can not be read by readFormat19AirspeedSupersonic", formatTypeCode)
+		return nil, fmt.Errorf("the data are given at format %v and can not be read by ReadFormat19AirspeedSupersonic", formatTypeCode)
 	}
 
-	subType := fields.ReadAirborneVelocitySubtype(data)
+	subType := fields.ReadSubtype(data)
 	if subType != fields.SubtypeAirspeedSupersonic {
-		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by readFormat19AirspeedSupersonic", subType.ToString())
+		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadFormat19AirspeedSupersonic", subType.ToString())
 	}
 
 	return &Format19AirspeedSupersonic{
