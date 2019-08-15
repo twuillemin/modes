@@ -161,8 +161,8 @@ func (message *{{ .Name }}) GetContainmentRadius() fields.ContainmentRadius {
 	return message.ContainmentRadius
 }
 
-// read{{ .Name }} reads a message at the format BDS 0,5
-func read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
+// Read{{ .Name }} reads a message at the format {{ .Name }}
+func Read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
 
 	if len(data) != 7 {
 		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))

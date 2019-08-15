@@ -3,6 +3,7 @@ package messages
 //go:generate go run gen/gen_formats_v0.go
 //go:generate go run gen/gen_formats_v1.go
 //go:generate go run gen/gen_formats_v2.go
+//go:generate go run gen/gen_tests_bds_0_5.go
 //go:generate go run gen/gen_tests_v0.go
 //go:generate go run gen/gen_tests_v1.go
 //go:generate go run gen/gen_tests_v2.go
@@ -60,129 +61,129 @@ func ReadBDS05(adsbLevel adsb.Level, nicSupplementA bool, data []byte) (MessageB
 	case adsb.Level0Exactly, adsb.Level0OrMore:
 		switch formatTypeCode {
 		case 9:
-			message, err := readFormat09V0(data)
+			message, err := ReadFormat09V0(data)
 			return message, adsbLevel, err
 		case 10:
-			message, err := readFormat10V0(data)
+			message, err := ReadFormat10V0(data)
 			return message, adsbLevel, err
 		case 11:
-			message, err := readFormat11V0(data)
+			message, err := ReadFormat11V0(data)
 			return message, adsbLevel, err
 		case 12:
-			message, err := readFormat12V0(data)
+			message, err := ReadFormat12V0(data)
 			return message, adsbLevel, err
 		case 13:
-			message, err := readFormat13V0(data)
+			message, err := ReadFormat13V0(data)
 			return message, adsbLevel, err
 		case 14:
-			message, err := readFormat14V0(data)
+			message, err := ReadFormat14V0(data)
 			return message, adsbLevel, err
 		case 15:
-			message, err := readFormat15V0(data)
+			message, err := ReadFormat15V0(data)
 			return message, adsbLevel, err
 		case 16:
-			message, err := readFormat16V0(data)
+			message, err := ReadFormat16V0(data)
 			return message, adsbLevel, err
 		case 17:
-			message, err := readFormat17V0(data)
+			message, err := ReadFormat17V0(data)
 			return message, adsbLevel, err
 		case 18:
-			message, err := readFormat18V0(data)
+			message, err := ReadFormat18V0(data)
 			return message, adsbLevel, err
 		case 20:
-			message, err := readFormat20V0(data)
+			message, err := ReadFormat20V0(data)
 			return message, adsbLevel, err
 		case 21:
-			message, err := readFormat21V0(data)
+			message, err := ReadFormat21V0(data)
 			return message, adsbLevel, err
 		case 22:
-			message, err := readFormat22V0(data)
+			message, err := ReadFormat22V0(data)
 			return message, adsbLevel, err
 		}
 
 	case adsb.Level1Exactly, adsb.Level1OrMore:
 		switch formatTypeCode {
 		case 9:
-			message, err := readFormat09V1(nicSupplementA, data)
+			message, err := ReadFormat09V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 10:
-			message, err := readFormat10V1(nicSupplementA, data)
+			message, err := ReadFormat10V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 11:
-			message, err := readFormat11V1(nicSupplementA, data)
+			message, err := ReadFormat11V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 12:
-			message, err := readFormat12V1(nicSupplementA, data)
+			message, err := ReadFormat12V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 13:
-			message, err := readFormat13V1(nicSupplementA, data)
+			message, err := ReadFormat13V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 14:
-			message, err := readFormat14V1(nicSupplementA, data)
+			message, err := ReadFormat14V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 15:
-			message, err := readFormat15V1(nicSupplementA, data)
+			message, err := ReadFormat15V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 16:
-			message, err := readFormat16V1(nicSupplementA, data)
+			message, err := ReadFormat16V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 17:
-			message, err := readFormat17V1(nicSupplementA, data)
+			message, err := ReadFormat17V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 18:
-			message, err := readFormat18V1(nicSupplementA, data)
+			message, err := ReadFormat18V1(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 20:
-			message, err := readFormat20V1(data)
+			message, err := ReadFormat20V1(data)
 			return message, adsbLevel, err
 		case 21:
-			message, err := readFormat21V1(data)
+			message, err := ReadFormat21V1(data)
 			return message, adsbLevel, err
 		case 22:
-			message, err := readFormat22V1(data)
+			message, err := ReadFormat22V1(data)
 			return message, adsbLevel, err
 		}
 
 	case adsb.Level2:
 		switch formatTypeCode {
 		case 9:
-			message, err := readFormat09V2(nicSupplementA, data)
+			message, err := ReadFormat09V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 10:
-			message, err := readFormat10V2(nicSupplementA, data)
+			message, err := ReadFormat10V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 11:
-			message, err := readFormat11V2(nicSupplementA, data)
+			message, err := ReadFormat11V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 12:
-			message, err := readFormat12V2(nicSupplementA, data)
+			message, err := ReadFormat12V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 13:
-			message, err := readFormat13V2(nicSupplementA, data)
+			message, err := ReadFormat13V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 14:
-			message, err := readFormat14V2(nicSupplementA, data)
+			message, err := ReadFormat14V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 15:
-			message, err := readFormat15V2(nicSupplementA, data)
+			message, err := ReadFormat15V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 16:
-			message, err := readFormat16V2(nicSupplementA, data)
+			message, err := ReadFormat16V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 17:
-			message, err := readFormat17V2(nicSupplementA, data)
+			message, err := ReadFormat17V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 18:
-			message, err := readFormat18V2(nicSupplementA, data)
+			message, err := ReadFormat18V2(nicSupplementA, data)
 			return message, adsbLevel, err
 		case 20:
-			message, err := readFormat20V2(data)
+			message, err := ReadFormat20V2(data)
 			return message, adsbLevel, err
 		case 21:
-			message, err := readFormat21V2(data)
+			message, err := ReadFormat21V2(data)
 			return message, adsbLevel, err
 		case 22:
-			message, err := readFormat22V2(data)
+			message, err := ReadFormat22V2(data)
 			return message, adsbLevel, err
 		}
 	}

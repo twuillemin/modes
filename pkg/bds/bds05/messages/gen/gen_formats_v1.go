@@ -161,10 +161,10 @@ func (message *{{ .Name }}) GetNavigationIntegrityCategory() byte {
 	return message.NavigationIntegrityCategory
 }
 
-// read{{ .Name }} reads a message at the format BDS 0,5{{ if .IsBaro }}	
-func read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
+// Read{{ .Name }} reads a message at the format {{ .Name }}{{ if .IsBaro }}	
+func Read{{ .Name }}(nicSupplementA bool, data []byte) (*{{ .Name }}, error) {
 {{ else }}
-func read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
+func Read{{ .Name }}(data []byte) (*{{ .Name }}, error) {
 {{ end }}
 	if len(data) != 7 {
 		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))

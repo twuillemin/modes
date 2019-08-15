@@ -87,7 +87,7 @@ func TestRead{{ .Name }}Valid(t *testing.T) {
 	data := buildValidBDS05V2Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, err := read{{ .Name }}({{.NICSupplementA}}data)
+	msg, err := Read{{ .Name }}({{.NICSupplementA}}data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -107,7 +107,7 @@ func TestRead{{ .Name }}TooShort(t *testing.T) {
 	data := buildValidBDS05V2Message()[:6]
 	data[0] = data[0] | {{ .MessageCode }}
 
-	_, err := read{{ .Name }}({{.NICSupplementA}}data)
+	_, err := Read{{ .Name }}({{.NICSupplementA}}data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -119,7 +119,7 @@ func TestRead{{ .Name }}BadCode(t *testing.T) {
 	data := buildValidBDS05V2Message()
 	data[0] = data[0] | 0x01
 
-	_, err := read{{ .Name }}({{.NICSupplementA}}data)
+	_, err := Read{{ .Name }}({{.NICSupplementA}}data)
 	if err == nil {
 		t.Error(err)
 	}
