@@ -38,8 +38,8 @@ func (message *Format01) GetAircraftIdentification() fields2.AircraftIdentificat
 	return message.AircraftIdentification
 }
 
-// readFormat01 reads a message at the format BDS 0,8
-func readFormat01(data []byte) (*Format01, error) {
+// ReadFormat01 reads a message at the format Format01
+func ReadFormat01(data []byte) (*Format01, error) {
 
 	if len(data) != 7 {
 		return nil, fmt.Errorf("the data must be 7 bytes long (%v given)", len(data))

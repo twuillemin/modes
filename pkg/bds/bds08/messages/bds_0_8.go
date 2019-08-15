@@ -45,16 +45,16 @@ func ReadBDS08(adsbLevel adsb.Level, data []byte) (MessageBDS08, adsb.Level, err
 
 	switch formatTypeCode {
 	case 1:
-		message, err := readFormat01(data)
+		message, err := ReadFormat01(data)
 		return message, adsbLevel, err
 	case 2:
-		message, err := readFormat02(data)
+		message, err := ReadFormat02(data)
 		return message, adsbLevel, err
 	case 3:
-		message, err := readFormat03(data)
+		message, err := ReadFormat03(data)
 		return message, adsbLevel, err
 	case 4:
-		message, err := readFormat04(data)
+		message, err := ReadFormat04(data)
 		return message, adsbLevel, err
 	}
 

@@ -9,7 +9,7 @@ import (
 
 func TestReadFormat04Valid(t *testing.T) {
 
-	msg, err := readFormat04(buildValidFormat04Message())
+	msg, err := ReadFormat04(buildValidFormat04Message())
 	if err != nil {
 		t.Error(err)
 	}
@@ -48,7 +48,7 @@ func TestReadFormat04TooShort(t *testing.T) {
 	// Get too short data
 	data := buildValidFormat04Message()[:6]
 
-	_, err := readFormat04(data)
+	_, err := ReadFormat04(data)
 	if err == nil {
 		t.Error(err)
 	}
@@ -60,7 +60,7 @@ func TestReadFormat04BadCode(t *testing.T) {
 	data := buildValidFormat04Message()
 	data[0] = (data[0] & 0x07) | 0x80
 
-	_, err := readFormat04(data)
+	_, err := ReadFormat04(data)
 	if err == nil {
 		t.Error(err)
 	}
