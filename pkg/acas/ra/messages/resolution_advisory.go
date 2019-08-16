@@ -15,6 +15,7 @@ type ResolutionAdvisory struct {
 	RAComplement            fields.RAComplement
 	RATerminatedIndicator   fields.RATerminatedIndicator
 	MultipleThreatEncounter fields.MultipleThreatEncounter
+	ThreatIdentityAddress
 }
 
 // ToString returns a basic, but readable, representation of the field
@@ -43,9 +44,11 @@ func ReadResolutionAdvisory(data []byte) (*ResolutionAdvisory, error) {
 	}
 
 	// Format of the message is as follow:
-	//        0                 1                 2            3,4,5
-	//       ARA       |   ARA       RAC | RAC RAT MTE Res | Reserved |
-	// a a a a a a a a | a a a a a a c c | c c t m _ _ _ _ | 18 bits  |
+	//        0                 1                 2                 3                 4                 5
+	//                 |             RAC |  R  R M  T  TID |       TID       |       TID       |       TID       |
+	//       ARA       |   ARA       RAC |  A  A T  T  d d | d d d d d d d d | d d d d d d d d | d d d d d d _ _ |
+	//                 |             RAC |  C  T E  I  TIDA|       TIDA      | TIDA    TIDR    |TIDR     TIDB    |
+	// a a a a a a a a | a a a a a a c c | c c t m i i a a | a a a a a a a a | a a a r r r r r | r r b b b b b b |
 
 	return &ResolutionAdvisory{
 		ActiveRA:                fields.ReadActiveResolutionAdvisory(data),

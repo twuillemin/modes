@@ -93,9 +93,11 @@ func ReadAltitude(data []byte) Altitude {
 	b4 := (data[2] & 0x20) != 0
 	d4 := (data[2] & 0x10) != 0
 
-	increment500 := bitutils.GrayToBinary(d2, d4, a1, a2, a4, b1, b2, b4)
+	increment500Gray := bitutils.Pack8Bits(d2, d4, a1, a2, a4, b1, b2, b4)
+	increment500 := bitutils.GrayToBinary8(increment500Gray)
 	// subIncrement is given from 1 to 5 (so there is always one bit in c1,c2,c4), but it is from 0 to 4
-	subIncrement := bitutils.GrayToBinary(false, false, false, false, false, c1, c2, c4)
+	subIncrementGray := bitutils.Pack8Bits(false, false, false, false, false, c1, c2, c4)
+	subIncrement := bitutils.GrayToBinary8(subIncrementGray)
 	increment100 := subIncrement - 1
 	// And increment is reversed alternatively
 	if increment500%2 != 0 {
