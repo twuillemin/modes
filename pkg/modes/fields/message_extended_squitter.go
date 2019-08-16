@@ -16,26 +16,28 @@ import (
 // or version 2 message formats as described below:
 //
 // Defined at 3.1.2.8.6.2
-type MessageExtendedSquitter struct {
-	Data []byte
-}
+type MessageExtendedSquitter []byte
 
 // ReadMessageExtendedSquitter reads the ME field from a message
 func ReadMessageExtendedSquitter(message common.MessageData) MessageExtendedSquitter {
 
-	return MessageExtendedSquitter{
-		Data: message.Payload[3:10],
+	data := make([]byte, 7)
+
+	for i := 0; i < 7; i++ {
+		data[i] = message.Payload[i+3]
 	}
+
+	return data
 }
 
 // ToString returns a basic, but readable, representation of the field
 func (messageExtendedSquitter MessageExtendedSquitter) ToString() string {
 	return fmt.Sprintf("%02X %02X %02X %02X %02X %02X %02X",
-		messageExtendedSquitter.Data[0],
-		messageExtendedSquitter.Data[1],
-		messageExtendedSquitter.Data[2],
-		messageExtendedSquitter.Data[3],
-		messageExtendedSquitter.Data[4],
-		messageExtendedSquitter.Data[5],
-		messageExtendedSquitter.Data[6])
+		messageExtendedSquitter[0],
+		messageExtendedSquitter[1],
+		messageExtendedSquitter[2],
+		messageExtendedSquitter[3],
+		messageExtendedSquitter[4],
+		messageExtendedSquitter[5],
+		messageExtendedSquitter[6])
 }

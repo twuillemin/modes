@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func TestReadFormatDF5Valid(t *testing.T) {
+func TestReadFormatDF21Valid(t *testing.T) {
 
-	msg, err := ParseDF5(buildValidDF5Message())
+	msg, err := ParseDF21(buildValidDF21Message())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -40,17 +40,45 @@ func TestReadFormatDF5Valid(t *testing.T) {
 			msg.Identity.Identity)
 	}
 
+	if msg.MessageCommB[0] != 0x01 {
+		t.Errorf("Expected MessageCommB[0] to be \"0x01\", got \"%v\"", msg.MessageCommB[0])
+	}
+
+	if msg.MessageCommB[1] != 0x23 {
+		t.Errorf("Expected MessageCommB[1] to be \"0x23\", got \"%v\"", msg.MessageCommB[1])
+	}
+
+	if msg.MessageCommB[2] != 0x45 {
+		t.Errorf("Expected MessageCommB[2] to be \"0x45\", got \"%v\"", msg.MessageCommB[2])
+	}
+
+	if msg.MessageCommB[3] != 0x67 {
+		t.Errorf("Expected MessageCommB[3] to be \"0x67\", got \"%v\"", msg.MessageCommB[3])
+	}
+
+	if msg.MessageCommB[4] != 0x89 {
+		t.Errorf("Expected MessageCommB[4] to be \"0x89\", got \"%v\"", msg.MessageCommB[4])
+	}
+
+	if msg.MessageCommB[5] != 0xAB {
+		t.Errorf("Expected MessageCommB[5] to be \"0xAB\", got \"%v\"", msg.MessageCommB[5])
+	}
+
+	if msg.MessageCommB[6] != 0xCD {
+		t.Errorf("Expected MessageCommB[6] to be \"0xCD\", got \"%v\"", msg.MessageCommB[6])
+	}
+
 	if len(msg.ToString()) <= 0 {
 		t.Error("Expected a printable message, but get nothing")
 	}
 }
 
-func buildValidDF5Message() common.MessageData {
+func buildValidDF21Message() common.MessageData {
 
 	// Format of the message is as follow:
 	//
-	//     DF     FS   |      DR     UM  |   UM      ID    |        ID       |   AP
-	// 0 0 1 0 1 f f f | d d d d d u u u | u u u i i i i i | i i i i i i i i | 24bits
+	//     DF     FS   |      DR     UM  |   UM      ID    |        ID       |  Comm-B |  AP/DP
+	// 1 0 1 0 1 f f f | d d d d d u u u | u u u i i i i i | i i i i i i i i | 56 bits | 24bits
 
 	//Identity A = 1   B = 2   C = 3   D = 4
 	//         0 0 1 - 0 1 0 - 0 1 1 - 1 0 0
@@ -63,7 +91,7 @@ func buildValidDF5Message() common.MessageData {
 	// 0000 0101: Unused (00000) + FS: On the ground + alert SPI (101)
 	firstField := byte(0x05)
 
-	payload := make([]byte, 3)
+	payload := make([]byte, 10)
 
 	// 1010 1010: DR : ELMAvailable6Segments (10101) + Utility message: IIS = 5 : 0101 + IDS CommB 01 (010[101])
 	payload[0] = 0xAA
@@ -74,10 +102,19 @@ func buildValidDF5Message() common.MessageData {
 	// 0000 1001: Identity ([1 1100] 0000 1001)
 	payload[2] = 0x09
 
+	// CommB message
+	payload[3] = 0x01
+	payload[4] = 0x23
+	payload[5] = 0x45
+	payload[6] = 0x67
+	payload[7] = 0x89
+	payload[8] = 0xAB
+	payload[9] = 0xCD
+
 	parity := make([]byte, 3)
 
 	return common.MessageData{
-		DownLinkFormat: 5,
+		DownLinkFormat: 21,
 		FirstField:     firstField,
 		Payload:        payload,
 		Parity:         parity,

@@ -108,13 +108,13 @@ func postProcessMessage16(messageDF16 *modeSMessages.MessageDF16) {
 
 func postProcessMessage17(timestamp uint32, plane *plane.Plane, messageDF17 *modeSMessages.MessageDF17) {
 
-	processADSBMessage(timestamp, plane, messageDF17.MessageExtendedSquitter.Data)
+	processADSBMessage(timestamp, plane, messageDF17.MessageExtendedSquitter)
 }
 
 func postProcessMessage18(timestamp uint32, plane *plane.Plane, messageDF18 *modeSMessages.MessageDF18) {
 
 	if messageDF18.ControlField == modeSFields.ControlFieldADSB || messageDF18.ControlField == modeSFields.ControlFieldADSBReserved {
-		processADSBMessage(timestamp, plane, messageDF18.MessageExtendedSquitter.Data)
+		processADSBMessage(timestamp, plane, messageDF18.MessageExtendedSquitter)
 	} else if messageDF18.ControlField == modeSFields.ControlFieldTISBFineFormat ||
 		messageDF18.ControlField == modeSFields.ControlFieldTISBCoarseFormat ||
 		messageDF18.ControlField == modeSFields.ControlFieldTISBReservedManagement ||

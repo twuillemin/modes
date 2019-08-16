@@ -34,10 +34,10 @@ func ParseDF24(message common.MessageData) (*MessageDF24, error) {
 
 	// Format of the message is as follow:
 	//
-	//  DF _ KE   ND   |  Comm-B |   AP
+	//  DF _ KE   ND   |  Comm-D |   AP
 	// 1 1 _ k n n n n | 80 bits | 24bits
 
-	if message.DownLinkFormat&0x18 == 0x18 {
+	if message.DownLinkFormat&0x18 != 0x18 {
 		return nil, errors.New("DF24 message must have a DownLinkFormat of 24")
 	}
 	if len(message.Payload) != 10 {

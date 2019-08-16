@@ -16,29 +16,31 @@ import (
 //   b) control codes for an uplink ELM.
 //
 // Defined at 3.1.2.7.3.3
-type MessageCommD struct {
-	Data []byte
-}
+type MessageCommD []byte
 
 // ReadMessageCommD reads the MB field from a message
 func ReadMessageCommD(message common.MessageData) MessageCommD {
 
-	return MessageCommD{
-		Data: message.Payload,
+	data := make([]byte, 10)
+
+	for i := 0; i < 10; i++ {
+		data[i] = message.Payload[i]
 	}
+
+	return data
 }
 
 // ToString returns a basic, but readable, representation of the field
 func (messageCommD MessageCommD) ToString() string {
 	return fmt.Sprintf("%02X %02X %02X %02X %02X %02X %02X %02X %02X %02X",
-		messageCommD.Data[0],
-		messageCommD.Data[1],
-		messageCommD.Data[2],
-		messageCommD.Data[3],
-		messageCommD.Data[4],
-		messageCommD.Data[5],
-		messageCommD.Data[6],
-		messageCommD.Data[7],
-		messageCommD.Data[8],
-		messageCommD.Data[9])
+		messageCommD[0],
+		messageCommD[1],
+		messageCommD[2],
+		messageCommD[3],
+		messageCommD[4],
+		messageCommD[5],
+		messageCommD[6],
+		messageCommD[7],
+		messageCommD[8],
+		messageCommD[9])
 }

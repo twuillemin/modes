@@ -28,7 +28,6 @@ func ReadMessageACAS(message common.MessageData) MessageACAS {
 
 	data := make([]byte, 7)
 
-	// Copy the Data to not keep a pointer on the original slice
 	for i := 0; i < 7; i++ {
 		data[i] = message.Payload[i+3]
 	}

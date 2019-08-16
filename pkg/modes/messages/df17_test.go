@@ -24,32 +24,32 @@ func TestReadFormatDF17Valid(t *testing.T) {
 			msg.AddressAnnounced.ToString())
 	}
 
-	if msg.MessageExtendedSquitter.Data[0] != 0x01 {
-		t.Errorf("Expected MessageExtendedSquitter.Data[0] to be \"0x01\", got \"%v\"", msg.MessageExtendedSquitter.Data[0])
+	if msg.MessageExtendedSquitter[0] != 0x01 {
+		t.Errorf("Expected MessageExtendedSquitter[0] to be \"0x01\", got \"%v\"", msg.MessageExtendedSquitter[0])
 	}
 
-	if msg.MessageExtendedSquitter.Data[1] != 0x23 {
-		t.Errorf("Expected MessageExtendedSquitter.Data[1] to be \"0x23\", got \"%v\"", msg.MessageExtendedSquitter.Data[1])
+	if msg.MessageExtendedSquitter[1] != 0x23 {
+		t.Errorf("Expected MessageExtendedSquitter[1] to be \"0x23\", got \"%v\"", msg.MessageExtendedSquitter[1])
 	}
 
-	if msg.MessageExtendedSquitter.Data[2] != 0x45 {
-		t.Errorf("Expected MessageExtendedSquitter.Data[2] to be \"0x45\", got \"%v\"", msg.MessageExtendedSquitter.Data[2])
+	if msg.MessageExtendedSquitter[2] != 0x45 {
+		t.Errorf("Expected MessageExtendedSquitter[2] to be \"0x45\", got \"%v\"", msg.MessageExtendedSquitter[2])
 	}
 
-	if msg.MessageExtendedSquitter.Data[3] != 0x67 {
-		t.Errorf("Expected MessageExtendedSquitter.Data[3] to be \"0x67\", got \"%v\"", msg.MessageExtendedSquitter.Data[3])
+	if msg.MessageExtendedSquitter[3] != 0x67 {
+		t.Errorf("Expected MessageExtendedSquitter[3] to be \"0x67\", got \"%v\"", msg.MessageExtendedSquitter[3])
 	}
 
-	if msg.MessageExtendedSquitter.Data[4] != 0x89 {
-		t.Errorf("Expected MessageExtendedSquitter.Data[4] to be \"0x89\", got \"%v\"", msg.MessageExtendedSquitter.Data[4])
+	if msg.MessageExtendedSquitter[4] != 0x89 {
+		t.Errorf("Expected MessageExtendedSquitter[4] to be \"0x89\", got \"%v\"", msg.MessageExtendedSquitter[4])
 	}
 
-	if msg.MessageExtendedSquitter.Data[5] != 0xAB {
-		t.Errorf("Expected MessageExtendedSquitter.Data[5] to be \"0xAB\", got \"%v\"", msg.MessageExtendedSquitter.Data[5])
+	if msg.MessageExtendedSquitter[5] != 0xAB {
+		t.Errorf("Expected MessageExtendedSquitter[5] to be \"0xAB\", got \"%v\"", msg.MessageExtendedSquitter[5])
 	}
 
-	if msg.MessageExtendedSquitter.Data[6] != 0xCD {
-		t.Errorf("Expected MessageExtendedSquitter.Data[6] to be \"0xCD\", got \"%v\"", msg.MessageExtendedSquitter.Data[6])
+	if msg.MessageExtendedSquitter[6] != 0xCD {
+		t.Errorf("Expected MessageExtendedSquitter[6] to be \"0xCD\", got \"%v\"", msg.MessageExtendedSquitter[6])
 	}
 
 	if len(msg.ToString()) <= 0 {
