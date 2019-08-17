@@ -94,7 +94,7 @@ func postProcessMessage16(messageDF16 *modeSMessages.MessageDF16) {
 	if vds1 == 3 && vds2 == 0 {
 
 		// Read the ACAS content
-		messageACAS, errACAS := resolutionAdvisoryMessage.ReadResolutionAdvisory(messageDF16.MessageACAS[1:])
+		messageACAS, errACAS := resolutionAdvisoryMessage.ParseResolutionAdvisory(messageDF16.MessageACAS[1:])
 		if errACAS != nil {
 			fmt.Println(errACAS)
 			return

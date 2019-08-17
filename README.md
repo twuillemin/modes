@@ -76,18 +76,59 @@ received to outputting the detailed content.
 A simple workflow can be:
 
 ```go
-// Split the line into its various fields
-messageADSBSpy, _ := adsbspy.ReadLine(str)
-// Convert to a Mode-S message if possible
-messageModeS, err := modeSReader.ReadMessage(messageADSBSpy.Message)
-// If the message is an ADSB message
-if messageModeS.GetDownLinkFormat() == 17 {
-    messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
-    messageADSB, _, _ := adsbReader.ReadADSBMessage(adsb.Level2, false, false, messageDF17.MessageExtendedSquitter.Data)
+package main
+
+import (
+	"fmt"
+	"github.com/twuillemin/modes/pkg/adsbspy"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
+	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
+	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
+)
+
+func main() {
+	// Split the line into its various fields (only the first part is useful at this point)
+	messageADSBSpy, _ := adsbspy.ReadLine("*8D40768DEA3AB864013C088209CA;F06821ED;0A;60A7;")
+	// Read to a Mode-S message if possible
+	messageModeS, _ := modeSReader.ReadMessage(messageADSBSpy.Message)
+	// If the message is a message having ADSB data
+	if messageModeS.GetDownLinkFormat() == 17 {
+		// Convert the message to its real type
+		messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
+		// Read the ADSB content
+		messageADSB, _, _ := adsbReader.ReadADSBMessage(
+			adsb.ReaderLevel2,
+			false,
+			false,
+			messageDF17.MessageExtendedSquitter)
+		fmt.Print(messageADSB.ToString())
+	}
 }
 ```
 
-##Application
+which should hopefully print a report like:
+```
+Message:                                       29 - Target state and status information (BDS 6,2) [ADSB V2]
+Subtype:                                       1 - Subtype 1
+Selected Altitude Type:                        0 - MCP/FCU (Mode Control Panel / Flight Control Unit)
+Selected Altitude :                            30016 feet
+Barometric Pressure Setting (minus 800 mbars): 213.60000000000002 feet
+Selected Heading :                             0 degrees
+Navigation Accuracy Category - Position:       9 - EPU < 30 m - e.g. GPS (SA off)
+Navigation Integrity Category - Baro:          1 - barometric altitude based on a Gilham input that has been cross-checked or on a non Gilham input
+Source Integrity ReaderLevel:                  1 - SIL <= 1 * 10^-7 per flight hour or per sample
+Source Integrity ReaderLevel Supplement:       0 - Probability of exceeding NIC radius of containment is based on "per hour"
+Status of MCP/FPU Mode Bits:                   0 - no information provided for MCP/FCU mode bits
+Autopilot Engaged:                             No information provided from MCP/FCU
+VNAV Mode Engaged:                             No information provided from MCP/FCU
+Altitude Hold Mode Engaged:                    No information provided from MCP/FCU
+Approach Mode Engaged:                         No information provided from MCP/FCU
+LNAV Mode Engaged:                             No information provided from MCP/FCU
+TCAS / ACAS Operational :                      1 - TCAS/ACAS is operational
+```
+
+## Application
 For reading a file
 ```bash
 go run cmd/main.go -file .\example\example2.txt
@@ -100,13 +141,16 @@ go run cmd/main.go -adsb_spy_server localhost -adsb_spy_port 47806
 
 # Sources
 The main sources used are:
- * ICAO - Annex 10 - Volume IV (July 2014): Surveillance and Collision Avoidance System
- * ICAO Doc 9871 AN/460: Technical Provisions for Mode S Services and Extended Squitter
+ * ICAO, Annex 10, Volume IV (July 2014): Surveillance and Collision Avoidance System
+ * ICAO, Doc 9871, AN/460: Technical Provisions for Mode S Services and Extended Squitter
  
 I am always open to add new valid sources of information. In particular, information about ACAS messages are welcome.
 
 # Versions
-
+ * v0.3.0: 
+    * Clean relation Format, SubType Version for ADSB messages
+    * Bug fixes on some fields not well fetched from messages
+    * Add unitary test on all main classes
  * v0.2.0: 
     * First public version
  * v0.1.0: First version

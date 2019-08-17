@@ -42,7 +42,7 @@ func (plane *Plane) ToString() string {
 			distance = fmt.Sprintf("%v", dist)
 		}
 
-		coord = fmt.Sprintf("lat: %8.5f, long: %8.5f, distance: %v km", lat, long, distance)
+		coord = fmt.Sprintf("lat: %8.5f, long: %8.5f, ground distance: %v km", lat, long, distance)
 	} else {
 		coord = err.Error()
 	}

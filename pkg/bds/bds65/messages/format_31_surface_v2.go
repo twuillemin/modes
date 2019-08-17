@@ -59,8 +59,8 @@ func (message Format31SurfaceV2) ToString() string {
 		"ADSV Version Number:                     %v\n"+
 		"NIC Supplement:                          %v\n"+
 		"Navigational Accuracy Category Position: %v\n"+
-		"Source Integrity ReaderLevel:                  %v\n"+
-		"Source Integrity ReaderLevel Supplement:       %v\n"+
+		"Source Integrity ReaderLevel:            %v\n"+
+		"Source Integrity ReaderLevel Supplement: %v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
 		adsb.GetMessageFormatInformation(&message),

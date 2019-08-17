@@ -59,8 +59,8 @@ func (message Format31AirborneV2) ToString() string {
 		"NIC Supplement:                          %v\n"+
 		"Navigational Accuracy Category Position: %v\n"+
 		"Geometric Vertical Accuracy:             %v\n"+
-		"Source Integrity ReaderLevel:                  %v\n"+
-		"Source Integrity ReaderLevel Supplement:       %v\n"+
+		"Source Integrity ReaderLevel:            %v\n"+
+		"Source Integrity ReaderLevel Supplement: %v\n"+
 		"NIC Baro:                                %v\n"+
 		"Horizontal Reference Direction:          %v",
 		adsb.GetMessageFormatInformation(&message),
