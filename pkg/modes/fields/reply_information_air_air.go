@@ -26,12 +26,12 @@ const (
 	ReplyInformationNoOperatingACAS ReplyInformationAirAir = 0
 	// ReplyInformationReservedACAS1 is reserved for ACAS (1).
 	ReplyInformationReservedACAS1 ReplyInformationAirAir = 1
-	// ReplyInformationReservedACAS2 is reserved for ACAS (2).
-	ReplyInformationReservedACAS2 ReplyInformationAirAir = 2
-	// ReplyInformationReservedACAS3 is reserved for ACAS (3).
-	ReplyInformationReservedACAS3 ReplyInformationAirAir = 3
-	// ReplyInformationReservedACAS4 is reserved for ACAS (4).
-	ReplyInformationReservedACAS4 ReplyInformationAirAir = 4
+	// ReplyInformationACASResolutionProhibited signifies that ACAS with resolution capability inhibited
+	ReplyInformationACASResolutionProhibited ReplyInformationAirAir = 2
+	// ReplyInformationACASVerticalOnlyResolution signifies that ACAS with vertical-only resolution capability
+	ReplyInformationACASVerticalOnlyResolution ReplyInformationAirAir = 3
+	// ReplyInformationACASVerticalAndHorizontalResolution signifies that ACAS with vertical and horizontal resolution capability
+	ReplyInformationACASVerticalAndHorizontalResolution ReplyInformationAirAir = 4
 	// ReplyInformationReservedACAS5 is reserved for ACAS (5).
 	ReplyInformationReservedACAS5 ReplyInformationAirAir = 5
 	// ReplyInformationReservedACAS6 is reserved for ACAS (6).
@@ -75,12 +75,12 @@ func (replyInformationAirAir ReplyInformationAirAir) ToString() string {
 		return "0 - No Operating ACAS"
 	case ReplyInformationReservedACAS1:
 		return "1 - Reserved ACAS"
-	case ReplyInformationReservedACAS2:
-		return "2 - Reserved ACAS"
-	case ReplyInformationReservedACAS3:
-		return "3 - Reserved ACAS"
-	case ReplyInformationReservedACAS4:
-		return "4 - Reserved ACAS"
+	case ReplyInformationACASResolutionProhibited:
+		return "2 - ACAS with resolution capability inhibited"
+	case ReplyInformationACASVerticalOnlyResolution:
+		return "3 - ACAS with vertical-only resolution capability"
+	case ReplyInformationACASVerticalAndHorizontalResolution:
+		return "4 - ACAS with vertical and horizontal resolution capability"
 	case ReplyInformationReservedACAS5:
 		return "5 - Reserved ACAS"
 	case ReplyInformationReservedACAS6:

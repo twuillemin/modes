@@ -21,18 +21,18 @@ const (
 	DownlinkRequestNoDownlinkRequest DownlinkRequest = 0
 	// DownlinkRequestToSendCommBMessage signifies request to send Comm-B message
 	DownlinkRequestToSendCommBMessage DownlinkRequest = 1
-	// DownlinkRequestReservedACAS2 is reserved for ACAS
-	DownlinkRequestReservedACAS2 DownlinkRequest = 2
-	// DownlinkRequestReservedACAS3 is reserved for ACAS
-	DownlinkRequestReservedACAS3 DownlinkRequest = 3
+	// DownlinkRequestACASMessageAvailable signifies that an ACAS message is available
+	DownlinkRequestACASMessageAvailable DownlinkRequest = 2
+	// DownlinkRequestCommBAndACASMessageAvailable is signifies that Comm-B message available and ACAS message available
+	DownlinkRequestCommBAndACASMessageAvailable DownlinkRequest = 3
 	// DownlinkRequestCommBMessage1Available signifies Comm-B broadcast message 1 available
 	DownlinkRequestCommBMessage1Available DownlinkRequest = 4
 	// DownlinkRequestCommBMessage2Available signifies Comm-B broadcast message 2 available
 	DownlinkRequestCommBMessage2Available DownlinkRequest = 5
-	// DownlinkRequestReservedACAS6 is reserved for ACAS
-	DownlinkRequestReservedACAS6 DownlinkRequest = 6
-	// DownlinkRequestReservedACAS7 is reserved for ACAS
-	DownlinkRequestReservedACAS7 DownlinkRequest = 7
+	// DownlinkRequestCommBMessage1AndACASMessageAvailable signifies that Comm-B broadcast message 1 available and ACAS message available
+	DownlinkRequestCommBMessage1AndACASMessageAvailable DownlinkRequest = 6
+	// DownlinkRequestCommBMessage2AndACASMessageAvailable signifies that Comm-B broadcast message 2 available and ACAS message available
+	DownlinkRequestCommBMessage2AndACASMessageAvailable DownlinkRequest = 7
 	// DownlinkRequestNotAssigned8 is not assigned
 	DownlinkRequestNotAssigned8 DownlinkRequest = 8
 	// DownlinkRequestNotAssigned9 is not assigned
@@ -96,18 +96,18 @@ func (downlinkRequest DownlinkRequest) ToString() string {
 		return "0 - No Downlink Request"
 	case DownlinkRequestToSendCommBMessage:
 		return "1 - Request To Send Comm-B Message"
-	case DownlinkRequestReservedACAS2:
-		return "2 - Reserved ACAS"
-	case DownlinkRequestReservedACAS3:
-		return "3 - Reserved ACAS"
+	case DownlinkRequestACASMessageAvailable:
+		return "2 - ACAS message available"
+	case DownlinkRequestCommBAndACASMessageAvailable:
+		return "3 - Comm-B message available and ACAS message available"
 	case DownlinkRequestCommBMessage1Available:
 		return "4 - Comm-B Message 1 Available"
 	case DownlinkRequestCommBMessage2Available:
-		return "5 - Comm-B Message 1 Available"
-	case DownlinkRequestReservedACAS6:
-		return "6 - Reserved ACAS"
-	case DownlinkRequestReservedACAS7:
-		return "7 - Reserved ACAS"
+		return "5 - Comm-B Message 2 Available"
+	case DownlinkRequestCommBMessage1AndACASMessageAvailable:
+		return "6 - Comm-B broadcast message 1 available and ACAS message available"
+	case DownlinkRequestCommBMessage2AndACASMessageAvailable:
+		return "7 - Comm-B broadcast message 2 available and ACAS message available"
 	case DownlinkRequestNotAssigned8:
 		return "8 - Not Assigned"
 	case DownlinkRequestNotAssigned9:
