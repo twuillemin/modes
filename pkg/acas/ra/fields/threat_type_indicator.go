@@ -37,6 +37,6 @@ func (indicator ThreatTypeIndicator) ToString() string {
 // ReadThreatTypeIndicator reads the ThreatTypeIndicator
 func ReadThreatTypeIndicator(data []byte) ThreatTypeIndicator {
 
-	bits := (data[2] & 0x0B) >> 2
+	bits := (data[2] & 0x0C) >> 2
 	return ThreatTypeIndicator(bits)
 }

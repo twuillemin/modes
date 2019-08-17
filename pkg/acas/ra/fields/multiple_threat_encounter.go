@@ -6,7 +6,7 @@ import (
 
 // MultipleThreatEncounter indicates whether two or more simultaneous threats are currently being processed by the ACAS
 // threat resolution logic.
-type MultipleThreatEncounter int
+type MultipleThreatEncounter byte
 
 const (
 	// MTEOneOrZero signifies that one or no threat is being processed

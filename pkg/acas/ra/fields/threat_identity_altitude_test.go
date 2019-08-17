@@ -61,6 +61,8 @@ func TestAltitudeZero(t *testing.T) {
 	// ALTITUDE  A1   A2   A4   B1   B2   B4   C1   C2   C4   D1   D2   D4   SQUAWK
 	//  0         0    0    0    0    1    1    0    1    0    0    0    0    0620
 
+	// => 00 1000 0001 010
+
 	data := make([]byte, 6)
 	for i := 0; i < len(data); i++ {
 		data[i] = 0

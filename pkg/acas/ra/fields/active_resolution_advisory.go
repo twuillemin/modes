@@ -37,5 +37,4 @@ func ReadActiveResolutionAdvisory(data []byte) ActiveResolutionAdvisory {
 	} else {
 		return ActiveRANoVerticalRAGenerated{}
 	}
-
 }
