@@ -1,9 +1,9 @@
 # Introduction
-ModeS is a Mode-S and ADSB decoder written in Go. The project is mainly a library that can be quickly plugged to 
-deformat the messages.
+ModeS is a Mode-S and ADSB decoder written in Go. The project is a pure Go library, without dependency, that allows to
+quickly deformat and access the content of Mode-S message.
 
-An example application is provided that can can connect either to an AirSpy device (via ADSB-Spy) or can 
-read from a text file.
+An small example application is provided that can be used to to dump the content of a message. A more complete usage
+of the library is done in the sister project ModeS Viewer (https://github.com/twuillemin/modes-viewer). 
 
 The main goal of this project is exactitude, code clarity and completeness (if achievable).
 
@@ -70,7 +70,7 @@ to rely (in the broadest meaning) on the provided information.
 
 # Usage
 ## Library
-A full example using the library is given in the file _message_processor.go_ which goes from a single "line" of data 
+A full example using the library is given in the file _main.go_ which goes from a single "line" of data 
 received to outputting the detailed content.
 
 A simple workflow can be:
@@ -79,20 +79,20 @@ A simple workflow can be:
 package main
 
 import (
-	"fmt"
-	"github.com/twuillemin/modes/pkg/adsbspy"
-	"github.com/twuillemin/modes/pkg/bds/adsb"
-	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
-	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
-	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
+    "encoding/hex"
+    "fmt"
+    "github.com/twuillemin/modes/pkg/bds/adsb"
+    adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
+    modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
+    modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
 )
 
 func main() {
-	// Split the line into its various fields (only the first part is useful at this point)
-	messageADSBSpy, _ := adsbspy.ReadLine("*8D40768DEA3AB864013C088209CA;F06821ED;0A;60A7;")
+	// Convert the string to its hexadecimal value
+	binaryData, _ := hex.DecodeString("8D40768DEA3AB864013C088209CA")
 	// Read to a Mode-S message if possible
-	messageModeS, _ := modeSReader.ReadMessage(messageADSBSpy.Message)
-	// If the message is a message having ADSB data
+	messageModeS, _ := modeSReader.ReadMessage(binaryData)
+	// If the message has ADSB data
 	if messageModeS.GetDownLinkFormat() == 17 {
 		// Convert the message to its real type
 		messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
@@ -128,15 +128,19 @@ LNAV Mode Engaged:                             No information provided from MCP/
 TCAS / ACAS Operational :                      1 - TCAS/ACAS is operational
 ```
 
+All the values printed are in fact extracted in their own structure, using either numerical value or enumeration when
+applicable. The _ToString()_ function is present on most if not all the attributes and just builds a readable 
+representation of the data otherwise accessible by the structure of the object.
+
 ## Application
-For reading a file
+For extracting a single line content
 ```bash
-go run cmd/main.go -file .\example\example2.txt
+go run cmd/main.go 8D40768DEA3AB864013C088209CA
 ```
 
-For connecting to an ADSBSpy server
+For reading a file with multiple lines
 ```bash
-go run cmd/main.go -adsb_spy_server localhost -adsb_spy_port 47806
+go run cmd/main.go -file .\example\example2.txt
 ```
 
 # Sources
@@ -147,7 +151,9 @@ The main sources used are:
 I am always open to add new valid sources of information. In particular, information about ACAS messages are welcome.
 
 # Versions
- * v0.3.0: 
+ * v0.4.0: 
+    * Mode ADSBSpy and "current state" of plane into a separate project
+ * v0.3.0:
     * Clean relation Format, SubType Version for ADSB messages
     * Bug fixes on some fields not well fetched from messages
     * Add unitary test on all main classes
