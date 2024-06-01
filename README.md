@@ -97,7 +97,7 @@ func main() {
 		// Convert the message to its real type
 		messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
 		// Read the ADSB content
-		messageADSB, _, _ := adsbReader.ReadADSBMessage(
+		messageADSB, _ := adsbReader.ReadADSBMessage(
 			adsb.ReaderLevel2,
 			false,
 			false,
