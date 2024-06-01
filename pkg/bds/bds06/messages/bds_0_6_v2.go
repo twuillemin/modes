@@ -36,7 +36,7 @@ func getHCRAndNICForV2(formatTypeCode byte, nicSupplementA bool, nicSupplementC 
 				return fields.HCRV2RcLowerThan0Point3NM, 6
 			}
 		} else {
-			if nicSupplementA {
+			if nicSupplementC {
 				return fields.HCRV2RcLowerThan0Point6NM, 6
 			} else {
 				return fields.HCRV2RcGreaterThan0Point6NM, 0
