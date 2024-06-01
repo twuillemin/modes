@@ -9,12 +9,12 @@ import (
 // ReadBDS62 reads a message at the format BDS 6,2. This format was created in ADSB V1, and extended in ADSB V2
 //
 // Changes between version:
-//    - ADSB V0 -> ADSB V1: Create message with Subtype 0
-//    - ADSB V1 -> ADSB V2: Add Subtype 1
+//   - ADSB V0 -> ADSB V1: Create message with Subtype 0
+//   - ADSB V1 -> ADSB V2: Add Subtype 1
 //
 // Params:
-//    - adsbLevel: The ADSB level request
-//    - data: The data of the message must be 7 bytes
+//   - adsbLevel: The ADSB level request
+//   - data: The data of the message must be 7 bytes
 //
 // Returns the message read, the given ADSBLevel or an error
 func ReadBDS62(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.ReaderLevel, error) {
@@ -30,45 +30,30 @@ func ReadBDS62(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.Read
 		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 6,2 format", formatTypeCode)
 	}
 
-	// Default is given code
-	adsbLevelToUse := adsbLevel
-
 	switch adsbLevel {
 
-	case adsb.ReaderLevel0OrMore:
-		switch subType {
-		case 0:
-			// Subtype 0 only exists from ADSB V1
-			adsbLevelToUse = adsb.ReaderLevel1OrMore
-		case 1:
-			// Subtype 1 only exists from ADSB V2
-			adsbLevelToUse = adsb.ReaderLevel2
-		}
+	case adsb.ReaderLevel0:
+		return nil, adsbLevel, fmt.Errorf("the BDS 6,2 format is not readable as an ADSB V0 message")
 
-	case adsb.ReaderLevel1OrMore:
-		// Mode A Data for subtype 1 are only provided for ADSB ReaderLevel 2
-		if subType == 1 {
-			adsbLevelToUse = adsb.ReaderLevel2
-		}
-	}
-
-	switch adsbLevelToUse {
-
-	case adsb.ReaderLevel1OrMore, adsb.ReaderLevel1Exactly:
+	case adsb.ReaderLevel1:
 		if subType == 0 {
 			message, err := ReadFormat29Subtype0(data)
-			return message, adsbLevelToUse, err
+			return message, adsbLevel, err
+		} else {
+			return nil, adsbLevel, fmt.Errorf("the subtype %v of Target state and status information is not supported", subType)
 		}
 
 	case adsb.ReaderLevel2:
 		if subType == 0 {
 			message, err := ReadFormat29Subtype0(data)
-			return message, adsbLevelToUse, err
+			return message, adsbLevel, err
 		} else if subType == 1 {
 			message, err := ReadFormat29Subtype1(data)
-			return message, adsbLevelToUse, err
+			return message, adsbLevel, err
+		} else {
+			return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 6,2 format", formatTypeCode)
 		}
 	}
 
-	return nil, adsbLevelToUse, fmt.Errorf("the subtype %v of Target state and status information is not supported", subType)
+	return nil, adsbLevel, fmt.Errorf("the BDS 6,2 format is not readable with the given reader level")
 }

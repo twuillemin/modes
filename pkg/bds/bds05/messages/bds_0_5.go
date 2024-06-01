@@ -58,7 +58,7 @@ func ReadBDS05(adsbLevel adsb.ReaderLevel, nicSupplementA bool, data []byte) (Me
 
 	switch adsbLevel {
 
-	case adsb.ReaderLevel0Exactly, adsb.ReaderLevel0OrMore:
+	case adsb.ReaderLevel0:
 		switch formatTypeCode {
 		case 9:
 			message, err := ReadFormat09V0(data)
@@ -101,7 +101,7 @@ func ReadBDS05(adsbLevel adsb.ReaderLevel, nicSupplementA bool, data []byte) (Me
 			return message, adsbLevel, err
 		}
 
-	case adsb.ReaderLevel1Exactly, adsb.ReaderLevel1OrMore:
+	case adsb.ReaderLevel1:
 		switch formatTypeCode {
 		case 9:
 			message, err := ReadFormat09V1(nicSupplementA, data)

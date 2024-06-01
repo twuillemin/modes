@@ -8,6 +8,9 @@ import (
 )
 
 // ReadBDS65 reads a message at the format BDS 6,5
+//
+// Contrary to the other readers which rely on the given ReaderLevel to be decoded, the BDS 6,5 includes the ADSB
+// level. So, the ReaderLevel is ignored.
 func ReadBDS65(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.ReaderLevel, error) {
 
 	if len(data) != 7 {
@@ -24,60 +27,37 @@ func ReadBDS65(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.Read
 	// Read the detectedADSBLevel of ADSB and the subtype
 	detectedADSBLevel := fields.ReadVersionNumber(data)
 
-	// If the version is fixed but different from the read one, return an error
-	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.ReaderLevel1Exactly || adsbLevel == adsb.ReaderLevel2)) ||
-		(detectedADSBLevel == fields.ADSBVersion1 && (adsbLevel == adsb.ReaderLevel0Exactly || adsbLevel == adsb.ReaderLevel2)) ||
-		(detectedADSBLevel == fields.ADSBVersion2 && (adsbLevel == adsb.ReaderLevel0Exactly || adsbLevel == adsb.ReaderLevel1Exactly)) {
+	switch detectedADSBLevel {
 
-		return nil, adsbLevel, fmt.Errorf("the request ADSB level (%v) is not coherent with the level detected in the message (%v)", adsbLevel, detectedADSBLevel)
-	}
-
-	// If the detected level is lower than the possible level
-	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.ReaderLevel1OrMore || adsbLevel == adsb.ReaderLevel2)) ||
-		(detectedADSBLevel == fields.ADSBVersion1 && adsbLevel == adsb.ReaderLevel2) {
-
-		return nil, adsbLevel, fmt.Errorf("the request ADSB level (%v or more) is not higher with the level detected in the message (%v)", adsbLevel, detectedADSBLevel)
-	}
-
-	// As the level is not supposed to change, use Exact version
-	resultingADSBLevel := adsb.ReaderLevel0Exactly
-	if detectedADSBLevel == fields.ADSBVersion1 {
-		resultingADSBLevel = adsb.ReaderLevel1Exactly
-	} else if detectedADSBLevel == fields.ADSBVersion2 {
-		resultingADSBLevel = adsb.ReaderLevel2
-	}
-
-	switch resultingADSBLevel {
-
-	case adsb.ReaderLevel0Exactly:
+	case fields.ADSBVersion0:
 		message, err := ReadFormat31Reserved(data)
-		return message, resultingADSBLevel, err
+		return message, adsb.ReaderLevel0, err
 
-	case adsb.ReaderLevel1Exactly:
+	case fields.ADSBVersion1:
 		switch subType {
 		case 0:
 			message, err := ReadFormat31AirborneV1(data)
-			return message, resultingADSBLevel, err
+			return message, adsb.ReaderLevel1, err
 		case 1:
 			message, err := ReadFormat31SurfaceV1(data)
-			return message, resultingADSBLevel, err
+			return message, adsb.ReaderLevel1, err
 		default:
-			return nil, resultingADSBLevel, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)
+			return nil, adsb.ReaderLevel1, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", subType)
 		}
 
-	case adsb.ReaderLevel2:
+	case fields.ADSBVersion2:
 		switch subType {
 		case 0:
 			message, err := ReadFormat31AirborneV2(data)
-			return message, resultingADSBLevel, err
+			return message, adsb.ReaderLevel2, err
 		case 1:
 			message, err := ReadFormat31SurfaceV2(data)
-			return message, resultingADSBLevel, err
+			return message, adsb.ReaderLevel2, err
 		default:
-			return nil, resultingADSBLevel, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", formatTypeCode)
+			return nil, adsb.ReaderLevel2, fmt.Errorf("the subtype %v of Aircraft Operational Status is not supported", subType)
 		}
 
 	default:
-		return nil, resultingADSBLevel, fmt.Errorf("the detectedADSBLevel of ADSB %v is not supported", formatTypeCode)
+		return nil, adsbLevel, fmt.Errorf("the detectedADSBLevel of ADSB %v is not supported", detectedADSBLevel)
 	}
 }

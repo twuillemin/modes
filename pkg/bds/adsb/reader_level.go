@@ -2,22 +2,21 @@ package adsb
 
 import "fmt"
 
-// ReaderLevel is the definition of the ADSB ReaderLevel used to communicate with reader function. As a parameter
-// of the reader function it determine the level that the client want to read. As a returned value, it allows
-// the function to provide more details after the data has been read. For example, sending Level0OrBetter is sent to
-// the function for reading type code 31. As the type code 31 contains the exact level, the read function may return
-// ReaderLevel1Exactly.
+// ReaderLevel is the definition of the ADSB ReaderLevel used to communicate with reader function. The ReaderLevel is
+// normally present given by the query (which is not available) or is given by the Aircraft Status Operational Message
+// BDS 6,5.
+//
+// As stated by official documentation:
+// An ADS-B Version Two (2) Receiving Subsystem shall, as a default, assume the received messages are
+// using ADS-B Version Zero (0) ADS-B Message format unless, or until, an Aircraft Operational Status
+// Message is received and the ADS-B Version Number is confirmed to be other than Zero (0)
 type ReaderLevel byte
 
 const (
-	// ReaderLevel0OrMore indicates that the message could be level ADSB level 0 or more
-	ReaderLevel0OrMore ReaderLevel = 0
-	// ReaderLevel0Exactly indicates that the message must be read as ADSB 0 or has been determined as being level 0 only
-	ReaderLevel0Exactly ReaderLevel = 1
-	// ReaderLevel1OrMore indicates that the message could be level ADSB level 1 or more
-	ReaderLevel1OrMore ReaderLevel = 2
-	// ReaderLevel1Exactly indicates that the message must be read as ADSB 1 or has been determined as being level 1 only
-	ReaderLevel1Exactly ReaderLevel = 3
+	// ReaderLevel0 indicates that the message must be read as ADSB 0 or has been determined as being level 0 only
+	ReaderLevel0 ReaderLevel = 1
+	// ReaderLevel1 indicates that the message must be read as ADSB 1 or has been determined as being level 1 only
+	ReaderLevel1 ReaderLevel = 3
 	// ReaderLevel2 indicates that the message must be read as ADSB 2 or has been determined as being level 1 only
 	ReaderLevel2 ReaderLevel = 4
 )
@@ -25,13 +24,9 @@ const (
 // ToString returns a basic, but readable, representation of the message
 func (level ReaderLevel) ToString() string {
 	switch level {
-	case ReaderLevel0OrMore:
-		return "ADSB V0, V1 and V2"
-	case ReaderLevel0Exactly:
+	case ReaderLevel0:
 		return "ADSB V0"
-	case ReaderLevel1OrMore:
-		return "ADSB V1 and V2"
-	case ReaderLevel1Exactly:
+	case ReaderLevel1:
 		return "ADSB V1"
 	case ReaderLevel2:
 		return "ADSB V2"

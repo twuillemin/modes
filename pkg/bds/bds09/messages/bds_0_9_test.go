@@ -7,29 +7,29 @@ import (
 
 func TestDetectAndReadFormat19AirspeedNormalValid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS09(adsb.ReaderLevel0OrMore, buildValidFormat19AirspeedNormalMessage())
+	msg, adsbResult, err := ReadBDS09(adsb.ReaderLevel0, buildValidFormat19AirspeedNormalMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*Format19AirSpeedNormal); !ok {
 		t.Errorf("expected a message of type Format19AirSpeedNormal, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.ReaderLevel0OrMore {
-		t.Errorf("expected adsbLevel to be returned as ReaderLevel0OrMore, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel0 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel0, but got %v instead", adsbResult.ToString())
 	}
 }
 
 func TestDetectAndReadFormat19AirspeedSupersonicValid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS09(adsb.ReaderLevel0OrMore, buildValidFormat19AirspeedSupersonicMessage())
+	msg, adsbResult, err := ReadBDS09(adsb.ReaderLevel0, buildValidFormat19AirspeedSupersonicMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*Format19AirSpeedSupersonic); !ok {
 		t.Errorf("expected a message of type Format19AirSpeedSupersonic, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.ReaderLevel0OrMore {
-		t.Errorf("expected adsbLevel to be returned as ReaderLevel0OrMore, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel0 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel0, but got %v instead", adsbResult.ToString())
 	}
 }
 
@@ -49,15 +49,15 @@ func TestDetectAndReadReadFormat19GroundNormalValid(t *testing.T) {
 
 func TestDetectAndReadReadFormat19GroundSupersonicValid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS09(adsb.ReaderLevel0OrMore, buildValidFormat19GroundSupersonicMessage())
+	msg, adsbResult, err := ReadBDS09(adsb.ReaderLevel0, buildValidFormat19GroundSupersonicMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*Format19GroundSpeedSupersonic); !ok {
 		t.Errorf("expected a message of type Format19GroundSpeedSupersonic, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.ReaderLevel0OrMore {
-		t.Errorf("expected adsbLevel to be returned as ReaderLevel0OrMore, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel0 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel0, but got %v instead", adsbResult.ToString())
 	}
 }
 
@@ -67,7 +67,7 @@ func TestDetectBadFormat(t *testing.T) {
 	data := buildValidFormat19GroundSupersonicMessage()
 	data[0] = (data[0] & 0x07) | 0x28
 
-	_, _, err := ReadBDS09(adsb.ReaderLevel0OrMore, data)
+	_, _, err := ReadBDS09(adsb.ReaderLevel0, data)
 	if err == nil {
 		t.Fatal("Expected an error while reading a message with format 5, but message was read")
 	}

@@ -1,5 +1,6 @@
 // The following directive is necessary to make the package coherent:
 
+//go:build ignore
 // +build ignore
 
 // This program generates list_converter.go. It can be invoked by running
@@ -88,15 +89,15 @@ func TestDetectAndRead{{ .Name }}V0Valid(t *testing.T) {
 	data := buildValidBDS05V0Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel0OrMore, false, data)
+	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel0, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V0); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V0, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.ReaderLevel0OrMore {
-		t.Errorf("expected adsbLevel to be returned as Level0OrMore, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel0 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel0, but got %v instead", adsbResult.ToString())
 	}
 }
 
@@ -105,15 +106,15 @@ func TestDetectAndRead{{ .Name }}V1Valid(t *testing.T) {
 	data := buildValidBDS05V1Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel1OrMore, false, data)
+	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel1, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V1); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V1, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.ReaderLevel1OrMore {
-		t.Errorf("expected adsbLevel to be returned as Level0OrMore, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel1 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel1, but got %v instead", adsbResult.ToString())
 	}
 }
 
@@ -141,7 +142,7 @@ func TestDetectBadFormat(t *testing.T) {
 	data := buildValidBDS05V0Message()
 	data[0] = (data[0] & 0x07) | 0x08
 
-	_, _, err := ReadBDS05(adsb.ReaderLevel0OrMore, false, data)
+	_, _, err := ReadBDS05(adsb.ReaderLevel0, false, data)
 	if err == nil {
 		t.Fatal("Expected an error while reading a message with format 01, but message was read")
 	}

@@ -7,21 +7,21 @@ import (
 
 func TestDetectAndReadReadFormat29Subtype0Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS62(adsb.ReaderLevel0OrMore, buildValidFormat29Subtype0Message())
+	msg, adsbResult, err := ReadBDS62(adsb.ReaderLevel1, buildValidFormat29Subtype0Message())
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*Format29Subtype0); !ok {
 		t.Errorf("expected a message of type Format29Subtype0, but got %v instead", msg.GetMessageFormat().ToString())
 	}
-	if adsbResult != adsb.ReaderLevel1OrMore {
-		t.Errorf("expected adsbLevel to be returned as ReaderLevel1OrMore, but got %v instead", adsbResult.ToString())
+	if adsbResult != adsb.ReaderLevel1 {
+		t.Errorf("expected adsbLevel to be returned as ReaderLevel1, but got %v instead", adsbResult.ToString())
 	}
 }
 
 func TestDetectAndReadReadFormat29Subtype1Valid(t *testing.T) {
 
-	msg, adsbResult, err := ReadBDS62(adsb.ReaderLevel0OrMore, buildValidFormat29Subtype1Message())
+	msg, adsbResult, err := ReadBDS62(adsb.ReaderLevel2, buildValidFormat29Subtype1Message())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -39,7 +39,7 @@ func TestDetectBadFormat(t *testing.T) {
 	data := buildValidFormat29Subtype1Message()
 	data[0] = (data[0] & 0x07) | 0x28
 
-	_, _, err := ReadBDS62(adsb.ReaderLevel0OrMore, data)
+	_, _, err := ReadBDS62(adsb.ReaderLevel0, data)
 	if err == nil {
 		t.Fatal("Expected an error while reading a message with format 5, but message was read")
 	}
