@@ -37,15 +37,15 @@ type MessageBDS05 interface {
 // correct ADSB version, the lowest adsbLevel given is used and returned.
 //
 // Changes between version:
-//    - ADSB V0 -> ADSB V1: Add NIC Supplement A bit coming from a previous message type 31
-//    - ADSB V1 -> ADSB V2: Precision on the movement values 125, 126 and 127, from simply Reserved to
-//                          Reserved with details.
-//    - ADSB V1 -> ADSB V2: Add the replace the SingleAntennaFlag bit by the NIC B bit in first byte of data
+//   - ADSB V0 -> ADSB V1: Add NIC Supplement A bit coming from a previous message type 31
+//   - ADSB V1 -> ADSB V2: Precision on the movement values 125, 126 and 127, from simply Reserved to
+//     Reserved with details.
+//   - ADSB V1 -> ADSB V2: Replace the SingleAntennaFlag bit by the NIC B bit in first byte of data
 //
 // Params:
-//    - adsbLevel: The ADSB level request (not used, but present for coherency)
-//    - data: The data of the message must be 7 bytes
-//    - nicSupplementA: The nic supplement A bit coming from previous Format Code 31 message if any. If none, 0 is fine
+//   - adsbLevel: The ADSB level request (not used, but present for coherency)
+//   - data: The data of the message must be 7 bytes
+//   - nicSupplementA: The nic supplement A bit coming from previous Format Code 31 message if any. If none, 0 is fine
 //
 // Returns the message read, the given ADSBLevel or an error
 func ReadBDS05(adsbLevel adsb.ReaderLevel, nicSupplementA bool, data []byte) (MessageBDS05, adsb.ReaderLevel, error) {

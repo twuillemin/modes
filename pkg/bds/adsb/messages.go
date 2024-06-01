@@ -33,7 +33,7 @@ func (level MessageLevel) ToString() string {
 	}
 }
 
-// Subtype is the subtype of a Format of a message. Some message dom't have subtype and so should use nil.
+// Subtype is the subtype of a Format of a message. Some message don't have subtype and so should use nil.
 type Subtype interface {
 	common.Printable
 

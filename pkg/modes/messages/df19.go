@@ -30,7 +30,7 @@ func (message *MessageDF19) GetDownLinkFormat() int {
 // ParseDF19 parses a message at the DF19 format
 func ParseDF19(message common.MessageData) (*MessageDF19, error) {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     AF   | Military use
 	// 1 0 0 1 1 a a a |   104 bits

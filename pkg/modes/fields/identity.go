@@ -47,7 +47,7 @@ func (identity Identity) IsSpecialInstructionNotReceived() bool {
 // ReadIdentity reads the identity from a message
 func ReadIdentity(message common.MessageData) Identity {
 
-	// Identity is a 13 bits fields, so read a uint16
+	// Identity is a 13 bits fields, so read an uint16
 	// bit         |17 18 19 20 21 22 23 24|25 26 27 28 29 30 31 32
 	// id bits     |_  _  _  C1 A1 C2 A2 C4|A4 0  B1 D1  B2 D2 B4 D4
 

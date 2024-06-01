@@ -70,7 +70,7 @@ func TestReadFormatDF24Valid(t *testing.T) {
 
 func buildValidDF24Message() common.MessageData {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//  DF _ KE   ND   |  Comm-D |   AP
 	// 1 1 _ k n n n n | 80 bits | 24bits

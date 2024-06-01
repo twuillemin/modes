@@ -26,7 +26,7 @@ func TestReadFormatDF19Valid(t *testing.T) {
 
 func buildValidDF19Message() common.MessageData {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     AF   | Military use
 	// 1 0 0 1 1 a a a |   104 bits

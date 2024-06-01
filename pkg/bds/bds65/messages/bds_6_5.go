@@ -32,7 +32,7 @@ func ReadBDS65(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.Read
 		return nil, adsbLevel, fmt.Errorf("the request ADSB level (%v) is not coherent with the level detected in the message (%v)", adsbLevel, detectedADSBLevel)
 	}
 
-	// If the detected level is lower then the possible level
+	// If the detected level is lower than the possible level
 	if (detectedADSBLevel == fields.ADSBVersion0 && (adsbLevel == adsb.ReaderLevel1OrMore || adsbLevel == adsb.ReaderLevel2)) ||
 		(detectedADSBLevel == fields.ADSBVersion1 && adsbLevel == adsb.ReaderLevel2) {
 

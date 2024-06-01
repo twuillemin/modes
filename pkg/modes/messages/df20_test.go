@@ -81,7 +81,7 @@ func TestReadFormatDF20Valid(t *testing.T) {
 
 func buildValidDF20Message() common.MessageData {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     FS   |      DR     UM  |   UM      AC    |        AC       |  Comm-B |  AP/DP
 	// 1 0 1 0 0 f f f | d d d d d u u u | u u u a a a a a | a a a a a a a a | 56 bits | 24bits

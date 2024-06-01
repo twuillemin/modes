@@ -36,7 +36,7 @@ func (message *MessageDF0) GetDownLinkFormat() int {
 // ParseDF0 parses a message at the DF0 format
 func ParseDF0(message common.MessageData) (*MessageDF0, error) {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF  VS CC _ |   SL  _ _   RI  |RI _ _     AC    |        AC       |   AP
 	// 0 0 0 0 0 x x _ | x x x _ _ x x x | x _ _ x x x x x | x x x x x x x x | 24bits

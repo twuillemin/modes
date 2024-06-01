@@ -32,7 +32,7 @@ func (message *MessageDF17) GetDownLinkFormat() int {
 // ParseDF17 parses a message at the DF17 format
 func ParseDF17(message common.MessageData) (*MessageDF17, error) {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     CA   |        AA       |        AA       |        AA       |    ME   |   PI
 	// 1 0 0 0 1 c c c | a a a a a a a a | a a a a a a a a | a a a a a a a a | 56 bits | 24bits

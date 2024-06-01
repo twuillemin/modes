@@ -75,7 +75,7 @@ func TestReadFormatDF21Valid(t *testing.T) {
 
 func buildValidDF21Message() common.MessageData {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     FS   |      DR     UM  |   UM      ID    |        ID       |  Comm-B |  AP/DP
 	// 1 0 1 0 1 f f f | d d d d d u u u | u u u i i i i i | i i i i i i i i | 56 bits | 24bits

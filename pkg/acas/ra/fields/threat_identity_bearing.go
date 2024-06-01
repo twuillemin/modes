@@ -22,7 +22,7 @@ func (threatBearing ThreatIdentityBearing) ToString() string {
 	return fmt.Sprintf("%v - Unknown code", threatBearing)
 }
 
-// GetBearing returns the approximate  numeric value of the bearing. Note that for extreme values, non sense are
+// GetBearing returns the approximate  numeric value of the bearing. Note that for extreme values, nonsense are
 // returned.
 // A message's bearing with a value of 0 or 1 is returned as 0.0. A message's bearing with a value of 61 or more is
 // returned as 363.

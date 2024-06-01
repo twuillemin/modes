@@ -20,7 +20,7 @@ type MessageACAS []byte
 // content is not parsed
 func ReadMessageACAS(message common.MessageData) MessageACAS {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//        0               1                   2                 3                 4                  5               6           7, 8, 9
 	//   SL  _ _   RI  |RI _ _     AC    |        AC       | <---------------------------------------- MV ----------------------------------> |
 	//                 |                 |                 |  VDS1     VDS2  |       ARA       |   ARA       RAC | RAC RAT MTE Res | Reserved |

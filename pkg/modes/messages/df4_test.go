@@ -53,7 +53,7 @@ func TestReadFormatDF4Valid(t *testing.T) {
 
 func buildValidDF4Message() common.MessageData {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     FS   |      DR     UM  |   UM      AC    |        AC       |   AP
 	// 0 0 1 0 0 f f f | d d d d d u u u | u u u a a a a a | a a a a a a a a | 24bits

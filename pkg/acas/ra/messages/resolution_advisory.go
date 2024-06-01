@@ -69,8 +69,8 @@ func (message ResolutionAdvisory) ToString() string {
 // ParseResolutionAdvisory reads a ResolutionAdvisory data message
 //
 // Params:
-//    - data: The content of the message including the field VDS. This is for example the full content
-//               content of the MV field from Mode S message
+//   - data: The content of the message including the field VDS. This is for example the full content
+//     of the MV field from Mode S message
 //
 // Returns a properly formatted ResolutionAdvisory
 func ParseResolutionAdvisory(data []byte) (*ResolutionAdvisory, error) {
@@ -79,7 +79,7 @@ func ParseResolutionAdvisory(data []byte) (*ResolutionAdvisory, error) {
 		return nil, errors.New("the data for ACAS ResolutionAdvisory message must be 6 bytes long")
 	}
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//        0                 1                 2                 3                 4                 5
 	//                 |             RAC |  R  R M  T  TID |       TID       |       TID       |       TID       |
 	//       ARA       |   ARA       RAC |  A  A T  T  d d | d d d d d d d d | d d d d d d d d | d d d d d d _ _ |

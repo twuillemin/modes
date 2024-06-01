@@ -33,7 +33,7 @@ func (message *MessageDF5) GetDownLinkFormat() int {
 // ParseDF5 parses a message at the DF5 format
 func ParseDF5(message common.MessageData) (*MessageDF5, error) {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     FS   |      DR     UM  |   UM      ID    |        ID       |   AP
 	// 0 0 1 0 1 f f f | d d d d d u u u | u u u i i i i i | i i i i i i i i | 24bits

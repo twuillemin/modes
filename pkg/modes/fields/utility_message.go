@@ -16,7 +16,7 @@ import (
 // Defined at 3.1.2.6.5.3
 type UtilityMessage struct {
 	// InterrogatorIdentifier subfield reports the identifier of the interrogator that is reserved for
-	// multi site communications.
+	// multi-site communications.
 	InterrogatorIdentifier uint8
 	// IdentifierDesignator subfield reports the type of reservation made by the interrogator identified in IIS
 	IdentifierDesignator UtilityMessageIdentifierDesignator

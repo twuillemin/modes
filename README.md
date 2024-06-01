@@ -2,7 +2,7 @@
 ModeS is a Mode-S and ADSB decoder written in Go. The project is a pure Go library, without dependency, that allows to
 quickly deformat and access the content of Mode-S message.
 
-An small example application is provided that can be used to to dump the content of a message. A more complete usage
+A small example application is provided that can be used to dump the content of a message. A more complete usage
 of the library is done in the sister project ModeS Viewer (https://github.com/twuillemin/modes-viewer). 
 
 The main goal of this project is exactitude, code clarity and completeness (if achievable).
@@ -13,59 +13,59 @@ to rely (in the broadest meaning) on the provided information.
 
 # Format Supported
 ## Mode-S
-| Downlink Format | Description |
-| --- | --- | 
-| DF-0 | Short air-air surveillance (ACAS) | 
-| DF-4 | Surveillance, altitude reply | 
-| DF-5 | Surveillance, identify reply |
-| DF-11 | All-call reply |
-| DF-16 | Long air-air surveillance (ACAS) |
-| DF-17 | Extended squitter (ADSB) |
-| DF-18 | Extended squitter/non transponder (ADSB) |
-| DF-19 | Military extended squitter |
-| DF-20 | Comm-B altitude reply |
-| DF-21 | Comm-B identify reply |
-| DF-24 | Comm-D (ELM) |
+| Downlink Format | Description                              |
+|-----------------|------------------------------------------| 
+| DF-0            | Short air-air surveillance (ACAS)        | 
+| DF-4            | Surveillance, altitude reply             | 
+| DF-5            | Surveillance, identify reply             |
+| DF-11           | All-call reply                           |
+| DF-16           | Long air-air surveillance (ACAS)         |
+| DF-17           | Extended squitter (ADSB)                 |
+| DF-18           | Extended squitter/non transponder (ADSB) |
+| DF-19           | Military extended squitter               |
+| DF-20           | Comm-B altitude reply                    |
+| DF-21           | Comm-B identify reply                    |
+| DF-24           | Comm-D (ELM)                             |
 
 ## ADSB
-| Code |  BDS | Description  |         V0   |   V1   |   V2 |
-| --- | --- | --- | --- | --- | --- | 
-|  0   |   ?  |  No Position
-|  1   |  0,8 |  Aircraft Id         | OK | OK | OK |
-|  2   |  0,8 |  Aircraft Id         | OK | OK | OK |
-|  3   |  0,8 |  Aircraft Id         | OK | OK | OK |
-|  4   |  0,8 |  Aircraft Id         | OK | OK | OK |
-|  5   |  0,6 |  Surface position    | OK | OK | OK |
-|  6   |  0,6 |  Surface position    | OK | OK | OK |
-|  7   |  0,6 |  Surface position    | OK | OK | OK |
-|  8   |  0,6 |  Surface position    | OK | OK | OK |
-|  9   |  0,5 |  Airborne position   | OK | OK | OK |
-| 10   |  0,5 |  Airborne position   | OK | OK | OK |
-| 14   |  0,5 |  Airborne position   | OK | OK | OK |
-| 12   |  0,5 |  Airborne position   | OK | OK | OK |
-| 13   |  0,5 |  Airborne position   | OK | OK | OK |
-| 14   |  0,5 |  Airborne position   | OK | OK | OK |
-| 15   |  0,5 |  Airborne position   | OK | OK | OK |
-| 16   |  0,5 |  Airborne position   | OK | OK | OK |
-| 17   |  0,5 |  Airborne position   | OK | OK | OK |
-| 18   |  0,5 |  Airborne position   | OK | OK | OK |
-| 19   |  0,9 |  Airborne velocity   | OK | OK | OK |
-| 20   |  0,5 |  Airborne position   | OK | OK | OK |
-| 21   |  0,5 |  Airborne position   | OK | OK | OK |
-| 22   |  0,5 |  Airborne position   | OK | OK | OK |
-| 23   |      | Reserved             |    |    |    |
-| 24   |      | Reserved             |    |    |    |
-| 25   |      |  Reserved            |    |    |    |
-| 26   |      |  Reserved            |    |    |    |
-| 27   |      |  Reserved            |    |    |    |
-| 28   |  6,1 |  Emergency report    | OK | OK | OK |
-| 29   |  6,2 |  Target and status   | _  | OK | OK |
-| 30   |      |  Reserved            |    |    |    |
-| 31   |  6,5 |  Operational status  | OK | OK | OK |
+| Code | BDS | Description        | V0 | V1 | V2 |
+|------|-----|--------------------|----|----|----| 
+| 0    | ?   | No Position        |    |    |    |
+| 1    | 0,8 | Aircraft Id        | OK | OK | OK |
+| 2    | 0,8 | Aircraft Id        | OK | OK | OK |
+| 3    | 0,8 | Aircraft Id        | OK | OK | OK |
+| 4    | 0,8 | Aircraft Id        | OK | OK | OK |
+| 5    | 0,6 | Surface position   | OK | OK | OK |
+| 6    | 0,6 | Surface position   | OK | OK | OK |
+| 7    | 0,6 | Surface position   | OK | OK | OK |
+| 8    | 0,6 | Surface position   | OK | OK | OK |
+| 9    | 0,5 | Airborne position  | OK | OK | OK |
+| 10   | 0,5 | Airborne position  | OK | OK | OK |
+| 14   | 0,5 | Airborne position  | OK | OK | OK |
+| 12   | 0,5 | Airborne position  | OK | OK | OK |
+| 13   | 0,5 | Airborne position  | OK | OK | OK |
+| 14   | 0,5 | Airborne position  | OK | OK | OK |
+| 15   | 0,5 | Airborne position  | OK | OK | OK |
+| 16   | 0,5 | Airborne position  | OK | OK | OK |
+| 17   | 0,5 | Airborne position  | OK | OK | OK |
+| 18   | 0,5 | Airborne position  | OK | OK | OK |
+| 19   | 0,9 | Airborne velocity  | OK | OK | OK |
+| 20   | 0,5 | Airborne position  | OK | OK | OK |
+| 21   | 0,5 | Airborne position  | OK | OK | OK |
+| 22   | 0,5 | Airborne position  | OK | OK | OK |
+| 23   |     | Reserved           |    |    |    |
+| 24   |     | Reserved           |    |    |    |
+| 25   |     | Reserved           |    |    |    |
+| 26   |     | Reserved           |    |    |    |
+| 27   |     | Reserved           |    |    |    |
+| 28   | 6,1 | Emergency report   | OK | OK | OK |
+| 29   | 6,2 | Target and status  | _  | OK | OK |
+| 30   |     | Reserved           |    |    |    |
+| 31   | 6,5 | Operational status | OK | OK | OK |
 
 ## ACAS
-| Code |  Description |
-| --- | --- |
+| Code | Description         |
+|------|---------------------|
 | 3,0  | Resolution Advisory | 
 
 # Usage

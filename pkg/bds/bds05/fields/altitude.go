@@ -25,7 +25,7 @@ const (
 	AltitudeReport25FootIncrements AltitudeReportMethod = 1
 )
 
-// Altitude field reports the barometric altitude in feet. It use (almost) the same encoding as the
+// Altitude field reports the barometric altitude in feet. It uses (almost) the same encoding as the
 // AC field of Mode S Message. The main difference is that the M bit is removed, so altitude is only
 // reported in feet, not in meter.
 //
@@ -57,11 +57,11 @@ func ReadAltitude(data []byte) Altitude {
 	// Get the Q bit
 	qBit := (data[1] & 0x01) != 0
 
-	// If altitude reported 25 foot increments
+	// If altitude reported 25-foot increments
 	if qBit {
 
 		// If the Q bit equals 1, the 11-bit field represented by bits 8 to 14 and 16 to 18
-		// shall represent a binary coded field with a least significant bit (LSB) of 25 ft. The binary value of the
+		// shall represent a binary coded field with a "least significant bit" (LSB) of 25 ft. The binary value of the
 		// positive decimal integer “N” shall be encoded to report pressure-altitude in the range [(25 N – 1 000)
 		// plus or minus 12.5 ft]. The coding of 3.1.2.6.5.4 c) shall be used to report pressure-altitude
 		// above 50 187.5 ft.

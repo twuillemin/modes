@@ -59,7 +59,7 @@ func TestReadFormatDF18Valid(t *testing.T) {
 
 func buildValidDF18Message() common.MessageData {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//
 	//     DF     CA   |        AA       |        AA       |        AA       |    ME   |   PI
 	// 1 0 0 0 1 c c c | a a a a a a a a | a a a a a a a a | a a a a a a a a | 56 bits | 24bits

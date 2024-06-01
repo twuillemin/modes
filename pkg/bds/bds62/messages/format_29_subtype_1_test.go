@@ -190,7 +190,7 @@ func buildValidFormat29Subtype1Message() []byte {
 	data[4] = 0xAB
 
 	// 0101 1111: NACp: EPU < 10 m ([1] 010) + NicBaro: Crosschecked (1) + SIL <= 10-7 (11) +
-	// MCP status: Valid (1) + auto pilot engaged (1)
+	// MCP status: Valid (1) + autopilot engaged (1)
 	data[5] = 0x5F
 
 	// 1101 1100: VNAV engaged (1) + Altitude hold engaged (1) + Reserved (0) + Approach engaged (1)

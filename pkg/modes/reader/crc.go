@@ -13,17 +13,17 @@ import (
 // Identifier. Only the messages DF18 and DF17 always give a valid Address.
 //
 // Params:
-//    - message: The message to check
-//    - data: The raw data of the message
-//    - allowedAddresses: For the messages that have uncertainty when computing the Address, allows to reject the
-//                        messages having an unknown Address. Leave to nil to ignore.
-//    - allowedInterrogatorIdentifiers: For the messages that have uncertainty when computing Interrogator Identifiers,
-//                                      allows to reject the messages having an unknown Interrogator Identifier.
+//   - message: The message to check
+//   - data: The raw data of the message
+//   - allowedAddresses: For the messages that have uncertainty when computing the Address, allows to reject the
+//     messages having an unknown Address. Leave to nil to ignore.
+//   - allowedInterrogatorIdentifiers: For the messages that have uncertainty when computing Interrogator Identifiers,
+//     allows to reject the messages having an unknown Interrogator Identifier.
 //
 // Notes:
-//    - the allowedAddresses is not used for messages DF17 and DF18 are always giving a valid address.
+//   - the allowedAddresses is not used for messages DF17 and DF18 are always giving a valid address.
 //
-// Returns the ICAO Interrogator Identifiers for messages DF11 and Address for all other.
+// Returns the ICAO Interrogator Identifiers for messages DF11 and Address for all others.
 func CheckCRC(
 	message messages.ModeSMessage,
 	data []byte,
@@ -44,7 +44,7 @@ func checkCRCDF11(
 	data []byte,
 	allowedInterrogatorIdentifiers map[common.ICAOAddress]bool) (common.ICAOAddress, error) {
 
-	// For DF11, the ICAO code is not returned (as it is the base of the message). Instead the interrogator id (II)
+	// For DF11, the ICAO code is not returned (as it is the base of the message). Instead, the interrogator id (II)
 	// is used to XOR the parity. So, an interrogator can detect if a message is a reply to its interrogation.
 	contentParity := computeParity(data[:4])
 	messageParity := bitutils.Pack3Bytes(data[4], data[5], data[6])
@@ -66,7 +66,7 @@ func checkCRCDF17And18(data []byte) (common.ICAOAddress, error) {
 	// For DF17 and DF18 (extended squitter), the ICAO address is returned as the first 3 bytes of the payload.
 	messageICAO := common.ICAOAddress(bitutils.Pack3Bytes(data[1], data[2], data[3]))
 
-	// The parity is XORed against an an Interrogator Id equals to 0
+	// The parity is XORed against an Interrogator ID equals to 0
 	contentParity := computeParity(data[:11])
 	messageParity := bitutils.Pack3Bytes(data[11], data[12], data[13])
 
@@ -99,8 +99,8 @@ func checkCRCOther(
 	return address, nil
 }
 
-// 	crcPolynomial is the polynomial for the CRC redundancy check
-//  Note: we assume that the degree of the polynomial is divisible by 8 (holds for Mode S) and the msb is left out
+//		crcPolynomial is the polynomial for the CRC redundancy check
+//	 Note: we assume that the degree of the polynomial is divisible by 8 (holds for Mode S) and the msb is left out
 //
 // Values defined according to Annex 10 V4
 var crcPolynomial = []uint8{0xFF, 0xF4, 0x09}
@@ -109,7 +109,7 @@ var crcPolynomial = []uint8{0xFF, 0xF4, 0x09}
 // http://www.eurocontrol.int/eec/gallery/content/public/document/eec/report/1994/022_CRC_calculations_for_Mode_S.pdf
 //
 // params:
-//    - data: The data for which to compute parity
+//   - data: The data for which to compute parity
 //
 // Returns the CRC (3 bytes)
 func computeParity(data []byte) uint32 {

@@ -94,7 +94,7 @@ func TestReadResolutionAdvisoryMultipleThreatSameSeparationValid(t *testing.T) {
 
 func buildValidResolutionAdvisoryMultipleThreatSameSeparationMessage() []byte {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//        0                 1                 2                 3                 4                 5
 	//                 |             RAC |  R  R M  T  TID |       TID       |       TID       |       TID       |
 	//       ARA       |   ARA       RAC |  A  A T  T  d d | d d d d d d d d | d d d d d d d d | d d d d d d _ _ |
@@ -241,7 +241,7 @@ func TestReadResolutionAdvisoryMultipleThreatDifferentSeparationValid(t *testing
 
 func buildValidResolutionAdvisoryMultipleThreatDifferentSeparation() []byte {
 
-	// Format of the message is as follow:
+	// Format of the message is as follows:
 	//        0                 1                 2                 3                 4                 5
 	//                 |             RAC |  C  T E  I  TIDA|       TIDA      | TIDA    TIDR    |TIDR     TIDB    |
 	// a a a a a a a a | a a a a a a c c | c c t m i i a a | a a a a a a a a | a a a r r r r r | r r b b b b b b |

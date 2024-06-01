@@ -16,7 +16,7 @@ import (
 // fields bit 26 (M-bit) and bit 28 (Q-bit):
 //   - M = 0 and Q = 0 => 100 foot increments
 //   - M = 0 and Q = 1 => 25 foot increments. For this method, the coding method is only able to provide values between
-//   minus 1 000 ft and plus 50 175 ft.
+//     minus 1 000 ft and plus 50 175 ft.
 //   - M = 1 => metric units
 //
 // Defined at 3.1.2.6.5.4
@@ -77,11 +77,11 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	// Get the Q bit
 	qBit := (altitudeCode & 0x0010) != 0
 
-	// If altitude reported 25 foot increments
+	// If altitude reported 25-foot increments
 	if qBit {
 
 		// If the M bit equals 0 and the Q bit equals 1, the 11-bit field represented by bits 20 to 25, 27 and 29 to 32
-		// shall represent a binary coded field with a least significant bit (LSB) of 25 ft. The binary value of the
+		// shall represent a binary coded field with a "least significant bit" (LSB) of 25 ft. The binary value of the
 		// positive decimal integer “N” shall be encoded to report pressure-altitude in the range [(25 N – 1 000)
 		// plus or minus 12.5 ft]. The coding of 3.1.2.6.5.4 c) shall be used to report pressure-altitude
 		// above 50 187.5 ft.
