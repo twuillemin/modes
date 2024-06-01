@@ -5,12 +5,13 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/adsb"
 	"log"
 	"os"
 
 	resolutionAdvisoryMessage "github.com/twuillemin/modes/pkg/acas/ra/messages"
-	"github.com/twuillemin/modes/pkg/bds/adsb"
-	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
+	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
+	commbReader "github.com/twuillemin/modes/pkg/commb/reader"
 	modeSCommon "github.com/twuillemin/modes/pkg/modes/common"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
@@ -128,6 +129,10 @@ func processSingleLine(str string, readerLevel adsb.ReaderLevel) {
 		postProcessMessage17(messageModeS.(*modeSMessages.MessageDF17), readerLevel)
 	case 18:
 		postProcessMessage18(messageModeS.(*modeSMessages.MessageDF18), readerLevel)
+	case 20:
+		postProcessMessage20(messageModeS.(*modeSMessages.MessageDF20))
+	case 21:
+		postProcessMessage21(messageModeS.(*modeSMessages.MessageDF21))
 	}
 
 	fmt.Printf("\n")
@@ -188,4 +193,28 @@ func processADSBMessage(data []byte, readerLevel adsb.ReaderLevel) {
 	}
 
 	fmt.Printf("%v\n", messageADSB.ToString())
+}
+
+func postProcessMessage20(messageDF20 *modeSMessages.MessageDF20) {
+
+	processCommBMessage(messageDF20.MessageCommB)
+}
+
+func postProcessMessage21(messageDF21 *modeSMessages.MessageDF21) {
+
+	processCommBMessage(messageDF21.MessageCommB)
+}
+
+func processCommBMessage(data []byte) {
+
+	fmt.Printf(" -- Comm-B Information --\n")
+
+	// Get the content
+	message, err := commbReader.ReadCommBMessage(data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Printf("%v\n", message.ToString())
 }

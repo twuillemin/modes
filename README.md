@@ -90,7 +90,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
-	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
+	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
 	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
 )
