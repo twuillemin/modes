@@ -1,18 +1,22 @@
 # Introduction
+
 ModeS is a Mode-S and ADSB decoder written in Go. The project is a pure Go library, without dependency, that allows to
 quickly deformat and access the content of Mode-S message.
 
 A small example application is provided that can be used to dump the content of a message. A more complete usage
-of the library is done in the sister project ModeS Viewer (https://github.com/twuillemin/modes-viewer). 
+of the library is done in the sister project ModeS Viewer (https://github.com/twuillemin/modes-viewer).
 
 The main goal of this project is exactitude, code clarity and completeness (if achievable).
 
 # Warning
+
 This project is experimental and has bugs and issues. It should by no means be used in a context where one will have
 to rely (in the broadest meaning) on the provided information.
 
 # Format Supported
+
 ## Mode-S
+
 | Downlink Format | Description                              |
 |-----------------|------------------------------------------| 
 | DF-0            | Short air-air surveillance (ACAS)        | 
@@ -28,6 +32,7 @@ to rely (in the broadest meaning) on the provided information.
 | DF-24           | Comm-D (ELM)                             |
 
 ## ADSB
+
 | Code | BDS | Description        | V0 | V1 | V2 |
 |------|-----|--------------------|----|----|----| 
 | 0    | ?   | No Position        |    |    |    |
@@ -64,13 +69,16 @@ to rely (in the broadest meaning) on the provided information.
 | 31   | 6,5 | Operational status | OK | OK | OK |
 
 ## ACAS
+
 | Code | Description         |
 |------|---------------------|
 | 3,0  | Resolution Advisory | 
 
 # Usage
+
 ## Library
-A full example using the library is given in the file _main.go_ which goes from a single "line" of data 
+
+A full example using the library is given in the file _main.go_ which goes from a single "line" of data
 received to outputting the detailed content.
 
 A simple workflow can be:
@@ -79,12 +87,12 @@ A simple workflow can be:
 package main
 
 import (
-    "encoding/hex"
-    "fmt"
-    "github.com/twuillemin/modes/pkg/bds/adsb"
-    adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
-    modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
-    modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
+	"encoding/hex"
+	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/adsb"
+	adsbReader "github.com/twuillemin/modes/pkg/bds/reader"
+	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
+	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
 )
 
 func main() {
@@ -108,6 +116,7 @@ func main() {
 ```
 
 which should hopefully print a report like:
+
 ```
 Message:                                       29 - Target state and status information (BDS 6,2) [ADSB V2]
 Subtype:                                       1 - Subtype 1
@@ -129,41 +138,52 @@ TCAS / ACAS Operational :                      1 - TCAS/ACAS is operational
 ```
 
 All the values printed are in fact extracted in their own structure, using either numerical value or enumeration when
-applicable. The _ToString()_ function is present on most if not all the attributes and just builds a readable 
+applicable. The _ToString()_ function is present on most if not all the attributes and just builds a readable
 representation of the data otherwise accessible by the structure of the object.
 
 ## Application
+
 For extracting a single line content
+
 ```bash
 go run cmd/main.go 8D40768DEA3AB864013C088209CA
 ```
 
 For reading a file with multiple lines
+
 ```bash
 go run cmd/main.go --file .\example\example2.txt
 ```
 
 ## Application parameters
- - **file**: The name of the file to process
- - **adsb_reader_level**: The level of ADSB to use when reading ADSB data. From 0 to 2.
+
+- **file**: The name of the file to process
+- **adsb_reader_level**: The level of ADSB to use when reading ADSB data. From 0 to 2.
 
 # Sources
+
 The main sources used are:
- * ICAO, Annex 10, Volume IV (July 2014): Surveillance and Collision Avoidance System
- * ICAO, Doc 9871, AN/460: Technical Provisions for Mode S Services and Extended Squitter
- 
+
+* ICAO, Annex 10, Volume IV (July 2014): Surveillance and Collision Avoidance System
+* ICAO, Doc 9871, AN/460: Technical Provisions for Mode S Services and Extended Squitter
+
 I am always open to add new valid sources of information. In particular, information about ACAS messages are welcome.
 
 # Versions
- * v0.4.0: 
+
+* v0.5.0:
+    * Fix: Decoding of HCR and NIC for BDS 0,6
+    * The ADSB reader level is no more inferred when possible, but always respect the given value
+    * Cleaning of ADSB messages readers
+* v0.4.0:
     * Mode ADSBSpy and "current state" of plane into a separate project
- * v0.3.0:
+* v0.3.0:
     * Clean relation Format, SubType Version for ADSB messages
     * Bug fixes on some fields not well fetched from messages
     * Add unitary test on all main classes
- * v0.2.0: 
+* v0.2.0:
     * First public version
- * v0.1.0: First version
+* v0.1.0: First version
 
 # License
 
