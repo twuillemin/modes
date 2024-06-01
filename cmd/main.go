@@ -20,18 +20,31 @@ import (
 func main() {
 
 	fileName := flag.String("file", "", "the name of the file to be processed")
+	adsbReaderLevelParam := flag.Int("adsb_reader_level", 0, "the version of ADSB reader 0, 1 or 2 to use (ADSB V0 by default)")
 	flag.Parse()
+
+	adsbReaderLevel := adsb.ReaderLevel0
+	switch *adsbReaderLevelParam {
+	case 0:
+		adsbReaderLevel = adsb.ReaderLevel0
+	case 1:
+		adsbReaderLevel = adsb.ReaderLevel1
+	case 2:
+		adsbReaderLevel = adsb.ReaderLevel2
+	default:
+		panic(fmt.Sprintf("Unable to use the given ADSB level %v", *adsbReaderLevelParam))
+	}
 
 	// If a filename is given, use it and quit
 	if len(*fileName) > 0 {
 		for _, str := range readFile(*fileName) {
-			processSingleLine(str)
+			processSingleLine(str, adsbReaderLevel)
 		}
 		return
 	}
 
 	if len(os.Args) > 1 {
-		processSingleLine(os.Args[1])
+		processSingleLine(os.Args[1], adsbReaderLevel)
 	} else {
 		fmt.Printf("No data provided")
 	}
@@ -68,8 +81,8 @@ func readFile(fileName string) []string {
 // processSingleLine processes a single line of data in the form of hexadecimal text, like "8D4BAB4558AB031C446849B72535"
 //
 // Params:
-//    - str: the line to process
-func processSingleLine(str string) {
+//   - str: the line to process
+func processSingleLine(str string, readerLevel adsb.ReaderLevel) {
 
 	fmt.Printf("Reading: %s\n", str)
 
@@ -112,9 +125,9 @@ func processSingleLine(str string) {
 	case 16:
 		postProcessMessage16(messageModeS.(*modeSMessages.MessageDF16))
 	case 17:
-		postProcessMessage17(messageModeS.(*modeSMessages.MessageDF17))
+		postProcessMessage17(messageModeS.(*modeSMessages.MessageDF17), readerLevel)
 	case 18:
-		postProcessMessage18(messageModeS.(*modeSMessages.MessageDF18))
+		postProcessMessage18(messageModeS.(*modeSMessages.MessageDF18), readerLevel)
 	}
 
 	fmt.Printf("\n")
@@ -143,16 +156,16 @@ func postProcessMessage16(messageDF16 *modeSMessages.MessageDF16) {
 	}
 }
 
-func postProcessMessage17(messageDF17 *modeSMessages.MessageDF17) {
+func postProcessMessage17(messageDF17 *modeSMessages.MessageDF17, readerLevel adsb.ReaderLevel) {
 
-	processADSBMessage(messageDF17.MessageExtendedSquitter)
+	processADSBMessage(messageDF17.MessageExtendedSquitter, readerLevel)
 }
 
-func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18) {
+func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18, readerLevel adsb.ReaderLevel) {
 
 	if messageDF18.ControlField == modeSFields.ControlFieldADSB ||
 		messageDF18.ControlField == modeSFields.ControlFieldADSBReserved {
-		processADSBMessage(messageDF18.MessageExtendedSquitter)
+		processADSBMessage(messageDF18.MessageExtendedSquitter, readerLevel)
 	} else if messageDF18.ControlField == modeSFields.ControlFieldTISBFineFormat ||
 		messageDF18.ControlField == modeSFields.ControlFieldTISBCoarseFormat ||
 		messageDF18.ControlField == modeSFields.ControlFieldTISBReservedManagement ||
@@ -163,12 +176,12 @@ func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18) {
 	}
 }
 
-func processADSBMessage(data []byte) {
+func processADSBMessage(data []byte, readerLevel adsb.ReaderLevel) {
 
 	fmt.Printf(" -- ADSB Information --\n")
 
 	// Get the content
-	messageADSB, _, errADSB := adsbReader.ReadADSBMessage(adsb.ReaderLevel2, false, false, data)
+	messageADSB, _, errADSB := adsbReader.ReadADSBMessage(readerLevel, false, false, data)
 	if errADSB != nil {
 		fmt.Println(errADSB)
 		return

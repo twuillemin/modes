@@ -140,8 +140,12 @@ go run cmd/main.go 8D40768DEA3AB864013C088209CA
 
 For reading a file with multiple lines
 ```bash
-go run cmd/main.go -file .\example\example2.txt
+go run cmd/main.go --file .\example\example2.txt
 ```
+
+## Application parameters
+ - **file**: The name of the file to process
+ - **adsb_reader_level**: The level of ADSB to use when reading ADSB data. From 0 to 2.
 
 # Sources
 The main sources used are:
