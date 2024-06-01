@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
 	"github.com/twuillemin/modes/pkg/bds/bds"
-	fields2 "github.com/twuillemin/modes/pkg/bds/bds08/fields"
+	"github.com/twuillemin/modes/pkg/bds/bds08/fields"
 )
 
 // Format04 is a message at the format BDS 0,8
 type Format04 struct {
-	AircraftCategory       fields2.AircraftCategorySetA
-	AircraftIdentification fields2.AircraftIdentification
+	AircraftCategory       fields.AircraftCategorySetA
+	AircraftIdentification fields.AircraftIdentification
 }
 
 // GetMessageFormat returns the ADSB format of the message
@@ -39,12 +39,12 @@ func (message Format04) GetMaximumADSBLevel() adsb.MessageLevel {
 }
 
 // GetAircraftCategory returns the category of the aircraft
-func (message Format04) GetAircraftCategory() fields2.AircraftCategory {
+func (message Format04) GetAircraftCategory() fields.AircraftCategory {
 	return message.AircraftCategory
 }
 
 // GetAircraftIdentification returns the identification of the aircraft
-func (message Format04) GetAircraftIdentification() fields2.AircraftIdentification {
+func (message Format04) GetAircraftIdentification() fields.AircraftIdentification {
 	return message.AircraftIdentification
 }
 
@@ -66,7 +66,7 @@ func ReadFormat04(data []byte) (*Format04, error) {
 	}
 
 	return &Format04{
-		AircraftCategory:       fields2.ReadAircraftCategorySetA(data),
-		AircraftIdentification: fields2.ReadAircraftIdentification(data),
+		AircraftCategory:       fields.ReadAircraftCategorySetA(data),
+		AircraftIdentification: fields.ReadAircraftIdentification(data),
 	}, nil
 }
