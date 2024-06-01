@@ -181,7 +181,7 @@ func processADSBMessage(data []byte, readerLevel adsb.ReaderLevel) {
 	fmt.Printf(" -- ADSB Information --\n")
 
 	// Get the content
-	messageADSB, _, errADSB := adsbReader.ReadADSBMessage(readerLevel, false, false, data)
+	messageADSB, errADSB := adsbReader.ReadADSBMessage(readerLevel, false, false, data)
 	if errADSB != nil {
 		fmt.Println(errADSB)
 		return

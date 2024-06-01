@@ -31,14 +31,14 @@ func bds08ToString(message MessageBDS08) string {
 // ADSB V2, the returned ADSBLevel is always the given one.
 //
 // Params:
-//    - adsbLevel: The ADSB level request (not used, but present for coherency)
-//    - data: The data of the message must be 7 bytes
+//   - adsbLevel: The ADSB level request (currently unused)
+//   - data: The data of the message must be 7 bytes
 //
-// Returns the message read, the given ADSBLevel or an error
-func ReadBDS08(adsbLevel adsb.ReaderLevel, data []byte) (MessageBDS08, adsb.ReaderLevel, error) {
+// Returns the message read or an error
+func ReadBDS08(_ adsb.ReaderLevel, data []byte) (MessageBDS08, error) {
 
 	if len(data) != 7 {
-		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
+		return nil, errors.New("the data for BDS 0,8 message must be 7 bytes long")
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
@@ -46,17 +46,17 @@ func ReadBDS08(adsbLevel adsb.ReaderLevel, data []byte) (MessageBDS08, adsb.Read
 	switch formatTypeCode {
 	case 1:
 		message, err := ReadFormat01(data)
-		return message, adsbLevel, err
+		return message, err
 	case 2:
 		message, err := ReadFormat02(data)
-		return message, adsbLevel, err
+		return message, err
 	case 3:
 		message, err := ReadFormat03(data)
-		return message, adsbLevel, err
+		return message, err
 	case 4:
 		message, err := ReadFormat04(data)
-		return message, adsbLevel, err
+		return message, err
+	default:
+		return nil, fmt.Errorf("the Format Type %v of BSD 0,8 is not supported", formatTypeCode)
 	}
-
-	return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,8 format", formatTypeCode)
 }

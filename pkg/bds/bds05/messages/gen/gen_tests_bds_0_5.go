@@ -89,15 +89,12 @@ func TestDetectAndRead{{ .Name }}V0Valid(t *testing.T) {
 	data := buildValidBDS05V0Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel0, false, data)
+	msg, err := ReadBDS05(adsb.ReaderLevel0, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V0); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V0, but got %v instead", msg.GetMessageFormat().ToString())
-	}
-	if adsbResult != adsb.ReaderLevel0 {
-		t.Errorf("expected adsbLevel to be returned as ReaderLevel0, but got %v instead", adsbResult.ToString())
 	}
 }
 
@@ -106,15 +103,12 @@ func TestDetectAndRead{{ .Name }}V1Valid(t *testing.T) {
 	data := buildValidBDS05V1Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel1, false, data)
+	msg, err := ReadBDS05(adsb.ReaderLevel1, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V1); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V1, but got %v instead", msg.GetMessageFormat().ToString())
-	}
-	if adsbResult != adsb.ReaderLevel1 {
-		t.Errorf("expected adsbLevel to be returned as ReaderLevel1, but got %v instead", adsbResult.ToString())
 	}
 }
 
@@ -123,15 +117,12 @@ func TestDetectAndRead{{ .Name }}V2Valid(t *testing.T) {
 	data := buildValidBDS05V2Message()
 	data[0] = data[0] | {{ .MessageCode }}
 
-	msg, adsbResult, err := ReadBDS05(adsb.ReaderLevel2, false, data)
+	msg, err := ReadBDS05(adsb.ReaderLevel2, false, data)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if _, ok := msg.(*{{ .Name }}V2); !ok {
 		t.Errorf("expected a message of type {{ .Name }}V2, but got %v instead", msg.GetMessageFormat().ToString())
-	}
-	if adsbResult != adsb.ReaderLevel2 {
-		t.Errorf("expected adsbLevel to be returned as Level2, but got %v instead", adsbResult.ToString())
 	}
 }
 {{ end }}
@@ -142,7 +133,7 @@ func TestDetectBadFormat(t *testing.T) {
 	data := buildValidBDS05V0Message()
 	data[0] = (data[0] & 0x07) | 0x08
 
-	_, _, err := ReadBDS05(adsb.ReaderLevel0, false, data)
+	_, err := ReadBDS05(adsb.ReaderLevel0, false, data)
 	if err == nil {
 		t.Fatal("Expected an error while reading a message with format 01, but message was read")
 	}

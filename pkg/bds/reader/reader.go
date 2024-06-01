@@ -2,6 +2,7 @@ package reader
 
 import (
 	"errors"
+	"fmt"
 	"github.com/twuillemin/modes/pkg/bds/adsb"
 	messages05 "github.com/twuillemin/modes/pkg/bds/bds05/messages"
 	messages06 "github.com/twuillemin/modes/pkg/bds/bds06/messages"
@@ -15,16 +16,16 @@ import (
 // ReadADSBMessage reads and parse an ADSB message.
 //
 // params:
-//    - adsbLevel: The ADSB level request (not used, but present for coherency)
-//    - nicSupplementA: The NIC Supplement-A comes from the Aircraft  Operational  Status - Message Type Format 31 (see
-//                      C.2.3.10.20). If no previous Type Format 31 message was received before calling this function, a
-//                      default value of 0 can be used.
-//                      Note: This value is name simply NIC Supplement in ADSB V1
-//    - nicSupplementC: The NIC Supplement-C comes from the Surface Capability Class (CC) Code  Subfield  of  the
-//                      Aircraft  Operational  Status - Message Type Format 31 (see  C.2.3.10.20). If no previous Type
-//                      Format 31 message was received before calling this function, a default value of 0 can be used.
-//                      Note: This value does is only present since ADSB V2
-//    - message: The body of the message. The message must be 7 bytes long
+//   - adsbLevel: The ADSB level request (not used, but present for coherency)
+//   - nicSupplementA: The NIC Supplement-A comes from the Aircraft  Operational  Status - Message Type Format 31 (see
+//     C.2.3.10.20). If no previous Type Format 31 message was received before calling this function, a
+//     default value of 0 can be used.
+//     Note: This value is name simply NIC Supplement in ADSB V1
+//   - nicSupplementC: The NIC Supplement-C comes from the Surface Capability Class (CC) Code  Subfield  of  the
+//     Aircraft  Operational  Status - Message Type Format 31 (see  C.2.3.10.20). If no previous Type
+//     Format 31 message was received before calling this function, a default value of 0 can be used.
+//     Note: This value does is only present since ADSB V2
+//   - message: The body of the message. The message must be 7 bytes long
 //
 // Return the parsed message, the detected ADSB ReaderLevel and an optional error. The detected ADSB ReaderLevel will generally be
 // the same as the given one, except if the decoded message has information to change it.
@@ -32,10 +33,10 @@ func ReadADSBMessage(
 	adsbLevel adsb.ReaderLevel,
 	nicSupplementA bool,
 	nicSupplementC bool,
-	data []byte) (adsb.Message, adsb.ReaderLevel, error) {
+	data []byte) (adsb.Message, error) {
 
 	if len(data) != 7 {
-		return nil, adsbLevel, errors.New("the data for ADSB message must be 7 bytes long")
+		return nil, errors.New("the data for ADSB message must be 7 bytes long")
 	}
 
 	// -----------------------------------------------------
@@ -93,5 +94,5 @@ func ReadADSBMessage(
 		return messages65.ReadBDS65(adsbLevel, data)
 	}
 
-	return nil, adsbLevel, nil
+	return nil, fmt.Errorf("the formatTypeCode %v is not supported", formatTypeCode)
 }

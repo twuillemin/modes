@@ -33,20 +33,20 @@ type MessageBDS09 interface {
 // ADSB V2, the returned ADSBLevel is always the given one.
 //
 // Params:
-//    - adsbLevel: The ADSB level request (not used, but present for coherency)
-//    - data: The data of the message must be 7 bytes
+//   - adsbLevel: The ADSB level request (currently unused)
+//   - data: The data of the message must be 7 bytes
 //
-// Returns the message read, the given ADSBLevel or an error
-func ReadBDS09(adsbLevel adsb.ReaderLevel, data []byte) (MessageBDS09, adsb.ReaderLevel, error) {
+// Returns the message read or an error
+func ReadBDS09(_ adsb.ReaderLevel, data []byte) (MessageBDS09, error) {
 
 	if len(data) != 7 {
-		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
+		return nil, errors.New("the data for BDS 0,9 message must be 7 bytes long")
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
 	if formatTypeCode != 19 {
-		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,9 format", formatTypeCode)
+		return nil, fmt.Errorf("the Format Type %v of BSD 0,9 is not supported", formatTypeCode)
 	}
 
 	// Read the subtype
@@ -55,18 +55,17 @@ func ReadBDS09(adsbLevel adsb.ReaderLevel, data []byte) (MessageBDS09, adsb.Read
 	switch subType {
 	case fields.SubtypeGroundSpeedNormal:
 		message, err := ReadFormat19GroundSpeedNormal(data)
-		return message, adsbLevel, err
+		return message, err
 	case fields.SubtypeGroundSpeedSupersonic:
 		message, err := ReadFormat19GroundSpeedSupersonic(data)
-		return message, adsbLevel, err
+		return message, err
 	case fields.SubtypeAirspeedNormal:
 		message, err := ReadFormat19AirSpeedNormal(data)
-		return message, adsbLevel, err
+		return message, err
 	case fields.SubtypeAirspeedSupersonic:
 		message, err := ReadFormat19AirSpeedSupersonic(data)
-		return message, adsbLevel, err
-
+		return message, err
 	default:
-		return nil, adsbLevel, fmt.Errorf("the subtype %v of SubtypeAirborne Velocity is not supported", formatTypeCode)
+		return nil, fmt.Errorf("the subtype %v of BSD 0,9 is not supported", subType)
 	}
 }

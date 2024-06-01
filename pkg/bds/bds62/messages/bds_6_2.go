@@ -16,44 +16,41 @@ import (
 //   - adsbLevel: The ADSB level request
 //   - data: The data of the message must be 7 bytes
 //
-// Returns the message read, the given ADSBLevel or an error
-func ReadBDS62(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, adsb.ReaderLevel, error) {
+// Returns the message read or an error
+func ReadBDS62(adsbLevel adsb.ReaderLevel, data []byte) (adsb.Message, error) {
 
 	if len(data) != 7 {
-		return nil, adsbLevel, errors.New("the data for BDS message must be 7 bytes long")
+		return nil, errors.New("the data for BDS 6,2 message must be 7 bytes long")
 	}
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 	subType := (data[0] & 0x06) >> 1
 
 	if formatTypeCode != 29 {
-		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 6,2 format", formatTypeCode)
+		return nil, fmt.Errorf("the Format Type %v of BSD 6,2 is not supported", formatTypeCode)
 	}
 
 	switch adsbLevel {
 
-	case adsb.ReaderLevel0:
-		return nil, adsbLevel, fmt.Errorf("the BDS 6,2 format is not readable as an ADSB V0 message")
-
 	case adsb.ReaderLevel1:
-		if subType == 0 {
-			message, err := ReadFormat29Subtype0(data)
-			return message, adsbLevel, err
-		} else {
-			return nil, adsbLevel, fmt.Errorf("the subtype %v of Target state and status information is not supported", subType)
+		switch subType {
+		case 0:
+			return ReadFormat29Subtype0(data)
+		default:
+			return nil, fmt.Errorf("the subtype %v of BSD 6,2 is not supported", subType)
 		}
 
 	case adsb.ReaderLevel2:
-		if subType == 0 {
-			message, err := ReadFormat29Subtype0(data)
-			return message, adsbLevel, err
-		} else if subType == 1 {
-			message, err := ReadFormat29Subtype1(data)
-			return message, adsbLevel, err
-		} else {
-			return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 6,2 format", formatTypeCode)
+		switch subType {
+		case 0:
+			return ReadFormat29Subtype0(data)
+		case 1:
+			return ReadFormat29Subtype1(data)
+		default:
+			return nil, fmt.Errorf("the subtype %v of BSD 6,2 is not supported", subType)
 		}
-	}
 
-	return nil, adsbLevel, fmt.Errorf("the BDS 6,2 format is not readable with the given reader level")
+	default:
+		return nil, fmt.Errorf("the BDS 6,2 format is not readable with the given reader level")
+	}
 }
