@@ -67,10 +67,6 @@ func ReadBDS06(
 
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
-	if formatTypeCode < 5 || formatTypeCode > 8 {
-		return nil, adsbLevel, fmt.Errorf("the format type code %v can not be read as a BDS 0,6 format", formatTypeCode)
-	}
-
 	switch adsbLevel {
 	case adsb.ReaderLevel0Exactly, adsb.ReaderLevel0OrMore:
 		switch formatTypeCode {
