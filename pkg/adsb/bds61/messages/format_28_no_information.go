@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds61/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 )
 
 // Format28NoInformation is a message at the format BDS 6,1
@@ -14,11 +13,6 @@ type Format28NoInformation struct {
 // GetMessageFormat returns the ADSB format of the message
 func (message Format28NoInformation) GetMessageFormat() adsb.MessageFormat {
 	return adsb.Format28
-}
-
-// GetRegister returns the register of the message
-func (message Format28NoInformation) GetRegister() bds.Register {
-	return adsb.Format28.GetRegister()
 }
 
 // GetSubtype returns the Subtype

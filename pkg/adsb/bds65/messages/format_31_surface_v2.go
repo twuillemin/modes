@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds65/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/common"
 )
 
@@ -27,11 +26,6 @@ type Format31SurfaceV2 struct {
 // GetMessageFormat returns the ADSB format of the message
 func (message Format31SurfaceV2) GetMessageFormat() adsb.MessageFormat {
 	return adsb.Format31
-}
-
-// GetRegister returns the register of the message
-func (message Format31SurfaceV2) GetRegister() bds.Register {
-	return adsb.Format31.GetRegister()
 }
 
 // GetSubtype returns the Subtype

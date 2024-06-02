@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds09/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 )
 
 // Format19GroundSpeedSupersonic is a message at the format BDS 9,0
@@ -26,11 +25,6 @@ type Format19GroundSpeedSupersonic struct {
 // GetMessageFormat returns the ADSB format of the message
 func (message Format19GroundSpeedSupersonic) GetMessageFormat() adsb.MessageFormat {
 	return adsb.Format19
-}
-
-// GetRegister returns the register of the message
-func (message Format19GroundSpeedSupersonic) GetRegister() bds.Register {
-	return adsb.Format19.GetRegister()
 }
 
 // GetFormatTypeCode returns the Format Type Code

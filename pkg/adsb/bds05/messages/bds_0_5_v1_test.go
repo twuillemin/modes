@@ -2,7 +2,6 @@ package messages
 
 import (
 	"github.com/twuillemin/modes/pkg/adsb/bds05/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 	"testing"
 )
 
@@ -13,12 +12,6 @@ import (
 // --------------------------------------------------------------------------------
 
 func isBDS05V1Valid(t *testing.T, msg MessageBDS05V1) {
-
-	if msg.GetRegister().GetId() != bds.BDS05.GetId() {
-		t.Errorf("Expected Register \"%v\", got \"%v\"",
-			bds.BDS05.GetId(),
-			msg.GetRegister().GetId())
-	}
 
 	if msg.GetSurveillanceStatus() != fields.SSTemporaryAlert {
 		t.Errorf("Expected Time \"%v\", got \"%v\"",

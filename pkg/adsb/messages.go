@@ -2,7 +2,6 @@ package adsb
 
 import (
 	"fmt"
-	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/common"
 	"strings"
 )
@@ -42,7 +41,7 @@ type Subtype interface {
 
 // Message is the basic interface that ADSB messages are expected to implement
 type Message interface {
-	bds.Message
+	common.Printable
 
 	// GetMessageFormat returns the ADSB format of the message
 	GetMessageFormat() MessageFormat

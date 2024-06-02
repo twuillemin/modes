@@ -3,7 +3,6 @@ package messages
 import (
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds61/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 	"testing"
 )
 
@@ -18,12 +17,6 @@ func TestReadFormat28StatusV0Valid(t *testing.T) {
 		t.Errorf("Expected Format \"%v\", got \"%v\"",
 			adsb.Format28.ToString(),
 			msg.GetMessageFormat().ToString())
-	}
-
-	if msg.GetRegister().GetId() != bds.BDS61.GetId() {
-		t.Errorf("Expected Register \"%v\", got \"%v\"",
-			bds.BDS61.GetId(),
-			msg.GetRegister().GetId())
 	}
 
 	if msg.GetSubtype() != fields.SubtypeEmergencyPriorityStatus {

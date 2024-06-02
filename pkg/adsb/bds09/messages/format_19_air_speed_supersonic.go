@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds09/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 )
 
 // Format19AirSpeedSupersonic is a message at the format BDS 9,0
@@ -26,11 +25,6 @@ type Format19AirSpeedSupersonic struct {
 // GetMessageFormat returns the ADSB format of the message
 func (message Format19AirSpeedSupersonic) GetMessageFormat() adsb.MessageFormat {
 	return adsb.Format19
-}
-
-// GetRegister returns the register of the message
-func (message Format19AirSpeedSupersonic) GetRegister() bds.Register {
-	return adsb.Format19.GetRegister()
 }
 
 // GetSubtype returns the code of the Operational Status Sub Type

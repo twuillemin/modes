@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds65/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 )
 
 // Format31Reserved is a message at the format BDS 6,5 the ADSB V1
@@ -22,11 +21,6 @@ type Format31Reserved struct {
 // GetMessageFormat returns the ADSB format of the message
 func (message Format31Reserved) GetMessageFormat() adsb.MessageFormat {
 	return adsb.Format31
-}
-
-// GetRegister returns the register of the message
-func (message Format31Reserved) GetRegister() bds.Register {
-	return adsb.Format31.GetRegister()
 }
 
 // GetSubtype returns the Subtype

@@ -33,5 +33,5 @@ func ReadAircraftIdentification(data []byte) AircraftIdentification {
 	}
 
 	// Return the value
-	return AircraftIdentification(string(chars))
+	return AircraftIdentification(chars)
 }

@@ -2,17 +2,10 @@ package messages
 
 import (
 	"github.com/twuillemin/modes/pkg/adsb/bds06/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 	"testing"
 )
 
 func isBDS06V2Valid(t *testing.T, msg MessageBDS06) {
-
-	if msg.GetRegister().GetId() != bds.BDS06.GetId() {
-		t.Errorf("Expected Register \"%v\", got \"%v\"",
-			bds.BDS06.GetId(),
-			msg.GetRegister().GetId())
-	}
 
 	if movement := msg.GetMovement().GetMovement(); movement < 112.5 || movement > 113.0 {
 		t.Errorf("Expected Movement between 112.5 and 113 km/h, got \"%v\"",

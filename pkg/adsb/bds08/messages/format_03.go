@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
 	"github.com/twuillemin/modes/pkg/adsb/bds08/fields"
-	"github.com/twuillemin/modes/pkg/bds"
 )
 
 // Format03 is a message at the format BDS 0,8
@@ -16,11 +15,6 @@ type Format03 struct {
 // GetMessageFormat returns the ADSB format of the message
 func (message Format03) GetMessageFormat() adsb.MessageFormat {
 	return adsb.Format03
-}
-
-// GetRegister returns the register of the message
-func (message Format03) GetRegister() bds.Register {
-	return adsb.Format03.GetRegister()
 }
 
 // GetSubtype returns the subtype of the message if any
