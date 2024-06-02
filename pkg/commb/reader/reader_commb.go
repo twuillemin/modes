@@ -3,6 +3,7 @@ package reader
 import (
 	"errors"
 	"github.com/twuillemin/modes/pkg/commb"
+	bds07 "github.com/twuillemin/modes/pkg/commb/bds07/messages"
 	bds10 "github.com/twuillemin/modes/pkg/commb/bds10/messages"
 	bds20 "github.com/twuillemin/modes/pkg/commb/bds20/messages"
 )
@@ -20,6 +21,13 @@ func ReadCommBMessage(data []byte) (commb.Message, error) {
 	}
 
 	messages := make([]commb.Message, 0, 10)
+
+	if bds07.CheckIfDataReadable(data) == nil {
+		message, err := bds07.ReadExtendedSquitterStatus(data)
+		if err == nil {
+			messages = append(messages, message)
+		}
+	}
 
 	if bds10.CheckIfDataReadable(data) == nil {
 		message, err := bds10.ReadDataLinkCapabilityReport(data)

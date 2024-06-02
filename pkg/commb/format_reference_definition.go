@@ -30,6 +30,10 @@ func (commb MessageFormat) ToString() string {
 //                             THE FORMATS
 // -------------------------------------------------------------------------
 
+var FormatExtendedSquitterStatus = MessageFormat{
+	register: bds.BDS07,
+}
+
 // FormatDataLinkCapabilityReport is the definition of a message DataLinkCapabilityReport
 var FormatDataLinkCapabilityReport = MessageFormat{
 	register: bds.BDS10,

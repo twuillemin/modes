@@ -36,6 +36,12 @@ var BDS06 = Register{
 	description: "Extended squitter surface position",
 }
 
+// BDS07 is the definition of the register 0,7
+var BDS07 = Register{
+	id:          "BDS 0,7",
+	description: " Extended squitter status",
+}
+
 // BDS08 is the definition of the register 0,8
 var BDS08 = Register{
 	id:          "BDS 0,8",
