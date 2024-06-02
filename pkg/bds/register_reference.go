@@ -67,6 +67,12 @@ var BDS10 = registerDefinition{
 	description: "Data link capability report",
 }
 
+// BDS20 is the definition of the register 2,0
+var BDS20 = registerDefinition{
+	id:          "BDS 2,0",
+	description: "Aircraft identification",
+}
+
 // BDS61 is the definition of the register 6,1
 var BDS61 = registerDefinition{
 	id:          "BDS 6,1",

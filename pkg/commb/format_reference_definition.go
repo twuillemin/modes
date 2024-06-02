@@ -47,3 +47,8 @@ func (commb commbFormatReferenceDefinition) ToString() string {
 var FormatDataLinkCapabilityReport = commbFormatReferenceDefinition{
 	register: bds.BDS10,
 }
+
+// FormatAircraftIdentification is the definition of a message AircraftIdentification
+var FormatAircraftIdentification = commbFormatReferenceDefinition{
+	register: bds.BDS20,
+}

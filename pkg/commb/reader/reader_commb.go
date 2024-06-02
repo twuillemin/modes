@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/twuillemin/modes/pkg/commb"
 	bds10 "github.com/twuillemin/modes/pkg/commb/bds10/messages"
+	bds20 "github.com/twuillemin/modes/pkg/commb/bds20/messages"
 )
 
 // ReadCommBMessage reads and parse a Comm-B message.
@@ -22,6 +23,13 @@ func ReadCommBMessage(data []byte) (commb.Message, error) {
 
 	if bds10.CheckIfDataReadable(data) == nil {
 		message, err := bds10.ReadDataLinkCapabilityReport(data)
+		if err == nil {
+			messages = append(messages, message)
+		}
+	}
+
+	if bds20.CheckIfDataReadable(data) == nil {
+		message, err := bds20.ReadAircraftIdentification(data)
 		if err == nil {
 			messages = append(messages, message)
 		}
