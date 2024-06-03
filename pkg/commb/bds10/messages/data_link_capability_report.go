@@ -71,6 +71,40 @@ func (message DataLinkCapabilityReport) ToString() string {
 		message.DTESubAddressStatuses.ToString())
 }
 
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message DataLinkCapabilityReport) CheckCoherency() error {
+	// If no ACAS, all ACAS info should be zeroed
+	if message.ACASStatus == fields.ACASFailedOrStandBy {
+		if message.ACASHybridSurveillanceCapability != fields.ACASHybridSurveillanceNotCapable {
+			return errors.New("field ACASStatus is FailedOrStandBy but ACASHybridSurveillanceCapability is not HybridSurveillanceNotCapable")
+		}
+		if message.ACASGenerationCapability != fields.ACASGenerationNotCapable {
+			return errors.New("field ACASStatus is FailedOrStandBy but ACASGenerationCapability is not ACASGenerationNotCapable")
+		}
+		if message.ACASApplicableDocument != fields.ACASApplicableDocument185 {
+			return errors.New("field ACASStatus is FailedOrStandBy but ACASApplicableDocument is not ACASApplicableDocument185")
+		}
+	} else {
+		if message.ACASApplicableDocument > 2 {
+			return errors.New("field ACASApplicableDocument is a Reserved value")
+		}
+	}
+
+	if message.ModeSSubnetworkVersion > 5 {
+		return errors.New("field ModeSSubnetworkVersion is a Reserved value")
+	}
+
+	if message.UplinkELMThroughputCapability > 6 {
+		return errors.New("field UplinkELMThroughputCapability is a Reserved value")
+	}
+
+	if message.DownlinkELMThroughputCapability > 6 {
+		return errors.New("field DownlinkELMThroughputCapability is a Reserved value")
+	}
+
+	return nil
+}
+
 // ReadDataLinkCapabilityReport reads a message as a DataLinkCapabilityReport
 func ReadDataLinkCapabilityReport(data []byte) (*DataLinkCapabilityReport, error) {
 	err := CheckIfDataReadable(data)

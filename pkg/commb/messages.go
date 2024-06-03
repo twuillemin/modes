@@ -11,6 +11,9 @@ type Message interface {
 
 	// GetMessageFormat returns the Comm-B format of the message
 	GetMessageFormat() MessageFormat
+
+	// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+	CheckCoherency() error
 }
 
 // GetMessageFormatInformation generates a string presenting the common information to all ADSB messages, which is

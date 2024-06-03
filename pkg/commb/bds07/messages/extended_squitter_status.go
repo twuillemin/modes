@@ -31,6 +31,15 @@ func (message ExtendedSquitterStatus) ToString() string {
 		message.AltitudeTypeSubfield.ToString())
 }
 
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message ExtendedSquitterStatus) CheckCoherency() error {
+	if message.TransmissionRateSubfield >= 3 {
+		return errors.New("field TransmissionRateSubfield is a Reserved value")
+	}
+
+	return nil
+}
+
 // ReadExtendedSquitterStatus reads a message as a ExtendedSquitterStatus
 func ReadExtendedSquitterStatus(data []byte) (*ExtendedSquitterStatus, error) {
 	err := CheckIfDataReadable(data)
@@ -64,14 +73,6 @@ func CheckIfDataReadable(data []byte) error {
 		if data[i] != 0 {
 			return errors.New("the bits 9 to 56 are reserved and must be 0")
 		}
-	}
-
-	return nil
-}
-
-func (message ExtendedSquitterStatus) CheckCoherency() error {
-	if message.TransmissionRateSubfield >= 3 {
-		return errors.New("TransmissionRateSubfield is a Reserved value")
 	}
 
 	return nil

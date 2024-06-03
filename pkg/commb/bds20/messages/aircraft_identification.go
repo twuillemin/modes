@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/commb"
+	"strings"
 )
 
 // AircraftIdentification is a message at the format BDS 2,0
@@ -25,6 +26,15 @@ func (message AircraftIdentification) ToString() string {
 		"Identification:                          %v\n",
 		commb.GetMessageFormatInformation(&message),
 		message.Identification)
+}
+
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message AircraftIdentification) CheckCoherency() error {
+	if strings.ContainsAny(message.Identification, "#") {
+		return errors.New("field Identification contains a non valid character")
+	}
+
+	return nil
 }
 
 var identificationCharacterCoding = []byte{
