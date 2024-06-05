@@ -6,12 +6,12 @@ import (
 	"flag"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/adsb"
+	"github.com/twuillemin/modes/pkg/adsb/reader"
+	commbReader "github.com/twuillemin/modes/pkg/commb"
 	"log"
 	"os"
 
 	resolutionAdvisoryMessage "github.com/twuillemin/modes/pkg/acas/ra/messages"
-	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
-	commbReader "github.com/twuillemin/modes/pkg/commb/reader"
 	modeSCommon "github.com/twuillemin/modes/pkg/modes/common"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
@@ -24,14 +24,14 @@ func main() {
 	adsbReaderLevelParam := flag.Int("adsb_reader_level", 0, "the version of ADSB reader 0, 1 or 2 to use (ADSB V0 by default)")
 	flag.Parse()
 
-	adsbReaderLevel := adsb.ReaderLevel0
+	adsbReaderLevel := adsb.ADSBV0
 	switch *adsbReaderLevelParam {
 	case 0:
-		adsbReaderLevel = adsb.ReaderLevel0
+		adsbReaderLevel = adsb.ADSBV0
 	case 1:
-		adsbReaderLevel = adsb.ReaderLevel1
+		adsbReaderLevel = adsb.ADSBV1
 	case 2:
-		adsbReaderLevel = adsb.ReaderLevel2
+		adsbReaderLevel = adsb.ADSBV2
 	default:
 		panic(fmt.Sprintf("Unable to use the given ADSB level %v", *adsbReaderLevelParam))
 	}
@@ -83,7 +83,7 @@ func readFile(fileName string) []string {
 //
 // Params:
 //   - str: the line to process
-func processSingleLine(str string, readerLevel adsb.ReaderLevel) {
+func processSingleLine(str string, readerLevel adsb.ADSBVersion) {
 
 	fmt.Printf("Reading: %s\n", str)
 
@@ -161,16 +161,16 @@ func postProcessMessage16(messageDF16 *modeSMessages.MessageDF16) {
 	}
 }
 
-func postProcessMessage17(messageDF17 *modeSMessages.MessageDF17, readerLevel adsb.ReaderLevel) {
+func postProcessMessage17(messageDF17 *modeSMessages.MessageDF17, adsbVersion adsb.ADSBVersion) {
 
-	processADSBMessage(messageDF17.MessageExtendedSquitter, readerLevel)
+	processADSBMessage(messageDF17.MessageExtendedSquitter, adsbVersion)
 }
 
-func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18, readerLevel adsb.ReaderLevel) {
+func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18, adsbVersion adsb.ADSBVersion) {
 
 	if messageDF18.ControlField == modeSFields.ControlFieldADSB ||
 		messageDF18.ControlField == modeSFields.ControlFieldADSBReserved {
-		processADSBMessage(messageDF18.MessageExtendedSquitter, readerLevel)
+		processADSBMessage(messageDF18.MessageExtendedSquitter, adsbVersion)
 	} else if messageDF18.ControlField == modeSFields.ControlFieldTISBFineFormat ||
 		messageDF18.ControlField == modeSFields.ControlFieldTISBCoarseFormat ||
 		messageDF18.ControlField == modeSFields.ControlFieldTISBReservedManagement ||
@@ -181,12 +181,12 @@ func postProcessMessage18(messageDF18 *modeSMessages.MessageDF18, readerLevel ad
 	}
 }
 
-func processADSBMessage(data []byte, readerLevel adsb.ReaderLevel) {
+func processADSBMessage(data []byte, adsbVersion adsb.ADSBVersion) {
 
 	fmt.Printf(" -- ADSB Information --\n")
 
 	// Get the content
-	messageADSB, errADSB := adsbReader.ReadADSBMessage(readerLevel, false, false, data)
+	messageADSB, errADSB := reader.ReadADSBMessage(adsbVersion, false, false, data)
 	if errADSB != nil {
 		fmt.Println(errADSB)
 		return
