@@ -1,4 +1,4 @@
-package messages
+package ra
 
 import (
 	"github.com/twuillemin/modes/pkg/acas/ra/fields"
@@ -7,7 +7,7 @@ import (
 
 func TestReadResolutionAdvisoryMultipleThreatSameSeparationValid(t *testing.T) {
 
-	msg, err := ParseResolutionAdvisory(buildValidResolutionAdvisoryMultipleThreatSameSeparationMessage())
+	msg, err := ReadResolutionAdvisory(buildValidResolutionAdvisoryMultipleThreatSameSeparationMessage())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -146,7 +146,7 @@ func buildValidResolutionAdvisoryMultipleThreatSameSeparationMessage() []byte {
 
 func TestReadResolutionAdvisoryMultipleThreatDifferentSeparationValid(t *testing.T) {
 
-	msg, err := ParseResolutionAdvisory(buildValidResolutionAdvisoryMultipleThreatDifferentSeparation())
+	msg, err := ReadResolutionAdvisory(buildValidResolutionAdvisoryMultipleThreatDifferentSeparation())
 	if err != nil {
 		t.Fatal(err)
 	}

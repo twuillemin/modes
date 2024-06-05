@@ -5,13 +5,13 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
-	"github.com/twuillemin/modes/pkg/adsb"
-	"github.com/twuillemin/modes/pkg/adsb/reader"
-	commbReader "github.com/twuillemin/modes/pkg/commb"
 	"log"
 	"os"
 
-	resolutionAdvisoryMessage "github.com/twuillemin/modes/pkg/acas/ra/messages"
+	resolutionAdvisory "github.com/twuillemin/modes/pkg/acas/ra"
+	"github.com/twuillemin/modes/pkg/adsb"
+	"github.com/twuillemin/modes/pkg/adsb/reader"
+	commbReader "github.com/twuillemin/modes/pkg/commb"
 	modeSCommon "github.com/twuillemin/modes/pkg/modes/common"
 	modeSFields "github.com/twuillemin/modes/pkg/modes/fields"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
@@ -149,7 +149,7 @@ func postProcessMessage16(messageDF16 *modeSMessages.MessageDF16) {
 	if vds1 == 3 && vds2 == 0 {
 
 		// Read the ACAS content
-		messageACAS, errACAS := resolutionAdvisoryMessage.ParseResolutionAdvisory(messageDF16.MessageACAS[1:])
+		messageACAS, errACAS := resolutionAdvisory.ReadResolutionAdvisory(messageDF16.MessageACAS[1:])
 		if errACAS != nil {
 			fmt.Println(errACAS)
 			return

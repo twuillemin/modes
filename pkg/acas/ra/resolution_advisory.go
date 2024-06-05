@@ -1,4 +1,4 @@
-package messages
+package ra
 
 import (
 	"errors"
@@ -66,14 +66,14 @@ func (message ResolutionAdvisory) ToString() string {
 		threatIdentity)
 }
 
-// ParseResolutionAdvisory reads a ResolutionAdvisory data message
+// ReadResolutionAdvisory reads a ResolutionAdvisory data message
 //
 // Params:
 //   - data: The content of the message including the field VDS. This is for example the full content
 //     of the MV field from Mode S message
 //
 // Returns a properly formatted ResolutionAdvisory
-func ParseResolutionAdvisory(data []byte) (*ResolutionAdvisory, error) {
+func ReadResolutionAdvisory(data []byte) (*ResolutionAdvisory, error) {
 
 	if len(data) != 6 {
 		return nil, errors.New("the data for ACAS ResolutionAdvisory message must be 6 bytes long")

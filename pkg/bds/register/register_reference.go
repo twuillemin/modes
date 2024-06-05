@@ -68,10 +68,22 @@ var BDS10 = Register{
 	description: "Data link capability report",
 }
 
+// BDS17 is the definition of the register 1,7
+var BDS17 = Register{
+	id:          "BDS 1,7",
+	description: "Common usage GICB capability report",
+}
+
 // BDS20 is the definition of the register 2,0
 var BDS20 = Register{
 	id:          "BDS 2,0",
 	description: "Aircraft identification",
+}
+
+// BDS30 is the definition of the register 3,0
+var BDS30 = Register{
+	id:          "BDS 2,0",
+	description: "ACAS active resolution advisory",
 }
 
 // BDS61 is the definition of the register 6,1

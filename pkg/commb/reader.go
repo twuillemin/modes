@@ -2,11 +2,13 @@ package commb
 
 import (
 	"errors"
-	"github.com/twuillemin/modes/pkg/bds"
 
+	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds07"
 	"github.com/twuillemin/modes/pkg/bds/bds10"
+	"github.com/twuillemin/modes/pkg/bds/bds17"
 	"github.com/twuillemin/modes/pkg/bds/bds20"
+	"github.com/twuillemin/modes/pkg/bds/bds30"
 )
 
 // ReadCommBMessage reads and parse a Comm-B message.
@@ -34,7 +36,15 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 	if err == nil {
 		messages = append(messages, message)
 	}
+	message, err = bds17.ReadCommonUsageGICBCapabilityReport(data)
+	if err == nil {
+		messages = append(messages, message)
+	}
 	message, err = bds20.ReadAircraftIdentification(data)
+	if err == nil {
+		messages = append(messages, message)
+	}
+	message, err = bds30.ReadACASResolutionAdvisory(data)
 	if err == nil {
 		messages = append(messages, message)
 	}

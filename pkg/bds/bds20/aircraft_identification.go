@@ -3,6 +3,7 @@ package bds20
 import (
 	"errors"
 	"fmt"
+	"github.com/twuillemin/modes/pkg/bds/encoding"
 	"strings"
 
 	"github.com/twuillemin/modes/pkg/bds/register"
@@ -38,18 +39,16 @@ func (message AircraftIdentification) CheckCoherency() error {
 	return nil
 }
 
-var identificationCharacterCoding = []byte{
-	'#', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#', '#', '#', '#', '#',
-	' ', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#',
-	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '#', '#', '#', '#', '#', '#',
-}
-
 // ReadAircraftIdentification reads a message as a AircraftIdentification
 func ReadAircraftIdentification(data []byte) (*AircraftIdentification, error) {
-	err := CheckIfDataReadable(data)
-	if err != nil {
-		return nil, err
+
+	if len(data) != 7 {
+		return nil, errors.New("the data for Comm-B AircraftIdentification message must be 7 bytes long")
+	}
+
+	// First byte is simply the BDS format 0010 0000
+	if data[0] != 0x20 {
+		return nil, errors.New("the first byte of data is not 0x20")
 	}
 
 	// Get the codes
@@ -66,24 +65,10 @@ func ReadAircraftIdentification(data []byte) (*AircraftIdentification, error) {
 	// Convert the codes to actual char
 	chars := make([]byte, 8)
 	for i, code := range codes {
-		chars[i] = identificationCharacterCoding[code]
+		chars[i] = encoding.IdentificationCharacterCoding[code]
 	}
 
 	return &AircraftIdentification{
 		Identification: string(chars),
 	}, nil
-}
-
-// CheckIfDataReadable checks if the data can be read as a DataLinkCapabilityReport
-func CheckIfDataReadable(data []byte) error {
-	if len(data) != 7 {
-		return errors.New("the data for Comm-B AircraftIdentification message must be 7 bytes long")
-	}
-
-	// First byte is simply the BDS format 0010 0000
-	if data[0] != 0x20 {
-		return errors.New("the first byte of data is not 0x20")
-	}
-
-	return nil
 }
