@@ -28,7 +28,7 @@ func ReadAirborneVelocity(data []byte) (AirborneVelocity, error) {
 	case fields.SubtypeGroundSpeedNormal:
 		return ReadAirborneVelocityGroundSpeedNormal(data)
 	case fields.SubtypeGroundSpeedSupersonic:
-		return ReadAirborneVelocityGroundSpeedNormal(data)
+		return ReadAirborneVelocityGroundSpeedSupersonic(data)
 	case fields.SubtypeAirspeedNormal:
 		return ReadAirborneVelocityAirSpeedNormal(data)
 	case fields.SubtypeAirspeedSupersonic:
