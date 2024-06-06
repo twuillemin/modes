@@ -2,6 +2,7 @@ package commb
 
 import (
 	"errors"
+	"github.com/twuillemin/modes/pkg/bds/bds40"
 
 	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds07"
@@ -45,6 +46,10 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 		messages = append(messages, message)
 	}
 	message, err = bds30.ReadACASResolutionAdvisory(data)
+	if err == nil {
+		messages = append(messages, message)
+	}
+	message, err = bds40.ReadSelectedVerticalIntention(data)
 	if err == nil {
 		messages = append(messages, message)
 	}

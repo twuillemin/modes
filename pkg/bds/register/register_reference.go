@@ -82,8 +82,14 @@ var BDS20 = Register{
 
 // BDS30 is the definition of the register 3,0
 var BDS30 = Register{
-	id:          "BDS 2,0",
+	id:          "BDS 3,0",
 	description: "ACAS active resolution advisory",
+}
+
+// BDS40 is the definition of the register 4,0
+var BDS40 = Register{
+	id:          "BDS 4,0",
+	description: "Selected vertical intention",
 }
 
 // BDS61 is the definition of the register 6,1

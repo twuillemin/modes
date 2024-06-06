@@ -2,6 +2,7 @@ package bds09
 
 import (
 	"fmt"
+
 	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds09/fields"
 )
