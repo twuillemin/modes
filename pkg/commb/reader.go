@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/twuillemin/modes/pkg/bds/bds07"
 	"github.com/twuillemin/modes/pkg/bds/bds20"
+	"github.com/twuillemin/modes/pkg/bds/bds60"
 
 	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds00"
@@ -77,6 +78,10 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 		messages = append(messages, message)
 	}
 	message, err = bds50.ReadTrackAndTurnReport(data)
+	if err == nil {
+		messages = append(messages, message)
+	}
+	message, err = bds60.ReadHeadingAndTrackReport(data)
 	if err == nil {
 		messages = append(messages, message)
 	}

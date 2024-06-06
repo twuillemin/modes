@@ -3,6 +3,7 @@ package bds50
 import (
 	"errors"
 	"fmt"
+
 	"github.com/twuillemin/modes/pkg/bds/bds50/fields"
 	"github.com/twuillemin/modes/pkg/bds/register"
 )
@@ -66,6 +67,26 @@ func (message TrackAndTurnReport) CheckCoherency() error {
 	// If no data available, it is probably not coherent
 	if !message.RollAngleStatus && !message.TrueTrackAngleStatus && !message.GroundSpeedStatus && !message.TrackAngleRateStatus && !message.TrueAirSpeedStatus {
 		return errors.New("the message does not convey any information")
+	}
+
+	if !message.RollAngleStatus && message.RollAngle != 0 {
+		return errors.New("the roll angle status is set to false, but a roll angle value is given")
+	}
+
+	if !message.TrueTrackAngleStatus && message.TrueTrackAngle != 0 {
+		return errors.New("the true track angle status is set to false, but a true track angle value is given")
+	}
+
+	if !message.GroundSpeedStatus && message.GroundSpeed != 0 {
+		return errors.New("the ground speed status is set to false, but a ground speed value is given")
+	}
+
+	if !message.TrackAngleRateStatus && message.TrackAngleRate != 0 {
+		return errors.New("the track angle rate status is set to false, but a track angle rate value is given")
+	}
+
+	if !message.TrueAirSpeedStatus && message.TrueAirSpeed != 0 {
+		return errors.New("the true air speed status is set to false, but a true air speed rate value is given")
 	}
 
 	if message.RollAngle > 50 {

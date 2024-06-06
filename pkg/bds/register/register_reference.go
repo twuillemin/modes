@@ -106,6 +106,12 @@ var BDS50 = Register{
 	description: "Track and turn report",
 }
 
+// BDS60 is the definition of the register 6,0
+var BDS60 = Register{
+	id:          "BDS 6,0",
+	description: "Heading and speed report",
+}
+
 // BDS61 is the definition of the register 6,1
 var BDS61 = Register{
 	id:          "BDS 6,1",

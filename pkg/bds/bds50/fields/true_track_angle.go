@@ -31,9 +31,7 @@ func (tto TrueTrackOrientation) ToString() string {
 }
 
 func ReadTrueTrackAngle(data []byte) (bool, TrueTrackOrientation, float32) {
-	if (data[1] & 0x10) == 0 {
-		return false, TTEast, 0
-	}
+	status := (data[1] & 0x10) == 0
 
 	orientation := TrueTrackOrientation((data[1] & 0x80) >> 3)
 
@@ -41,5 +39,6 @@ func ReadTrueTrackAngle(data []byte) (bool, TrueTrackOrientation, float32) {
 	byte2 := data[1] & 0xFE
 	allBits := bitutils.Pack2Bytes(byte1, byte2) >> 1
 	angle := float32(allBits) * 90.0 / 512.0
-	return true, orientation, angle
+
+	return status, orientation, angle
 }

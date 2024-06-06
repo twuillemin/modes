@@ -31,9 +31,7 @@ func (wd WingDown) ToString() string {
 }
 
 func ReadRollAngle(data []byte) (bool, WingDown, float32) {
-	if (data[0] & 0x80) == 0 {
-		return false, RARightWingDown, 0
-	}
+	status := (data[0] & 0x80) == 0
 
 	wingDown := WingDown((data[0] & 0x40) >> 6)
 
@@ -41,5 +39,6 @@ func ReadRollAngle(data []byte) (bool, WingDown, float32) {
 	byte2 := data[1] & 0xE0
 	allBits := bitutils.Pack2Bytes(byte1, byte2) >> 5
 	rollAngle := float32(allBits) * 45.0 / 256.0
-	return true, wingDown, rollAngle
+
+	return status, wingDown, rollAngle
 }
