@@ -100,6 +100,12 @@ var BDS40 = Register{
 	description: "Selected vertical intention",
 }
 
+// BDS50 is the definition of the register 5,0
+var BDS50 = Register{
+	id:          "BDS 5,0",
+	description: "Track and turn report",
+}
+
 // BDS61 is the definition of the register 6,1
 var BDS61 = Register{
 	id:          "BDS 6,1",

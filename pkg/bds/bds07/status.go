@@ -48,17 +48,12 @@ func ReadStatus(data []byte) (*Status, error) {
 		return nil, errors.New("the data for Comm-B Status message must be 7 bytes long")
 	}
 
-	// First byte is simply the BDS format 0001 0000
-	if data[0] != 0x10 {
-		return nil, errors.New("the first byte of data is not 0x10")
-	}
-
 	// Bits 4 to 8 are reserved and must be 0
 	if data[0]&0x1C != 0 {
 		return nil, errors.New("the bits 4 to 8 are reserved and must be 0")
 	}
 
-	for i := uint32(1); i < 7; i++ {
+	for i := uint(1); i < 7; i++ {
 		if data[i] != 0 {
 			return nil, errors.New("the bits 9 to 56 are reserved and must be 0")
 		}

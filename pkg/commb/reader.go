@@ -2,15 +2,16 @@ package commb
 
 import (
 	"errors"
-	"github.com/twuillemin/modes/pkg/bds/bds00"
-	"github.com/twuillemin/modes/pkg/bds/bds40"
+	"github.com/twuillemin/modes/pkg/bds/bds07"
+	"github.com/twuillemin/modes/pkg/bds/bds20"
 
 	"github.com/twuillemin/modes/pkg/bds"
-	"github.com/twuillemin/modes/pkg/bds/bds07"
+	"github.com/twuillemin/modes/pkg/bds/bds00"
 	"github.com/twuillemin/modes/pkg/bds/bds10"
 	"github.com/twuillemin/modes/pkg/bds/bds17"
-	"github.com/twuillemin/modes/pkg/bds/bds20"
 	"github.com/twuillemin/modes/pkg/bds/bds30"
+	"github.com/twuillemin/modes/pkg/bds/bds40"
+	"github.com/twuillemin/modes/pkg/bds/bds50"
 )
 
 // ReadCommBMessage reads and parse a Comm-B message.
@@ -30,17 +31,35 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 	var message bds.Message
 	var err error
 
+	//
 	// Remove the all-zero messages directly
+	//
 	message, err = bds00.ReadNoMessageAvailable(data)
 	if err == nil {
 		return message, nil
 	}
 
-	// Force analysis on all know types
+	//
+	// Then the messages that leave no place to doubt
+	//
+
+	// Very short message (3 bits) rest must be blank
 	message, err = bds07.ReadStatus(data)
-	if err == nil {
+	if err == nil && message.CheckCoherency() == nil {
 		messages = append(messages, message)
 	}
+
+	// Expect a well-formed string
+	message, err = bds20.ReadAircraftIdentification(data)
+	if err == nil && message.CheckCoherency() == nil {
+		return message, nil
+	}
+
+	//
+	// Then the message that could be interpreted in different formats
+	//
+
+	// Force analysis on all know types
 	message, err = bds10.ReadDataLinkCapabilityReport(data)
 	if err == nil {
 		messages = append(messages, message)
@@ -49,15 +68,15 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 	if err == nil {
 		messages = append(messages, message)
 	}
-	message, err = bds20.ReadAircraftIdentification(data)
-	if err == nil {
-		messages = append(messages, message)
-	}
 	message, err = bds30.ReadACASResolutionAdvisory(data)
 	if err == nil {
 		messages = append(messages, message)
 	}
 	message, err = bds40.ReadSelectedVerticalIntention(data)
+	if err == nil {
+		messages = append(messages, message)
+	}
+	message, err = bds50.ReadTrackAndTurnReport(data)
 	if err == nil {
 		messages = append(messages, message)
 	}

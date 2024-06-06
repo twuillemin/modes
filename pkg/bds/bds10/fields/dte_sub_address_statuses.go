@@ -16,7 +16,7 @@ func (dss DTESubAddressStatuses) ToString() string {
 
 	statuses := make([]string, 16)
 
-	for i := uint32(0); i < 16; i++ {
+	for i := uint(0); i < 16; i++ {
 		bitShift := 15 - i
 		dteStatus := (dss >> bitShift) & 0x01
 		statuses[i] = fmt.Sprintf("%d", dteStatus)

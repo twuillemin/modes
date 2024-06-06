@@ -66,7 +66,7 @@ func ReadAircraftStatusNoInformation(data []byte) (*AircraftStatusNoInformation,
 		return nil, errors.New("the bits 12 to 16 are expected to be 0")
 	}
 
-	for i := uint32(2); i < 7; i++ {
+	for i := uint(2); i < 7; i++ {
 		if (data[1] & 0x1F) != 0 {
 			return nil, errors.New("the bits 17 to 56 are expected to be 0")
 		}
