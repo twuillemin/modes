@@ -64,6 +64,11 @@ func (message SelectedVerticalIntention) ToString() string {
 
 // CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
 func (message SelectedVerticalIntention) CheckCoherency() error {
+	// If no data available, it is probably not coherent
+	if !message.MCPFCUSelectedAltitudeAvailable && !message.FMSSelectedAltitudeAvailable && !message.BarometricPressureSettingAvailable {
+		return errors.New("the message does not convey any information")
+	}
+
 	return nil
 }
 

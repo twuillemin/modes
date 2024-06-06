@@ -32,6 +32,14 @@ func (register Register) ToString() string {
 //                              INSTANCES
 // -------------------------------------------------------------------------
 
+// BDS00 is the definition of the register 0,0 (Does not exist in reality)
+// See https://www.icao.int/APAC/Meetings/2023%20Mode%20S%20and%20DAPs%20WG6/IP03_SGP%20AI.6%20-%20IC%20codes%20for%20ADS-B%20and%20M-LAT.pdf
+// pge 12
+var BDS00 = Register{
+	id:          "BDS 0,0",
+	description: "No message waiting for transmission",
+}
+
 // BDS05 is the definition of the register 0,5
 var BDS05 = Register{
 	id:          "BDS 0,5",

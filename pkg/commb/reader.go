@@ -2,6 +2,7 @@ package commb
 
 import (
 	"errors"
+	"github.com/twuillemin/modes/pkg/bds/bds00"
 	"github.com/twuillemin/modes/pkg/bds/bds40"
 
 	"github.com/twuillemin/modes/pkg/bds"
@@ -29,6 +30,13 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 	var message bds.Message
 	var err error
 
+	// Remove the all-zero messages directly
+	message, err = bds00.ReadNoMessageAvailable(data)
+	if err == nil {
+		return message, nil
+	}
+
+	// Force analysis on all know types
 	message, err = bds07.ReadStatus(data)
 	if err == nil {
 		messages = append(messages, message)
@@ -54,12 +62,29 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 		messages = append(messages, message)
 	}
 
-	switch len(messages) {
-	case 0:
+	// If no message is found, just return
+	if len(messages) == 1 {
 		return nil, errors.New("message can not be read")
-	case 1:
+	}
+
+	// If only one message is found, it should be the good one
+	if len(messages) == 1 {
 		return messages[0], nil
+	}
+
+	coherentMessages := make([]bds.Message, 0, len(messages))
+	for _, message := range messages {
+		if message.CheckCoherency() == nil {
+			coherentMessages = append(coherentMessages, message)
+		}
+	}
+
+	switch len(coherentMessages) {
+	case 0:
+		return nil, errors.New("no coherent message can be read")
+	case 1:
+		return coherentMessages[0], nil
 	default:
-		return nil, errors.New("multiple format match the message")
+		return nil, errors.New("multiple formats match the message")
 	}
 }

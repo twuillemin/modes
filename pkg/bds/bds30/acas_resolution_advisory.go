@@ -7,7 +7,7 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/register"
 )
 
-// ACASResolutionAdvisory is a message at the format BDS 2,0
+// ACASResolutionAdvisory is a message at the format BDS 3,0
 //
 // Specified in Doc 9871 / Table A-2-48
 type ACASResolutionAdvisory struct {
