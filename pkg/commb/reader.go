@@ -11,6 +11,7 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/bds20"
 	"github.com/twuillemin/modes/pkg/bds/bds30"
 	"github.com/twuillemin/modes/pkg/bds/bds40"
+	"github.com/twuillemin/modes/pkg/bds/bds44"
 	"github.com/twuillemin/modes/pkg/bds/bds50"
 	"github.com/twuillemin/modes/pkg/bds/bds60"
 )
@@ -74,6 +75,10 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 		messages = append(messages, message)
 	}
 	message, err = bds40.ReadSelectedVerticalIntention(data)
+	if err == nil {
+		messages = append(messages, message)
+	}
+	message, err = bds44.ReadMeteorologicalRoutineAirReport(data)
 	if err == nil {
 		messages = append(messages, message)
 	}
