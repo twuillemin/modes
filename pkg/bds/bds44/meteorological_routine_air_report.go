@@ -11,6 +11,7 @@ import (
 //
 // Specified in Doc 9871 / Table A-2-48
 type MeteorologicalRoutineAirReport struct {
+	Source                      fields.Source
 	WindSpeedStatus             bool
 	WindSpeed                   uint32
 	WindDirectionStatus         bool
@@ -33,6 +34,7 @@ func (message MeteorologicalRoutineAirReport) GetRegister() register.Register {
 func (message MeteorologicalRoutineAirReport) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                            %v\n"+
+		"Source:                             %v\n"+
 		"Wind Speed Status:                  %v\n"+
 		"Wind Speed (knot):                  %v\n"+
 		"Wind Direction Status:              %v\n"+
@@ -45,6 +47,7 @@ func (message MeteorologicalRoutineAirReport) ToString() string {
 		"Humidity Status:                    %v\n"+
 		"Humidity (%%):                       %v",
 		message.GetRegister().ToString(),
+		message.Source.ToString(),
 		message.WindSpeedStatus,
 		message.WindSpeed,
 		message.WindDirectionStatus,
@@ -63,6 +66,10 @@ func (message MeteorologicalRoutineAirReport) CheckCoherency() error {
 	// If no data available, it is probably not coherent
 	if !message.WindSpeedStatus && !message.WindDirectionStatus && !message.StaticAirTemperatureStatus && !message.AverageStaticPressureStatus && !message.HumidityStatus {
 		return errors.New("the message does not convey any information")
+	}
+
+	if message.Source >= 5 {
+		return errors.New("field Source is a Reserved value")
 	}
 
 	if !message.WindSpeedStatus && message.WindSpeed != 0 {
@@ -103,10 +110,6 @@ func ReadMeteorologicalRoutineAirReport(data []byte) (*MeteorologicalRoutineAirR
 		return nil, errors.New("the data for Comm-B MeteorologicalRoutineAirReport message must be 7 bytes long")
 	}
 
-	if data[0]&0xF0 != 0 {
-		return nil, errors.New("the bits 1 to 4 must be zero")
-	}
-
 	windSpeedStatus, windSpeed := fields.ReadWindSpeed(data)
 	windDirectionStatus, windDirection := fields.ReadWindDirection(data)
 	staticAirTemperatureStatus, staticAirTemperature := fields.ReadStaticAirTemperature(data)
@@ -114,6 +117,7 @@ func ReadMeteorologicalRoutineAirReport(data []byte) (*MeteorologicalRoutineAirR
 	humidityStatus, humidity := fields.ReadHumidity(data)
 
 	return &MeteorologicalRoutineAirReport{
+		Source:                      fields.ReadSource(data),
 		WindSpeedStatus:             windSpeedStatus,
 		WindSpeed:                   windSpeed,
 		WindDirectionStatus:         windDirectionStatus,
