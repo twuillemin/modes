@@ -100,6 +100,18 @@ var BDS40 = Register{
 	description: "Selected vertical intention",
 }
 
+// BDS44 is the definition of the register 4,4
+var BDS44 = Register{
+	id:          "BDS 4,4",
+	description: "Meteorological routine air report",
+}
+
+// BDS45 is the definition of the register 4,5
+var BDS45 = Register{
+	id:          "BDS 4,5",
+	description: "Meteorological hazard report",
+}
+
 // BDS50 is the definition of the register 5,0
 var BDS50 = Register{
 	id:          "BDS 5,0",
