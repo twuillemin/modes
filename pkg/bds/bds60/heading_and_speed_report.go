@@ -90,19 +90,19 @@ func (message HeadingAndTrackReport) CheckCoherency() error {
 		return errors.New("the mach is too high (above 1.0)")
 	}
 
-	if (message.BarometricAltitudeRate < -6000) || (message.BarometricAltitudeRate > 600) {
+	if (message.BarometricAltitudeRate < -6000) || (message.BarometricAltitudeRate > 6000) {
 		return errors.New("the barometric altitude rate is to high or to low (above or under 6000fpm)")
 	}
 
-	if (message.InitialVerticalVelocity < -6000) || (message.InitialVerticalVelocity > 600) {
+	if (message.InitialVerticalVelocity < -6000) || (message.InitialVerticalVelocity > 6000) {
 		return errors.New("the initial vertical velocity is to high or to low (above or under 6000fpm)")
 	}
 
 	return nil
 }
 
-// ReadHeadingAndTrackReport reads a message as a HeadingAndTrackReport
-func ReadHeadingAndTrackReport(data []byte) (*HeadingAndTrackReport, error) {
+// ReadHeadingAndSpeedReport reads a message as a HeadingAndTrackReport
+func ReadHeadingAndSpeedReport(data []byte) (*HeadingAndTrackReport, error) {
 
 	if len(data) != 7 {
 		return nil, errors.New("the data for Comm-B HeadingAndTrackReport message must be 7 bytes long")

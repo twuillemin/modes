@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestNoMessageAvailableValid(t *testing.T) {
+func TestReadNoMessageAvailableValid(t *testing.T) {
 
 	id1, _ := hex.DecodeString("00000000000000")
 	message, err := ReadNoMessageAvailable(id1)
@@ -23,7 +23,7 @@ func TestNoMessageAvailableValid(t *testing.T) {
 	}
 }
 
-func TestNoMessageAvailableErroneous(t *testing.T) {
+func TestReadNoMessageAvailableErroneous(t *testing.T) {
 	tooShortMessage, _ := hex.DecodeString("000000000000")
 	_, err := ReadNoMessageAvailable(tooShortMessage)
 	if err == nil {

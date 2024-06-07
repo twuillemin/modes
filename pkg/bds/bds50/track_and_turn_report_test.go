@@ -7,7 +7,7 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/register"
 )
 
-func TestSelectedReadTrackAndTurnReportValid1(t *testing.T) {
+func TestReadTrackAndTurnReportValid(t *testing.T) {
 
 	id1, _ := hex.DecodeString("81951536E024D4")
 	message, err := ReadTrackAndTurnReport(id1)
@@ -64,7 +64,7 @@ func TestSelectedReadTrackAndTurnReportValid1(t *testing.T) {
 	}
 }
 
-func TestSelectedReadTrackAndTurnReportValid2(t *testing.T) {
+func TestReadTrackAndTurnReportValid2(t *testing.T) {
 
 	id1, _ := hex.DecodeString("FFD263377FFCE0")
 	message, err := ReadTrackAndTurnReport(id1)
@@ -89,7 +89,7 @@ func TestSelectedReadTrackAndTurnReportValid2(t *testing.T) {
 	}
 }
 
-func TestSelectedReadTrackAndTurnReportIncoherent(t *testing.T) {
+func TestReadTrackAndTurnReportIncoherent(t *testing.T) {
 	allStatusFalse, _ := hex.DecodeString("00000000000000")
 	messageAllStatusFalse, err := ReadTrackAndTurnReport(allStatusFalse)
 	if err != nil {
@@ -144,10 +144,10 @@ func TestSelectedReadTrackAndTurnReportIncoherent(t *testing.T) {
 	}
 }
 
-func TestSelectedReadTrackAndTurnReportErroneous(t *testing.T) {
+func TestReadTrackAndTurnReportErroneous(t *testing.T) {
 	tooShortMessage, _ := hex.DecodeString("85E42F31300")
 	_, err := ReadTrackAndTurnReport(tooShortMessage)
 	if err == nil {
-		t.Errorf("for ReadSelectedVerticalIntention: got nil, want error")
+		t.Errorf("for ReadTrackAndTurnReport: got nil, want error")
 	}
 }

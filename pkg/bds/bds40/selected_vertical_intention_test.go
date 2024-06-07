@@ -8,7 +8,7 @@ import (
 	"github.com/twuillemin/modes/pkg/bds/register"
 )
 
-func TestSelectedVerticalIntentionValid(t *testing.T) {
+func TestReadSelectedVerticalIntentionValid(t *testing.T) {
 
 	id1, _ := hex.DecodeString("85E42F313001E7")
 	message, err := ReadSelectedVerticalIntention(id1)
@@ -73,7 +73,7 @@ func TestSelectedVerticalIntentionValid(t *testing.T) {
 	}
 }
 
-func TestSelectedVerticalIntentionIncoherent(t *testing.T) {
+func TestReadSelectedVerticalIntentionIncoherent(t *testing.T) {
 	allStatusFalse, _ := hex.DecodeString("00000000000000")
 	messageAllStatusFalse, err := ReadSelectedVerticalIntention(allStatusFalse)
 	if err != nil {
@@ -85,7 +85,7 @@ func TestSelectedVerticalIntentionIncoherent(t *testing.T) {
 	}
 }
 
-func TestSelectedVerticalIntentionErroneous(t *testing.T) {
+func TestReadSelectedVerticalIntentionErroneous(t *testing.T) {
 	tooShortMessage, _ := hex.DecodeString("85E42F31300")
 	_, err := ReadSelectedVerticalIntention(tooShortMessage)
 	if err == nil {

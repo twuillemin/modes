@@ -91,7 +91,7 @@ func ReadCommBMessage(data []byte) (bds.Message, error) {
 	if err == nil {
 		messages = append(messages, message)
 	}
-	message, err = bds60.ReadHeadingAndTrackReport(data)
+	message, err = bds60.ReadHeadingAndSpeedReport(data)
 	if err == nil {
 		messages = append(messages, message)
 	}

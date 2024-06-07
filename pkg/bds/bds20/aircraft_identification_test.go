@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestIdentificationValid(t *testing.T) {
+func TestReadAircraftIdentificationValid(t *testing.T) {
 
 	id1, _ := hex.DecodeString("20508673E19820")
 	message, err := ReadAircraftIdentification(id1)
@@ -27,7 +27,7 @@ func TestIdentificationValid(t *testing.T) {
 	}
 }
 
-func TestIdentificationIncoherent(t *testing.T) {
+func TestReadAircraftIdentificationIncoherent(t *testing.T) {
 
 	id1, _ := hex.DecodeString("20508673E1982F")
 	message, err := ReadAircraftIdentification(id1)
@@ -44,7 +44,7 @@ func TestIdentificationIncoherent(t *testing.T) {
 	}
 }
 
-func TestIdentificationErroneous(t *testing.T) {
+func TestReadAircraftIdentificationErroneous(t *testing.T) {
 	tooShortMessage, _ := hex.DecodeString("20508673E198")
 	_, err := ReadAircraftIdentification(tooShortMessage)
 	if err == nil {
