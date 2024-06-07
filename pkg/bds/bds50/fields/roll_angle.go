@@ -31,7 +31,7 @@ func (wd WingDown) ToString() string {
 }
 
 func ReadRollAngle(data []byte) (bool, WingDown, float32) {
-	status := (data[0] & 0x80) == 0
+	status := (data[0] & 0x80) != 0
 
 	wingDown := WingDown((data[0] & 0x40) >> 6)
 

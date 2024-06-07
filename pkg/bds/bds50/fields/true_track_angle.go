@@ -31,7 +31,7 @@ func (tto TrueTrackOrientation) ToString() string {
 }
 
 func ReadTrueTrackAngle(data []byte) (bool, TrueTrackOrientation, float32) {
-	status := (data[1] & 0x10) == 0
+	status := (data[1] & 0x10) != 0
 
 	orientation := TrueTrackOrientation((data[1] & 0x80) >> 3)
 

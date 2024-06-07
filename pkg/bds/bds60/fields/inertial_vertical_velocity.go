@@ -3,7 +3,7 @@ package fields
 import "github.com/twuillemin/modes/pkg/bitutils"
 
 func ReadInertialVerticalVelocity(data []byte) (bool, int32) {
-	status := (data[4] & 0x20) == 0
+	status := (data[4] & 0x20) != 0
 
 	negative := (data[4] & 0x10) != 0
 

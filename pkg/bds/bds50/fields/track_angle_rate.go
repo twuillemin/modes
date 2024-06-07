@@ -3,7 +3,7 @@ package fields
 import "github.com/twuillemin/modes/pkg/bitutils"
 
 func ReadTrackAngleRate(data []byte) (bool, float32) {
-	status := (data[4] & 0x20) == 0
+	status := (data[4] & 0x20) != 0
 
 	byte1 := data[4] & 0x0F
 	byte2 := data[5] & 0xF8

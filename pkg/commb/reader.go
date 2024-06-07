@@ -2,17 +2,17 @@ package commb
 
 import (
 	"errors"
-	"github.com/twuillemin/modes/pkg/bds/bds07"
-	"github.com/twuillemin/modes/pkg/bds/bds20"
-	"github.com/twuillemin/modes/pkg/bds/bds60"
 
 	"github.com/twuillemin/modes/pkg/bds"
 	"github.com/twuillemin/modes/pkg/bds/bds00"
+	"github.com/twuillemin/modes/pkg/bds/bds07"
 	"github.com/twuillemin/modes/pkg/bds/bds10"
 	"github.com/twuillemin/modes/pkg/bds/bds17"
+	"github.com/twuillemin/modes/pkg/bds/bds20"
 	"github.com/twuillemin/modes/pkg/bds/bds30"
 	"github.com/twuillemin/modes/pkg/bds/bds40"
 	"github.com/twuillemin/modes/pkg/bds/bds50"
+	"github.com/twuillemin/modes/pkg/bds/bds60"
 )
 
 // ReadCommBMessage reads and parse a Comm-B message.

@@ -3,7 +3,7 @@ package fields
 import "github.com/twuillemin/modes/pkg/bitutils"
 
 func ReadGroundSpeed(data []byte) (bool, float32) {
-	status := (data[2] & 0x01) == 0
+	status := (data[2] & 0x01) != 0
 
 	byte1 := data[3] & 0xFF
 	byte2 := data[4] & 0xC0

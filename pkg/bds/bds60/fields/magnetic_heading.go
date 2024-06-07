@@ -31,7 +31,7 @@ func (mh MagneticHeading) ToString() string {
 }
 
 func ReadMagneticHeading(data []byte) (bool, MagneticHeading, float32) {
-	status := (data[0] & 0x80) == 0
+	status := (data[0] & 0x80) != 0
 
 	magneticHeading := MagneticHeading((data[0] & 0x40) >> 6)
 
