@@ -12,18 +12,16 @@ import (
 //
 // Specified in Doc 9871 / Table A-2-48
 type TrackAndTurnReport struct {
-	RollAngleStatus           bool
-	RollAngleWingDown         fields.WingDown
-	RollAngle                 float32
-	TrueTrackAngleStatus      bool
-	TrueTrackAngleOrientation fields.TrueTrackOrientation
-	TrueTrackAngle            float32
-	GroundSpeedStatus         bool
-	GroundSpeed               float32
-	TrackAngleRateStatus      bool
-	TrackAngleRate            float32
-	TrueAirSpeedStatus        bool
-	TrueAirSpeed              float32
+	RollAngleStatus      bool
+	RollAngle            float32
+	TrueTrackAngleStatus bool
+	TrueTrackAngle       float32
+	GroundSpeedStatus    bool
+	GroundSpeed          uint32
+	TrackAngleRateStatus bool
+	TrackAngleRate       float32
+	TrueAirSpeedStatus   bool
+	TrueAirSpeed         uint32
 }
 
 // GetRegister returns the Register the message
@@ -36,10 +34,8 @@ func (message TrackAndTurnReport) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                               %v\n"+
 		"Roll Angle Status:                     %v\n"+
-		"Roll Angle Wing:                       %v\n"+
 		"Roll Angle (degrees):                  %v\n"+
 		"True Track Angle Status:               %v\n"+
-		"True Track Angle Orientation:          %v\n"+
 		"True Track (degrees):                  %v\n"+
 		"Ground Speed Status:                   %v\n"+
 		"Ground Speed (knots):                  %v\n"+
@@ -49,10 +45,8 @@ func (message TrackAndTurnReport) ToString() string {
 		"True Air Speed (knots):                %v",
 		message.GetRegister().ToString(),
 		message.RollAngleStatus,
-		message.RollAngleWingDown,
 		message.RollAngle,
 		message.TrueTrackAngleStatus,
-		message.TrueTrackAngleOrientation,
 		message.TrueTrackAngle,
 		message.GroundSpeedStatus,
 		message.GroundSpeed,
@@ -89,7 +83,7 @@ func (message TrackAndTurnReport) CheckCoherency() error {
 		return errors.New("the true air speed status is set to false, but a true air speed rate value is given")
 	}
 
-	if message.RollAngle > 50 {
+	if message.RollAngle > 50 || message.RollAngle < -50 {
 		return errors.New("the roll angle is too high (above 50 degrees)")
 	}
 
@@ -101,7 +95,7 @@ func (message TrackAndTurnReport) CheckCoherency() error {
 		return errors.New("the true air speed is too high (above 500 knots)")
 	}
 
-	speedDifference := message.GroundSpeed - message.TrueAirSpeed
+	speedDifference := int(message.GroundSpeed) - int(message.TrueAirSpeed)
 	if (speedDifference < -200) || (speedDifference > 200) {
 		return errors.New("the difference between true air speed and ground speed is too high (above 200 knots)")
 	}
@@ -116,24 +110,22 @@ func ReadTrackAndTurnReport(data []byte) (*TrackAndTurnReport, error) {
 		return nil, errors.New("the data for Comm-B TrackAndTurnReport message must be 7 bytes long")
 	}
 
-	rollAngleStatus, rollAngleWingDown, rollAngle := fields.ReadRollAngle(data)
-	trueTrackAngleStatus, trueTrackAngleOrientation, trueTrackAngle := fields.ReadTrueTrackAngle(data)
+	rollAngleStatus, rollAngle := fields.ReadRollAngle(data)
+	trueTrackAngleStatus, trueTrackAngle := fields.ReadTrueTrackAngle(data)
 	groundSpeedStatus, groundSpeed := fields.ReadGroundSpeed(data)
 	trackAngleRateStatus, trackAngleRate := fields.ReadTrackAngleRate(data)
 	trueAirSpeedStatus, trueAirSpeed := fields.ReadTrueAirSpeed(data)
 
 	return &TrackAndTurnReport{
-		RollAngleStatus:           rollAngleStatus,
-		RollAngleWingDown:         rollAngleWingDown,
-		RollAngle:                 rollAngle,
-		TrueTrackAngleStatus:      trueTrackAngleStatus,
-		TrueTrackAngleOrientation: trueTrackAngleOrientation,
-		TrueTrackAngle:            trueTrackAngle,
-		GroundSpeedStatus:         groundSpeedStatus,
-		GroundSpeed:               groundSpeed,
-		TrackAngleRateStatus:      trackAngleRateStatus,
-		TrackAngleRate:            trackAngleRate,
-		TrueAirSpeedStatus:        trueAirSpeedStatus,
-		TrueAirSpeed:              trueAirSpeed,
+		RollAngleStatus:      rollAngleStatus,
+		RollAngle:            rollAngle,
+		TrueTrackAngleStatus: trueTrackAngleStatus,
+		TrueTrackAngle:       trueTrackAngle,
+		GroundSpeedStatus:    groundSpeedStatus,
+		GroundSpeed:          groundSpeed,
+		TrackAngleRateStatus: trackAngleRateStatus,
+		TrackAngleRate:       trackAngleRate,
+		TrueAirSpeedStatus:   trueAirSpeedStatus,
+		TrueAirSpeed:         trueAirSpeed,
 	}, nil
 }

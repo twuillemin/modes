@@ -12,7 +12,6 @@ import (
 // Specified in Doc 9871 / Table A-2-48
 type HeadingAndTrackReport struct {
 	MagneticHeadingStatus         bool
-	MagneticHeadingOrientation    fields.MagneticHeading
 	MagneticHeading               float32
 	IndicatedAirSpeedStatus       bool
 	IndicatedAirSpeed             uint32
@@ -34,7 +33,6 @@ func (message HeadingAndTrackReport) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                                  %v\n"+
 		"Magnetic Heading Status:                  %v\n"+
-		"Magnetic Heading Orientation:             %v\n"+
 		"Magnetic Heading (degrees):               %v\n"+
 		"Indicated Air Speed Status:               %v\n"+
 		"Indicated Air Speed (knots):              %v\n"+
@@ -46,7 +44,6 @@ func (message HeadingAndTrackReport) ToString() string {
 		"Inertial Vertical Velocity (feet/minute): %v",
 		message.GetRegister().ToString(),
 		message.MagneticHeadingStatus,
-		message.MagneticHeadingOrientation,
 		message.MagneticHeading,
 		message.IndicatedAirSpeedStatus,
 		message.IndicatedAirSpeed,
@@ -111,7 +108,7 @@ func ReadHeadingAndTrackReport(data []byte) (*HeadingAndTrackReport, error) {
 		return nil, errors.New("the data for Comm-B HeadingAndTrackReport message must be 7 bytes long")
 	}
 
-	magneticHeadingStatus, magneticHeadingOrientation, magneticHeading := fields.ReadMagneticHeading(data)
+	magneticHeadingStatus, magneticHeading := fields.ReadMagneticHeading(data)
 	indicatedAirSpeedStatus, indicatedAirSpeed := fields.ReadIndicatedAirSpeed(data)
 	machStatus, mach := fields.ReadMach(data)
 	barometricAltitudeRateStatus, barometricAltitudeRate := fields.ReadBarometricAltitudeRate(data)
@@ -119,7 +116,6 @@ func ReadHeadingAndTrackReport(data []byte) (*HeadingAndTrackReport, error) {
 
 	return &HeadingAndTrackReport{
 		MagneticHeadingStatus:         magneticHeadingStatus,
-		MagneticHeadingOrientation:    magneticHeadingOrientation,
 		MagneticHeading:               magneticHeading,
 		IndicatedAirSpeedStatus:       indicatedAirSpeedStatus,
 		IndicatedAirSpeed:             indicatedAirSpeed,

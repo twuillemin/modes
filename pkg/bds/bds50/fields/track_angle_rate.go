@@ -7,11 +7,11 @@ func ReadTrackAngleRate(data []byte) (bool, float32) {
 
 	byte1 := data[4] & 0x0F
 	byte2 := data[5] & 0xF8
-	allBits := bitutils.Pack2Bytes(byte1, byte2) >> 4
+	allBits := bitutils.Pack2Bytes(byte1, byte2) >> 3
 	angleRate := float32(allBits) * 8.0 / 256.0
 
 	if (data[4] & 0x10) != 0 {
-		angleRate = -angleRate
+		angleRate = angleRate - 16
 	}
 
 	return status, angleRate

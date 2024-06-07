@@ -22,8 +22,8 @@ type SelectedVerticalIntention struct {
 	VNAVMode                           bool
 	AltitudeHoldMode                   bool
 	ApproachMode                       bool
-	StatusOfTargetSource               fields.StatusOfTargetSource
-	TargetSource                       fields.TargetSource
+	StatusOfTargetAltitudeSource       fields.StatusOfTargetAltitudeSource
+	TargetAltitudeSource               fields.TargetAltitudeSource
 }
 
 // GetRegister returns the Register the message
@@ -45,8 +45,8 @@ func (message SelectedVerticalIntention) ToString() string {
 		"VNAV Mode:                             %v\n"+
 		"Altitude Hold Mode:                    %v\n"+
 		"Approach Mode:                         %v\n"+
-		"Status Of Target Source:               %v\n"+
-		"Target Source:                         %v",
+		"Status Of Target Altitude Source:      %v\n"+
+		"Target Altitude Source:                %v",
 		message.GetRegister().ToString(),
 		message.MCPFCUSelectedAltitudeAvailable,
 		message.MCPFCUSelectedAltitude,
@@ -58,8 +58,8 @@ func (message SelectedVerticalIntention) ToString() string {
 		message.VNAVMode,
 		message.AltitudeHoldMode,
 		message.ApproachMode,
-		message.StatusOfTargetSource.ToString(),
-		message.TargetSource.ToString())
+		message.StatusOfTargetAltitudeSource.ToString(),
+		message.TargetAltitudeSource.ToString())
 }
 
 // CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
@@ -106,7 +106,7 @@ func ReadSelectedVerticalIntention(data []byte) (*SelectedVerticalIntention, err
 		VNAVMode:                           (data[6]&0x80)>>7 == 0x01,
 		AltitudeHoldMode:                   (data[6]&0x40)>>6 == 0x01,
 		ApproachMode:                       (data[6]&0x20)>>5 == 0x01,
-		StatusOfTargetSource:               fields.ReadStatusOfTargetSource(data),
-		TargetSource:                       fields.ReadTargetSource(data),
+		StatusOfTargetAltitudeSource:       fields.ReadStatusOfTargetAltitudeSource(data),
+		TargetAltitudeSource:               fields.ReadTargetAltitudeSource(data),
 	}, nil
 }
