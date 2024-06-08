@@ -5,30 +5,32 @@ import (
 
 	"github.com/twuillemin/modes/pkg/bds/bds62/fields"
 	"github.com/twuillemin/modes/pkg/bds/register"
-	"github.com/twuillemin/modes/pkg/common"
 )
 
 // TargetStateAndStatus1 is a message at the format BDS 6,2
+//
+// Specified in Doc 9871 / Figure C-9
 type TargetStateAndStatus1 struct {
 	FormatTypeCode                       byte
 	Subtype                              fields.Subtype
 	SourceIntegrityLevelSupplement       fields.SourceIntegrityLevelSupplement
 	SelectedAltitudeType                 fields.SelectedAltitudeType
-	SelectedAltitude                     fields.SelectedAltitude
-	BarometricPressureSetting            fields.BarometricPressureSetting
+	SelectedAltitudeStatus               fields.NumericValueStatus
+	SelectedAltitude                     uint16
+	BarometricPressureSettingStatus      fields.NumericValueStatus
+	BarometricPressureSetting            float32
 	SelectedHeadingStatus                fields.SelectedHeadingStatus
-	SelectedHeadingSign                  fields.SelectedHeadingSign
-	SelectedHeading                      fields.SelectedHeading
+	SelectedHeading                      float32
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV2
 	NICBaro                              fields.NICBaro
 	SourceIntegrityLevel                 fields.SourceIntegrityLevel
 	StatusMCPFCUBits                     fields.StatusMCPFCUBits
-	AutopilotEngaged                     fields.AutopilotEngaged
-	VNAVModeEngaged                      fields.VNAVModeEngaged
-	AltitudeHoldModeEngaged              fields.AltitudeHoldModeEngaged
-	ApproachModeEngaged                  fields.ApproachModeEngaged
-	ACASOperational                      fields.ACASOperational
-	LNAVModeEngaged                      fields.LNAVModeEngaged
+	AutopilotEngaged                     bool
+	VNAVModeEngaged                      bool
+	AltitudeHoldModeEngaged              bool
+	ApproachModeEngaged                  bool
+	TCASACASOperational                  bool
+	LNAVModeEngaged                      bool
 }
 
 func (message TargetStateAndStatus1) GetSubtype() fields.Subtype {
@@ -51,8 +53,11 @@ func (message TargetStateAndStatus1) ToString() string {
 		"Message:                                       %v\n"+
 		"Subtype:                                       %v\n"+
 		"Selected Altitude Type:                        %v\n"+
-		"Selected Altitude :                            %v\n"+
-		"Barometric Pressure Setting (minus 800 mbars): %v\n"+
+		"Selected Altitude Status:                      %v\n"+
+		"Selected Altitude:                             %v\n"+
+		"Barometric Pressure Setting Status:            %v\n"+
+		"Barometric Pressure Setting:                   %v\n"+
+		"Selected Heading Status:                       %v\n"+
 		"Selected Heading :                             %v\n"+
 		"Navigation Accuracy Category - Position:       %v\n"+
 		"Navigation Integrity Category - Baro:          %v\n"+
@@ -68,27 +73,23 @@ func (message TargetStateAndStatus1) ToString() string {
 		message.GetRegister().ToString(),
 		message.GetSubtype().ToString(),
 		message.SelectedAltitudeType.ToString(),
-		message.SelectedAltitude.ToString(),
-		message.BarometricPressureSetting.ToString(),
-		message.SelectedHeading.ToString(message.SelectedHeadingStatus, message.SelectedHeadingSign),
+		message.SelectedAltitudeStatus.ToString(),
+		message.SelectedAltitude,
+		message.BarometricPressureSettingStatus.ToString(),
+		message.BarometricPressureSetting,
+		message.SelectedHeadingStatus.ToString(),
+		message.SelectedHeading,
 		message.NavigationalAccuracyCategoryPosition.ToString(),
 		message.NICBaro.ToString(),
 		message.SourceIntegrityLevel.ToString(),
 		message.SourceIntegrityLevelSupplement.ToString(),
 		message.StatusMCPFCUBits.ToString(),
-		printStatusBit(message.StatusMCPFCUBits, message.AutopilotEngaged),
-		printStatusBit(message.StatusMCPFCUBits, message.VNAVModeEngaged),
-		printStatusBit(message.StatusMCPFCUBits, message.AltitudeHoldModeEngaged),
-		printStatusBit(message.StatusMCPFCUBits, message.ApproachModeEngaged),
-		printStatusBit(message.StatusMCPFCUBits, message.LNAVModeEngaged),
-		message.ACASOperational.ToString())
-}
-
-func printStatusBit(status fields.StatusMCPFCUBits, bit common.Printable) string {
-	if status == fields.SMFBNoInformationProvided {
-		return "No information provided from MCP/FCU"
-	}
-	return bit.ToString()
+		message.AutopilotEngaged,
+		message.VNAVModeEngaged,
+		message.AltitudeHoldModeEngaged,
+		message.ApproachModeEngaged,
+		message.LNAVModeEngaged,
+		message.TCASACASOperational)
 }
 
 // ReadTargetStateAndStatus1 reads a TargetStateAndStatus / Subtype 1
@@ -108,25 +109,30 @@ func ReadTargetStateAndStatus1(data []byte) (*TargetStateAndStatus1, error) {
 		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadTargetStateAndStatus1", subType.ToString())
 	}
 
+	selectedAltitude, selectedAltitudeStatus := fields.ReadSelectedAltitude(data)
+	barometricPressureSetting, barometricPressureSettingStatus := fields.ReadBarometricPressureSetting(data)
+	selectedHeading, selectedHeadingStatus := fields.ReadSelectedHeading(data)
+
 	return &TargetStateAndStatus1{
 		FormatTypeCode:                       formatTypeCode,
 		Subtype:                              subType,
 		SourceIntegrityLevelSupplement:       fields.ReadSourceIntegrityLevelSupplement(data),
 		SelectedAltitudeType:                 fields.ReadSelectedAltitudeType(data),
-		SelectedAltitude:                     fields.ReadSelectedAltitude(data),
-		BarometricPressureSetting:            fields.ReadBarometricPressureSetting(data),
-		SelectedHeadingStatus:                fields.ReadSelectedHeadingStatus(data),
-		SelectedHeadingSign:                  fields.ReadSelectedHeadingSign(data),
-		SelectedHeading:                      fields.ReadSelectedHeading(data),
+		SelectedAltitudeStatus:               selectedAltitudeStatus,
+		SelectedAltitude:                     selectedAltitude,
+		BarometricPressureSettingStatus:      barometricPressureSettingStatus,
+		BarometricPressureSetting:            barometricPressureSetting,
+		SelectedHeadingStatus:                selectedHeadingStatus,
+		SelectedHeading:                      selectedHeading,
 		NavigationalAccuracyCategoryPosition: fields.ReadNavigationalAccuracyCategoryPositionV2(data),
 		NICBaro:                              fields.ReadNICBaro(data),
 		SourceIntegrityLevel:                 fields.ReadSourceIntegrityLevel(data),
 		StatusMCPFCUBits:                     fields.ReadStatusMCPFCUBits(data),
-		AutopilotEngaged:                     fields.ReadAutopilotEngaged(data),
-		VNAVModeEngaged:                      fields.ReadVNAVModeEngaged(data),
-		AltitudeHoldModeEngaged:              fields.ReadAltitudeHoldModeEngaged(data),
-		ApproachModeEngaged:                  fields.ReadApproachModeEngaged(data),
-		ACASOperational:                      fields.ReadACASOperational(data),
-		LNAVModeEngaged:                      fields.ReadLNAVModeEngaged(data),
+		AutopilotEngaged:                     (data[5] & 0x01) != 0,
+		VNAVModeEngaged:                      (data[6] & 0x80) != 0,
+		AltitudeHoldModeEngaged:              (data[6] & 0x40) != 0,
+		ApproachModeEngaged:                  (data[6] & 0x10) != 0,
+		TCASACASOperational:                  (data[6] & 0x08) != 0,
+		LNAVModeEngaged:                      (data[6] & 0x04) != 0,
 	}, nil
 }

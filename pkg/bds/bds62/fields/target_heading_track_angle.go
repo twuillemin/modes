@@ -5,44 +5,47 @@ import (
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
 
-// TargetHeadingTrackAngle is the Target Altitude definition
+// TargetHeadingTrackIndicator is the Target Heading / Track Angle Indicator definition
 //
-// Specified in Doc 9871 / B.2.3.9.9
-type TargetHeadingTrackAngle uint16
+// Specified in Doc 9871 / B.2.3.9.10
+type TargetHeadingTrackIndicator byte
 
-// GetStatus returns the status of the target heading / track
-func (targetAngle TargetHeadingTrackAngle) GetStatus() TargetHeadingTrackStatus {
-	if targetAngle >= 1011 {
-		return THTSInvalid
-	}
-	return THTSValid
-}
+const (
+	// THTIHeading indicates target heading angle is being reported
+	THTIHeading TargetHeadingTrackIndicator = 0
+	// THTITrack indicates track angle is being reported
+	THTITrack TargetHeadingTrackIndicator = 1
+)
 
 // ToString returns a basic, but readable, representation of the field
-func (targetAngle TargetHeadingTrackAngle) ToString() string {
+func (targetType TargetHeadingTrackIndicator) ToString() string {
 
-	if targetAngle >= 360 {
-		return "Invalid (out of range)"
+	switch targetType {
+	case THTIHeading:
+		return "0 - target heading angle is being reported"
+	case THTITrack:
+		return "1 - track angle is being reported"
+	default:
+		return fmt.Sprintf("%v - Unknown code", targetType)
 	}
-
-	return fmt.Sprintf("%v degrees", targetAngle.GetTargetHeadingTrackAngle())
-
 }
 
-// GetTargetHeadingTrackAngle returns the TargetHeadingTrackAngle. Note that the returned value will be the maximum
-// for THTSValid
-func (targetAngle TargetHeadingTrackAngle) GetTargetHeadingTrackAngle() int {
-
-	if targetAngle >= 360 {
-		return 360
-	}
-
-	return int(targetAngle)
+// ReadTargetHeadingTrackIndicator reads the TargetHeadingTrackIndicator from a 56 bits data field
+func ReadTargetHeadingTrackIndicator(data []byte) TargetHeadingTrackIndicator {
+	bits := (data[4] & 0x08) >> 3
+	return TargetHeadingTrackIndicator(bits)
 }
 
-// ReadTargetHeadingTrackAngle reads the TargetHeadingTrackAngle from a 56 bits data field
-func ReadTargetHeadingTrackAngle(data []byte) TargetHeadingTrackAngle {
-	bit1 := (data[3] & 0x10) >> 4
-	bit2 := (data[3]&0x0F)<<4 + (data[4]&0xF0)>>4
-	return TargetHeadingTrackAngle(bitutils.Pack2Bytes(bit1, bit2))
+// ReadTargetHeadingTrackAngle reads the TargetAltitude from a 56 bits data field
+// Specified in Doc 9871 / B.2.3.9.9
+func ReadTargetHeadingTrackAngle(data []byte) (uint16, NumericValueStatus) {
+	byte1 := data[3] & 0x1F
+	byte2 := data[2] & 0xF0
+	targetHeading := bitutils.Pack2Bytes(byte1, byte2) >> 4
+
+	if targetHeading > 359 {
+		return 0, NVSMaximum
+	}
+
+	return targetHeading, NVSRegular
 }

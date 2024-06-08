@@ -9,6 +9,8 @@ import (
 )
 
 // TargetStateAndStatus0 is a message at the format BDS 6,2
+//
+// Specified in Doc 9871 / Table B-2-98
 type TargetStateAndStatus0 struct {
 	FormatTypeCode                         byte
 	Subtype                                fields.Subtype
@@ -16,9 +18,11 @@ type TargetStateAndStatus0 struct {
 	TargetAltitudeType                     fields.TargetAltitudeType
 	TargetAltitudeCapability               fields.TargetAltitudeCapability
 	VerticalModeIndicator                  fields.VerticalModeIndicator
-	TargetAltitude                         fields.TargetAltitude
+	TargetAltitudeStatus                   fields.NumericValueStatus
+	TargetAltitude                         int32
 	HorizontalDataAvailableSourceIndicator fields.HorizontalDataAvailableSourceIndicator
-	TargetHeadingTrackAngle                fields.TargetHeadingTrackAngle
+	TargetHeadingTrackAngleStatus          fields.NumericValueStatus
+	TargetHeadingTrackAngle                uint16
 	TargetHeadingTrackIndicator            fields.TargetHeadingTrackIndicator
 	HorizontalModeIndicator                fields.HorizontalModeIndicator
 	NavigationalAccuracyCategoryPosition   fields.NavigationalAccuracyCategoryPositionV1
@@ -51,8 +55,10 @@ func (message TargetStateAndStatus0) ToString() string {
 		"Target Altitude Type:                         %v\n"+
 		"Target Altitude Capability:                   %v\n"+
 		"Vertical Mode Indicator:                      %v\n"+
+		"Target Altitude Status:                       %v\n"+
 		"Target Altitude:                              %v\n"+
 		"Horizontal Data Available / Source Indicator: %v\n"+
+		"Target Heading / Track Angle Status:          %v\n"+
 		"Target Heading / Track Angle:                 %v\n"+
 		"Target Heading / Track Indicator:             %v\n"+
 		"Horizontal Mode Indicator:                    %v\n"+
@@ -67,9 +73,11 @@ func (message TargetStateAndStatus0) ToString() string {
 		message.TargetAltitudeType.ToString(),
 		message.TargetAltitudeCapability.ToString(),
 		message.VerticalModeIndicator.ToString(),
-		message.TargetAltitude.ToString(),
+		message.TargetAltitudeStatus.ToString(),
+		message.TargetAltitude,
 		message.HorizontalDataAvailableSourceIndicator.ToString(),
-		message.TargetHeadingTrackAngle.ToString(),
+		message.TargetHeadingTrackAngleStatus.ToString(),
+		message.TargetHeadingTrackAngle,
 		message.TargetHeadingTrackIndicator.ToString(),
 		message.HorizontalModeIndicator.ToString(),
 		message.NavigationalAccuracyCategoryPosition.ToString(),
@@ -104,6 +112,9 @@ func ReadTargetStateAndStatus0(data []byte) (*TargetStateAndStatus0, error) {
 		return nil, errors.New("the bits 49 to 51 are expected to be 0")
 	}
 
+	targetAltitude, targetAltitudeStatus := fields.ReadTargetAltitude(data)
+	targetHeading, targetHeadingStatus := fields.ReadTargetHeadingTrackAngle(data)
+
 	return &TargetStateAndStatus0{
 		FormatTypeCode:                         formatTypeCode,
 		Subtype:                                subType,
@@ -111,9 +122,11 @@ func ReadTargetStateAndStatus0(data []byte) (*TargetStateAndStatus0, error) {
 		TargetAltitudeType:                     fields.ReadTargetAltitudeType(data),
 		TargetAltitudeCapability:               fields.ReadTargetAltitudeCapability(data),
 		VerticalModeIndicator:                  fields.ReadVerticalModeIndicator(data),
-		TargetAltitude:                         fields.ReadTargetAltitude(data),
+		TargetAltitudeStatus:                   targetAltitudeStatus,
+		TargetAltitude:                         targetAltitude,
 		HorizontalDataAvailableSourceIndicator: fields.ReadHorizontalDataAvailableSourceIndicator(data),
-		TargetHeadingTrackAngle:                fields.ReadTargetHeadingTrackAngle(data),
+		TargetHeadingTrackAngleStatus:          targetHeadingStatus,
+		TargetHeadingTrackAngle:                targetHeading,
 		TargetHeadingTrackIndicator:            fields.ReadTargetHeadingTrackIndicator(data),
 		HorizontalModeIndicator:                fields.ReadHorizontalModeIndicator(data),
 		NavigationalAccuracyCategoryPosition:   fields.ReadNavigationalAccuracyCategoryPositionV1(data),

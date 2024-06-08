@@ -9,7 +9,7 @@ type SelectedAltitudeType byte
 
 const (
 	// SATByMCPFCU indicates MCP/FCU (Mode Control Panel / Flight Control Unit)
-	SATByMCPFCU = 0
+	SATByMCPFCU SelectedAltitudeType = 0
 	// SATByFMS indicates FMS (Flight Management System)
 	SATByFMS SelectedAltitudeType = 1
 )
