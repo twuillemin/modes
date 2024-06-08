@@ -2,26 +2,27 @@ package bds09
 
 import (
 	"fmt"
+
 	"github.com/twuillemin/modes/pkg/bds/bds09/fields"
 	"github.com/twuillemin/modes/pkg/bds/register"
 )
 
 // AirborneVelocityAirSpeedSupersonic is a message at the format BDS 9,0
 type AirborneVelocityAirSpeedSupersonic struct {
-	FormatTypeCode                byte
-	Subtype                       fields.Subtype
-	IntentChange                  fields.IntentChange
-	IFRCapability                 fields.IFRCapability
-	NavigationUncertaintyCategory fields.NavigationUncertaintyCategory
-	MagneticHeadingStatus         fields.MagneticHeadingStatus
-	MagneticHeading               fields.MagneticHeading
-	AirspeedType                  fields.AirspeedType
-	AirspeedSupersonic            fields.AirspeedSupersonic
-	VerticalRateSource            fields.VerticalRateSource
-	VerticalRateSign              fields.VerticalRateSign
-	VerticalRate                  fields.VerticalRate
-	DifferenceGNSSBaroSign        fields.DifferenceGNSSBaroSign
-	DifferenceGNSSBaro            fields.DifferenceGNSSBaro
+	FormatTypeCode                 byte
+	Subtype                        fields.Subtype
+	IntentChange                   fields.IntentChange
+	IFRCapability                  fields.IFRCapability
+	NavigationUncertaintyCategory  fields.NavigationUncertaintyCategory
+	MagneticHeadingStatus          fields.MagneticHeadingStatus
+	MagneticHeading                float32
+	AirspeedStatus                 fields.NumericValueStatus
+	Airspeed                       uint16
+	VerticalRateSource             fields.VerticalRateSource
+	VerticalRateStatus             fields.NumericValueStatus
+	VerticalRate                   int16
+	HeightDifferenceFromBaroStatus fields.NumericValueStatus
+	HeightDifferenceFromBaro       int16
 }
 
 func (message AirborneVelocityAirSpeedSupersonic) GetSubtype() fields.Subtype {
@@ -40,34 +41,35 @@ func (message AirborneVelocityAirSpeedSupersonic) CheckCoherency() error {
 
 // ToString returns a basic, but readable, representation of the message
 func (message AirborneVelocityAirSpeedSupersonic) ToString() string {
-	return fmt.Sprintf("Message:                         %v\n"+
-		"Subtype:                         %v\n"+
-		"Intent Change:                   %v\n"+
-		"IFR Capability:                  %v\n"+
-		"Navigation Uncertainty Category: %v\n"+
-		"Magnetic Heading Status:         %v\n"+
-		"Magnetic Heading:                %v\n"+
-		"Airspeed Type:                   %v\n"+
-		"Airspeed:                        %v\n"+
-		"Vertical Rate Source:            %v\n"+
-		"Vertical Rate Sign:              %v\n"+
-		"Vertical Rate:                   %v\n"+
-		"Difference GNSS Baro Sign:       %v\n"+
-		"Difference GNSS Baro:            %v",
+	return fmt.Sprintf(""+
+		"Message:                             %v\n"+
+		"Subtype:                             %v\n"+
+		"Intent Change:                       %v\n"+
+		"IFR Capability:                      %v\n"+
+		"Navigation Uncertainty Category:     %v\n"+
+		"Magnetic Heading Status:             %v\n"+
+		"Magnetic Heading (degrees):          %v\n"+
+		"Air Speed Status:                    %v\n"+
+		"Air Speed (knots):                   %v\n"+
+		"Vertical Rate Source:                %v\n"+
+		"Vertical Rate Status:                %v\n"+
+		"Vertical Rate (ft/min):              %v\n"+
+		"Geom. Height Diff. From Baro Status: %v\n"+
+		"Geom. Height Diff. From Baro (ft):   %v",
 		message.GetRegister().ToString(),
 		message.Subtype.ToString(),
 		message.IntentChange.ToString(),
 		message.IFRCapability.ToString(),
 		message.NavigationUncertaintyCategory.ToString(),
 		message.MagneticHeadingStatus.ToString(),
-		message.MagneticHeading.ToString(),
-		message.AirspeedType.ToString(),
-		message.AirspeedSupersonic.ToString(),
+		message.MagneticHeading,
+		message.AirspeedStatus.ToString(),
+		message.Airspeed,
 		message.VerticalRateSource.ToString(),
-		message.VerticalRateSign.ToString(),
-		message.VerticalRate.ToString(),
-		message.DifferenceGNSSBaroSign.ToString(),
-		message.DifferenceGNSSBaro.ToString())
+		message.VerticalRateStatus.ToString(),
+		message.VerticalRate,
+		message.HeightDifferenceFromBaroStatus.ToString(),
+		message.HeightDifferenceFromBaro)
 }
 
 // ReadAirborneVelocityAirSpeedSupersonic reads a message at the format AirborneVelocity / Subtype 4 (Airspeed supersonic)
@@ -87,18 +89,25 @@ func ReadAirborneVelocityAirSpeedSupersonic(data []byte) (*AirborneVelocityAirSp
 		return nil, fmt.Errorf("the data are given for subtype %v format and can not be read by ReadAirborneVelocityAirSpeedSupersonic", subType.ToString())
 	}
 
+	magneticHeading, magneticHeadingStatus := fields.ReadMagneticHeading(data)
+	airSpeed, airSpeedStatus := fields.ReadAirspeedSupersonic(data)
+	verticalRate, verticalRateStatus := fields.ReadVerticalRate(data)
+	diffBaro, diffBaroStatus := fields.ReadHeightDifference(data)
+
 	return &AirborneVelocityAirSpeedSupersonic{
-		IntentChange:                  fields.ReadIntentChange(data),
-		IFRCapability:                 fields.ReadIFRCapability(data),
-		NavigationUncertaintyCategory: fields.ReadNavigationUncertaintyCategory(data),
-		MagneticHeadingStatus:         fields.ReadMagneticHeadingStatus(data),
-		MagneticHeading:               fields.ReadMagneticHeading(data),
-		AirspeedType:                  fields.ReadAirspeedType(data),
-		AirspeedSupersonic:            fields.ReadAirspeedSupersonic(data),
-		VerticalRateSource:            fields.ReadVerticalRateSource(data),
-		VerticalRateSign:              fields.ReadVerticalRateSign(data),
-		VerticalRate:                  fields.ReadVerticalRate(data),
-		DifferenceGNSSBaroSign:        fields.ReadDifferenceGNSSBaroSign(data),
-		DifferenceGNSSBaro:            fields.ReadDifferenceGNSSBaro(data),
+		FormatTypeCode:                 formatTypeCode,
+		Subtype:                        subType,
+		IntentChange:                   fields.ReadIntentChange(data),
+		IFRCapability:                  fields.ReadIFRCapability(data),
+		NavigationUncertaintyCategory:  fields.ReadNavigationUncertaintyCategory(data),
+		MagneticHeadingStatus:          magneticHeadingStatus,
+		MagneticHeading:                magneticHeading,
+		AirspeedStatus:                 airSpeedStatus,
+		Airspeed:                       airSpeed,
+		VerticalRateSource:             fields.ReadVerticalRateSource(data),
+		VerticalRateStatus:             verticalRateStatus,
+		VerticalRate:                   verticalRate,
+		HeightDifferenceFromBaroStatus: diffBaroStatus,
+		HeightDifferenceFromBaro:       diffBaro,
 	}, nil
 }

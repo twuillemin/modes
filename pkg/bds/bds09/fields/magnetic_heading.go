@@ -5,23 +5,40 @@ import (
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
 
-// MagneticHeading is the Velocity Magnetic Heading definition
+// MagneticHeadingStatus is the Magnetic Heading Status definition
 //
-// Specified in Doc 9871 / A.2.3.5.6
-type MagneticHeading float64
+// Specified in Doc 9871 / Table A-2-9
+type MagneticHeadingStatus byte
+
+const (
+	// MHSNotAvailable indicates magnetic heading not available
+	MHSNotAvailable MagneticHeadingStatus = 0
+	// MHSAvailable indicates magnetic heading available
+	MHSAvailable MagneticHeadingStatus = 1
+)
 
 // ToString returns a basic, but readable, representation of the field
-func (heading MagneticHeading) ToString() string {
+func (bit MagneticHeadingStatus) ToString() string {
 
-	return fmt.Sprintf("%v", heading)
+	switch bit {
+	case MHSNotAvailable:
+		return "0 - Magnetic heading not available"
+	case MHSAvailable:
+		return "1 - Magnetic heading available"
+	default:
+		return fmt.Sprintf("%v - Unknown code", bit)
+	}
 }
 
 // ReadMagneticHeading reads the MagneticHeading from a 56 bits data field
-func ReadMagneticHeading(data []byte) MagneticHeading {
-	bit1 := data[1] & 0x03
-	bit2 := data[2]
+func ReadMagneticHeading(data []byte) (float32, MagneticHeadingStatus) {
 
-	value := float64(bitutils.Pack2Bytes(bit1, bit2)) * 360 / 1024.0
+	status := MagneticHeadingStatus((data[1] & 0x04) >> 2)
 
-	return MagneticHeading(value)
+	byte1 := data[1] & 0x03
+	byte2 := data[2]
+
+	value := float64(bitutils.Pack2Bytes(byte1, byte2)) * 360 / 1024.0
+
+	return float32(value), status
 }
