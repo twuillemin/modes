@@ -68,6 +68,22 @@ to rely (in the broadest meaning) on the provided information.
 | 30   |     | Reserved           |    |    |    |
 | 31   | 6,5 | Operational status | OK | OK | OK |
 
+## Comm-B
+
+| BDS | Description                         |
+|-----|-------------------------------------|
+| 0,0 | No message available                |
+| 0,7 | Status                              |
+| 1,0 | Data link capability report         |
+| 1,7 | Common usage GICB capability report |
+| 2,0 | Aircraft identification             |
+| 3,0 | ACAS resolution advisory            |
+| 4,0 | Selected vertical intention         |
+| 4,4 | Meteorological routine air report   |
+| 4,5 | Meteorological hazard report        |
+| 5,0 | Track and turn report               |
+| 6,0 | Heading and speed report            |
+
 ## ACAS
 
 | Code | Description         |
@@ -89,6 +105,7 @@ package main
 import (
 	"encoding/hex"
 	"fmt"
+	
 	"github.com/twuillemin/modes/pkg/bds/adsb"
 	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
 	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
