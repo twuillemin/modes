@@ -20,12 +20,12 @@ func ReadMeteorologicalHazardReport(data []byte) (MeteorologicalHazardReport, er
 	}
 
 	messageV1, err := ReadMeteorologicalHazardReportV1(data)
-	if err != nil {
+	if err == nil {
 		return messageV1, err
 	}
 
 	messageV0, err := ReadMeteorologicalHazardReportV0(data)
-	if err != nil {
+	if err == nil {
 		return messageV0, err
 	}
 
