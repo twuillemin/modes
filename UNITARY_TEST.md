@@ -31,12 +31,12 @@
 | 2,0 | Aircraft identification             |    |
 | 3,0 | ACAS resolution advisory            |    |
 | 4,0 | Selected vertical intention         | ✓  |
-| 4,4 | Meteorological routine air report   |    |
+| 4,4 | Meteorological routine air report   | ✓  |
 | 4,5 | Meteorological hazard report        |    |
 | 5,0 | Track and turn report               | ✓  |
 | 6,0 | Heading and speed report            | ✓  |
 | 6,1 | (ADSB) Emergency report             |    |
-| 6,2 | (ADSB)  Target and status           | ✓  |
+| 6,2 | (ADSB) Target and status            | ✓  |
 | 6,5 | (ADSB) Operational status           |    |
 
 ## ADSB
