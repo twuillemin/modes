@@ -8,14 +8,16 @@ import (
 
 // AirbornePosition is a message at the format BDS 0,5
 type AirbornePosition struct {
-	FormatTypeCode     byte
-	SurveillanceStatus fields.SurveillanceStatus
-	SingleAntennaFlag  fields.SingleAntennaFlag
-	Altitude           fields.Altitude
-	Time               fields.Time
-	CPRFormat          fields.CompactPositionReportingFormat
-	EncodedLatitude    fields.EncodedLatitude
-	EncodedLongitude   fields.EncodedLongitude
+	FormatTypeCode       byte
+	SurveillanceStatus   fields.SurveillanceStatus
+	SingleAntennaFlag    fields.SingleAntennaFlag
+	AltitudeSource       fields.AltitudeSource
+	AltitudeReportMethod fields.AltitudeReportMethod
+	AltitudeInFeet       int
+	Time                 fields.Time
+	CPRFormat            fields.CompactPositionReportingFormat
+	EncodedLatitude      fields.EncodedLatitude
+	EncodedLongitude     fields.EncodedLongitude
 }
 
 // GetRegister returns the Register the message
@@ -34,7 +36,9 @@ func (message AirbornePosition) ToString() string {
 		"Format Type Code:                  %v\n"+
 		"Surveillance Status:               %v\n"+
 		"Single Antenna Flag:               %v\n"+
-		"Altitude:                          %v\n"+
+		"Altitude Source:                   %v\n"+
+		"Altitude Report Method:            %v\n"+
+		"Altitude (feet):                   %v\n"+
 		"Time:                              %v\n"+
 		"Compact Position Reporting Format: %v\n"+
 		"Encoded Latitude:                  %v\n"+
@@ -43,7 +47,9 @@ func (message AirbornePosition) ToString() string {
 		message.FormatTypeCode,
 		message.SurveillanceStatus.ToString(),
 		message.SingleAntennaFlag.ToString(),
-		message.Altitude.ToString(),
+		message.AltitudeSource.ToString(),
+		message.AltitudeReportMethod.ToString(),
+		message.AltitudeInFeet,
 		message.Time.ToString(),
 		message.CPRFormat.ToString(),
 		message.EncodedLatitude,
@@ -63,14 +69,18 @@ func ReadAirbornePosition(data []byte) (*AirbornePosition, error) {
 		return nil, fmt.Errorf("the field FormatTypeCode must be comprised between 9 and 18 included or 20 and 22 included, got %v", formatTypeCode)
 	}
 
+	altitude, altitudeSource, altitudeReportMethod := fields.ReadAltitude(data)
+
 	return &AirbornePosition{
-		FormatTypeCode:     formatTypeCode,
-		SurveillanceStatus: fields.ReadSurveillanceStatus(data),
-		SingleAntennaFlag:  fields.ReadSingleAntennaFlag(data),
-		Altitude:           fields.ReadAltitude(data),
-		Time:               fields.ReadTime(data),
-		CPRFormat:          fields.ReadCompactPositionReportingFormat(data),
-		EncodedLatitude:    fields.ReadEncodedLatitude(data),
-		EncodedLongitude:   fields.ReadEncodedLongitude(data),
+		FormatTypeCode:       formatTypeCode,
+		SurveillanceStatus:   fields.ReadSurveillanceStatus(data),
+		SingleAntennaFlag:    fields.ReadSingleAntennaFlag(data),
+		AltitudeSource:       altitudeSource,
+		AltitudeReportMethod: altitudeReportMethod,
+		AltitudeInFeet:       altitude,
+		Time:                 fields.ReadTime(data),
+		CPRFormat:            fields.ReadCompactPositionReportingFormat(data),
+		EncodedLatitude:      fields.ReadEncodedLatitude(data),
+		EncodedLongitude:     fields.ReadEncodedLongitude(data),
 	}, nil
 }

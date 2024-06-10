@@ -15,6 +15,18 @@ const (
 	AltitudeGNSS AltitudeSource = 1
 )
 
+// ToString returns a basic, but readable, representation of the field
+func (altitudeSource AltitudeSource) ToString() string {
+	switch altitudeSource {
+	case AltitudeBarometric:
+		return "0 - Barometric"
+	case AltitudeGNSS:
+		return "1 - GNSS"
+	default:
+		return fmt.Sprintf("%v - Unknown code", altitudeSource)
+	}
+}
+
 // AltitudeReportMethod defines how the altitude is reported
 type AltitudeReportMethod int
 
@@ -25,22 +37,20 @@ const (
 	AltitudeReport25FootIncrements AltitudeReportMethod = 1
 )
 
-// Altitude field reports the barometric altitude in feet. It uses (almost) the same encoding as the
-// AC field of Mode S Message. The main difference is that the M bit is removed, so altitude is only
-// reported in feet, not in meter.
-//
-// Specified in Doc 9871 / Table A-2-5 + Annexe 4 / 3.1.2.6.5.4
-type Altitude struct {
-	// Source is the source of the altitude
-	Source AltitudeSource
-	// ReportMethod is the way tha altitude is reported
-	ReportMethod AltitudeReportMethod
-	// AltitudeInFeet is the altitude in feet
-	AltitudeInFeet int
+// ToString returns a basic, but readable, representation of the field
+func (altitudeReportMethod AltitudeReportMethod) ToString() string {
+	switch altitudeReportMethod {
+	case AltitudeReport100FootIncrements:
+		return "0 - 100 Foot Increments"
+	case AltitudeReport25FootIncrements:
+		return "1 - 25 Foot Increments"
+	default:
+		return fmt.Sprintf("%v - Unknown code", altitudeReportMethod)
+	}
 }
 
 // ReadAltitude reads the altitude code from a message.
-func ReadAltitude(data []byte) Altitude {
+func ReadAltitude(data []byte) (int, AltitudeSource, AltitudeReportMethod) {
 
 	// Determines the source of the altitude. Only format 20 to 22 are using GNSS altitude
 	source := AltitudeBarometric
@@ -70,11 +80,7 @@ func ReadAltitude(data []byte) Altitude {
 		n |= uint16(data[1]&0xFE) << 3
 		n |= uint16(data[2]&0xF0) >> 4
 
-		return Altitude{
-			Source:         source,
-			ReportMethod:   AltitudeReport25FootIncrements,
-			AltitudeInFeet: 25*int(n) - 1000,
-		}
+		return 25*int(n) - 1000, source, AltitudeReport25FootIncrements
 	}
 
 	// Otherwise, altitude is reported in 100 foot increment
@@ -107,26 +113,5 @@ func ReadAltitude(data []byte) Altitude {
 	// Compute the altitude
 	altitudeFeet := -1200 + int(increment500)*500 + int(increment100)*100
 
-	return Altitude{
-		Source:         source,
-		ReportMethod:   AltitudeReport100FootIncrements,
-		AltitudeInFeet: altitudeFeet,
-	}
-}
-
-// ToString returns a basic, but readable, representation of the field
-func (altitudeReportMethod AltitudeReportMethod) ToString() string {
-	switch altitudeReportMethod {
-	case AltitudeReport100FootIncrements:
-		return "0 - 100 Foot Increments"
-	case AltitudeReport25FootIncrements:
-		return "1 - 25 Foot Increments"
-	default:
-		return fmt.Sprintf("%v - Unknown code", altitudeReportMethod)
-	}
-}
-
-// ToString returns a basic, but readable, representation of the field
-func (altitudeCode Altitude) ToString() string {
-	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ToString())
+	return altitudeFeet, source, AltitudeReport100FootIncrements
 }

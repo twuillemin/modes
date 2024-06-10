@@ -10,8 +10,8 @@ import (
 type SurfacePosition struct {
 	FormatTypeCode    byte
 	Movement          fields.Movement
-	GroundTrackStatus fields.GroundTrackStatus
-	GroundTrack       fields.GroundTrack
+	GroundTrackStatus bool
+	GroundTrack       float32
 	Time              fields.Time
 	CPRFormat         fields.CompactPositionReportingFormat
 	EncodedLatitude   fields.EncodedLatitude
@@ -32,9 +32,9 @@ func (message SurfacePosition) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                           %v\n"+
 		"Format Type Code:                  %v\n"+
-		"Surveillance Status:               %v\n"+
-		"Single Antenna Flag:               %v\n"+
-		"Altitude:                          %v\n"+
+		"Mevement:                          %v\n"+
+		"Ground Track Status:               %v\n"+
+		"Ground Track (degrees):            %v\n"+
 		"Time:                              %v\n"+
 		"Compact Position Reporting Format: %v\n"+
 		"Encoded Latitude:                  %v\n"+
@@ -63,11 +63,13 @@ func ReadSurfacePosition(data []byte) (*SurfacePosition, error) {
 		return nil, fmt.Errorf("the field FormatTypeCode must be comprised between 5 and 8 included, got %v", formatTypeCode)
 	}
 
+	groundTrack, groundTrackStatus := fields.ReadGroundTrack(data)
+
 	return &SurfacePosition{
 		FormatTypeCode:    formatTypeCode,
 		Movement:          fields.ReadMovement(data),
-		GroundTrackStatus: fields.ReadGroundTrackStatus(data),
-		GroundTrack:       fields.ReadGroundTrack(data),
+		GroundTrackStatus: groundTrackStatus,
+		GroundTrack:       groundTrack,
 		Time:              fields.ReadTime(data),
 		CPRFormat:         fields.ReadCompactPositionReportingFormat(data),
 		EncodedLatitude:   fields.ReadEncodedLatitude(data),
