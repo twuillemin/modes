@@ -8,6 +8,7 @@ import (
 
 type NoPositionInformation struct {
 	adsbVersion                 adsb.ADSBVersion
+	FormatTypeCode              byte
 	AltitudeBarometric          int
 	NavigationIntegrityCategory byte
 }
@@ -20,8 +21,10 @@ func (message NoPositionInformation) GetADSBVersion() adsb.ADSBVersion {
 func (message NoPositionInformation) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                           No Position Information\n"+
+		"Format Type Code:                  %v\n"+
 		"Altitude Baro (feet):              %v\n"+
 		"Navigation Integrity Category:     %v",
+		message.FormatTypeCode,
 		message.AltitudeBarometric,
 		message.NavigationIntegrityCategory)
 }
@@ -38,6 +41,7 @@ func ReadNoPositionInformation(adsbVersion adsb.ADSBVersion, data []byte) (*NoPo
 	}
 
 	return &NoPositionInformation{
+		FormatTypeCode:              0,
 		AltitudeBarometric:          bds.AltitudeInFeet,
 		NavigationIntegrityCategory: 0,
 		adsbVersion:                 adsbVersion,
