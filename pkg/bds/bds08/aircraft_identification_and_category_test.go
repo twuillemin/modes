@@ -2,9 +2,9 @@ package bds08
 
 import (
 	"encoding/hex"
-	"github.com/twuillemin/modes/pkg/bds/bds08/fields"
 	"testing"
 
+	"github.com/twuillemin/modes/pkg/bds/bds08/fields"
 	"github.com/twuillemin/modes/pkg/bds/register"
 )
 

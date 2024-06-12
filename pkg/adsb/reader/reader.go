@@ -9,6 +9,7 @@ import (
 	"github.com/twuillemin/modes/pkg/adsb/aircraft_identification_and_category"
 	"github.com/twuillemin/modes/pkg/adsb/aircraft_operational_status"
 	"github.com/twuillemin/modes/pkg/adsb/aircraft_status"
+	"github.com/twuillemin/modes/pkg/adsb/no_position_information"
 	"github.com/twuillemin/modes/pkg/adsb/surface_position"
 	"github.com/twuillemin/modes/pkg/adsb/target_state_and_status"
 )
@@ -78,6 +79,12 @@ func ReadADSBMessage(
 	formatTypeCode := (data[0] & 0xF8) >> 3
 
 	switch formatTypeCode {
+	case 0:
+		if data[2]&0x0F == 0 && data[3] == 0 && data[4] == 0 && data[5] == 0 && data[6] == 0 {
+			return no_position_information.ReadNoPositionInformation(adsbLevel, data)
+		} else {
+			return airborne_position.ReadAirbornePositionType0(adsbLevel, data)
+		}
 	case 1, 2, 3, 4:
 		return aircraft_identification_and_category.ReadAircraftIdentificationAndCategory(adsbLevel, data)
 	case 5, 6, 7, 8:

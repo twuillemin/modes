@@ -67,7 +67,7 @@ func ReadAircraftStatusEmergency(data []byte) (*AircraftStatusEmergency, error) 
 	byte2 := data[2]
 
 	for i := uint(3); i < 7; i++ {
-		if (data[1] & 0x1F) != 0 {
+		if data[i] != 0 {
 			return nil, errors.New("the bits 25 to 56 are expected to be 0")
 		}
 	}

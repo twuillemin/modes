@@ -49,7 +49,7 @@ func (message AircraftOperationalStatusSurfaceADSB2) ToString() string {
 		"SubtypeAirborne Capability Class:        \n%v\n"+
 		"Aircraft Length And Width                %v\n"+
 		"Operational Mode:                        \n%v\n"+
-		"ADSV Version Number:                     %v\n"+
+		"ADSB Version Number:                     %v\n"+
 		"NIC Supplement:                          %v\n"+
 		"Navigational Accuracy Category Position: %v\n"+
 		"Source Integrity ReaderLevel:            %v\n"+

@@ -21,9 +21,9 @@ func (subtype Subtype) ToString() string {
 
 	switch subtype {
 	case SubtypeAirborne:
-		return "0 - SubtypeAirborne Status Message"
+		return "0 - Airborne Status Message"
 	case SubtypeSurface:
-		return "1 - SubtypeSurface Status Message"
+		return "1 - Surface Status Message"
 	default:
 		return fmt.Sprintf("%v - Unknown code", subtype)
 	}

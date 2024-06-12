@@ -8,6 +8,10 @@ import (
 // ReadAirbornePosition reads a message at the format AirbornePosition
 func ReadAirbornePosition(adsbVersion adsb.ADSBVersion, data []byte, nicSupplementA bool) (adsb.Message, error) {
 
+	if data[0] == 0 {
+		return ReadAirbornePositionType0(adsbVersion, data)
+	}
+
 	switch adsbVersion {
 	case adsb.ADSBV0:
 		return ReadAirbornePositionV0(data)

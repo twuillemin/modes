@@ -13,7 +13,7 @@ type AirborneVelocity struct {
 
 // GetADSBVersion returns the ADSB level used to read the data
 func (message AirborneVelocity) GetADSBVersion() adsb.ADSBVersion {
-	return adsb.ADSBV2
+	return message.adsbVersion
 }
 
 func (message AirborneVelocity) ToString() string {

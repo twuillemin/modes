@@ -59,7 +59,7 @@ func ReadAltitude(data []byte) (int, AltitudeSource, AltitudeReportMethod) {
 		source = AltitudeGNSS
 	}
 
-	// Altitude code is a 13 bits fields, so read a uint16
+	// Altitude code is a 12 bits fields, so read a uint16
 	// bit         | 8  9 10 11 12 13 14 15| 16 17 18 19 20 21 22 23 |
 	// message     | x  x  x  x  x  x  x  x|  x  x  x  x  _  _  _  _ |
 	// 100 foot    |C1 A1 C2 A2 C4 A4 B1  Q| B2 D2 B4 D4  _  _  _  _ |
