@@ -18,6 +18,11 @@ func (message NoPositionInformation) GetADSBVersion() adsb.ADSBVersion {
 	return message.adsbVersion
 }
 
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message NoPositionInformation) CheckCoherency() error {
+	return nil
+}
+
 func (message NoPositionInformation) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                           No Position Information\n"+

@@ -37,7 +37,7 @@
 | 6,0 | Heading and speed report            | ✓  |
 | 6,1 | (ADSB) Emergency report             | ✓  |
 | 6,2 | (ADSB) Target and status            | ✓  |
-| 6,5 | (ADSB) Operational status           |    |
+| 6,5 | (ADSB) Operational status           | ✓  |
 
 ## ADSB
 

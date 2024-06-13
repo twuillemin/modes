@@ -103,8 +103,8 @@ func ReadAircraftOperationalStatusAirborneADSB2(data []byte) (*AircraftOperation
 		return nil, fmt.Errorf("the Operational Mode Format (field Operational Mode) must be 0 (%v given)", operationalModeFormat)
 	}
 
-	if data[6]&0x03 != 0 {
-		return nil, errors.New("the bits 55 and 56 must be 0")
+	if data[6]&0x01 != 0 {
+		return nil, errors.New("the bit 56 must be 0")
 	}
 
 	return &AircraftOperationalStatusAirborneADSB2{

@@ -21,6 +21,11 @@ func (message AirbornePositionV2) GetADSBVersion() adsb.ADSBVersion {
 	return adsb.ADSBV2
 }
 
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message AirbornePositionV2) CheckCoherency() error {
+	return message.AirbornePosition.CheckCoherency()
+}
+
 func (message AirbornePositionV2) ToString() string {
 	return fmt.Sprintf(""+
 		"%v\n"+

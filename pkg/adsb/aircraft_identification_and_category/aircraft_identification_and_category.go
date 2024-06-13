@@ -16,6 +16,11 @@ func (message AircraftIdentificationAndCategory) GetADSBVersion() adsb.ADSBVersi
 	return message.adsbVersion
 }
 
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message AircraftIdentificationAndCategory) CheckCoherency() error {
+	return message.AircraftIdentificationAndCategory.CheckCoherency()
+}
+
 func (message AircraftIdentificationAndCategory) ToString() string {
 	return fmt.Sprintf(""+
 		"%v",

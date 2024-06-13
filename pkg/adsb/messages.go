@@ -10,4 +10,7 @@ type Message interface {
 
 	// GetADSBVersion returns the ADSB level used to read the data
 	GetADSBVersion() ADSBVersion
+
+	// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+	CheckCoherency() error
 }

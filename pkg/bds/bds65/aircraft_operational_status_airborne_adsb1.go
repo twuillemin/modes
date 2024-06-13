@@ -20,10 +20,9 @@ type AircraftOperationalStatusAirborneADSB1 struct {
 	VersionNumber                        fields.VersionNumber
 	NICSupplement                        fields.NICSupplementA
 	NavigationalAccuracyCategoryPosition fields.NavigationalAccuracyCategoryPositionV1
-
-	SurveillanceIntegrityLevel   fields.SurveillanceIntegrityLevel
-	NICBaro                      fields.NICBaro
-	HorizontalReferenceDirection fields.HorizontalReferenceDirection
+	SurveillanceIntegrityLevel           fields.SurveillanceIntegrityLevel
+	NICBaro                              fields.NICBaro
+	HorizontalReferenceDirection         fields.HorizontalReferenceDirection
 }
 
 func (message AircraftOperationalStatusAirborneADSB1) GetADSBLevel() byte {
@@ -96,6 +95,10 @@ func ReadAircraftOperationalStatusAirborneADSB1(data []byte) (*AircraftOperation
 	operationalModeFormat := (data[3] & 0xC0) >> 6
 	if operationalModeFormat != 0 {
 		return nil, fmt.Errorf("the Operational Mode Format (field Operational Mode) must be 0 (%v given)", operationalModeFormat)
+	}
+
+	if data[6]&0xC0 != 0 {
+		return nil, errors.New("the bits 49 and 50 must be 0")
 	}
 
 	if data[6]&0x03 != 0 {

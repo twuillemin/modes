@@ -29,6 +29,11 @@ func (message SurfacePositionV0) GetADSBVersion() adsb.ADSBVersion {
 	return adsb.ADSBV0
 }
 
+// CheckCoherency checks that the data of the message are somehow coherent, such as for example: no Reserved values, etc.
+func (message SurfacePositionV0) CheckCoherency() error {
+	return message.SurfacePosition.CheckCoherency()
+}
+
 // ReadSurfacePositionV0 reads a message at the format SurfacePositionV0
 func ReadSurfacePositionV0(data []byte) (*SurfacePositionV0, error) {
 
