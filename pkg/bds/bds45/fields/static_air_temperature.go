@@ -18,14 +18,14 @@ func ReadStaticAirTemperatureV0(data []byte) (bool, float32) {
 }
 
 func ReadStaticAirTemperatureV1(data []byte) (bool, float32) {
-	status := (data[1] & 0x04) != 0
+	status := (data[1] & 0x08) != 0
 
-	byte1 := data[2] & 0x03
-	byte2 := data[3] & 0xFF
+	byte1 := data[1] & 0x03
+	byte2 := data[2] & 0xFF
 	allBits := bitutils.Pack2Bytes(byte1, byte2)
 	temperature := float32(allBits) * 0.125
 
-	if (data[2] & 0x02) != 0 {
+	if (data[1] & 0x04) != 0 {
 		temperature = temperature - 128
 	}
 

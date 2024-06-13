@@ -13,7 +13,7 @@ func ReadTurbulenceV1(data []byte) (bool, float32, float32, byte) {
 
 	byte1 := data[4] & 0x03
 	byte2 := data[5] & 0xF0
-	average := float32(bitutils.Pack2Bytes(byte1, byte2)>>4) * 0.2
+	average := float32(bitutils.Pack2Bytes(byte1, byte2)>>4) * 0.02
 
 	if average > 1.26 {
 		average = 1.26
@@ -21,7 +21,7 @@ func ReadTurbulenceV1(data []byte) (bool, float32, float32, byte) {
 
 	byte1 = data[5] & 0x0F
 	byte2 = data[6] & 0xC0
-	peak := float32(bitutils.Pack2Bytes(byte1, byte2)>>4) * 0.2
+	peak := float32(bitutils.Pack2Bytes(byte1, byte2)>>6) * 0.02
 
 	if peak > 1.26 {
 		peak = 1.26

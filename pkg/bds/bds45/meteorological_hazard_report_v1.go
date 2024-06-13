@@ -110,8 +110,10 @@ func (message MeteorologicalHazardReportV1) CheckCoherency() error {
 		return errors.New("the wake vortex status is set to false, but a wake vortex value is given")
 	}
 
-	if !message.StaticAirTemperatureStatus && message.StaticAirTemperature != 0 {
-		return errors.New("the static air temperature status is set to false, but a static air temperature value is given")
+	if message.StaticAirTemperatureStatus {
+		if (message.StaticAirTemperature < -80) || (message.StaticAirTemperature > 60) {
+			return errors.New("the static air temperature is to high or to low (-80 <= temp <= 60)")
+		}
 	}
 
 	if !message.AverageStaticPressureStatus && message.AverageStaticPressure != 0 {
@@ -120,10 +122,6 @@ func (message MeteorologicalHazardReportV1) CheckCoherency() error {
 
 	if !message.RadioHeightStatus && message.RadioHeight != 0 {
 		return errors.New("the radioHeight status is set to false, but a radioHeight value is given")
-	}
-
-	if (message.StaticAirTemperature < -80) || (message.StaticAirTemperature > 60) {
-		return errors.New("the static air temperature is to high or to low (-80 <= temp <= 60)")
 	}
 
 	return nil

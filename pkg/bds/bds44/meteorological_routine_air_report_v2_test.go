@@ -10,7 +10,6 @@ import (
 
 func TestReadMeteorologicalRoutineAirReportV2Valid(t *testing.T) {
 
-	//a0000f3c18bba9cdc000004c6477
 	id1, _ := hex.DecodeString("18BBA9CDC00000")
 	message, err := ReadMeteorologicalRoutineAirReportV2(id1)
 	if err != nil {

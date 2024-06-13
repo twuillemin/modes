@@ -35,7 +35,7 @@ to rely (in the broadest meaning) on the provided information.
 
 | Code | BDS | Description        | V0 | V1 | V2 |
 |------|-----|--------------------|----|----|----| 
-| 0    | ?   | No Position        |    |    |    |
+| 0    | ?   | No Position        | OK | OK | OK |
 | 1    | 0,8 | Aircraft Id        | OK | OK | OK |
 | 2    | 0,8 | Aircraft Id        | OK | OK | OK |
 | 3    | 0,8 | Aircraft Id        | OK | OK | OK |
