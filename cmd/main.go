@@ -133,6 +133,8 @@ func processSingleLine(str string, readerLevel adsb.ADSBVersion) {
 		postProcessMessage20(messageModeS.(*modeSMessages.MessageDF20))
 	case 21:
 		postProcessMessage21(messageModeS.(*modeSMessages.MessageDF21))
+	default:
+		fmt.Printf("\n")
 	}
 
 	fmt.Printf("\n")
@@ -210,11 +212,20 @@ func processCommBMessage(data []byte) {
 	fmt.Printf(" -- Comm-B Information --\n")
 
 	// Get the content
-	message, err := commbReader.ReadCommBMessage(data)
+	messages, err := commbReader.ReadCommBMessage(data)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Printf("%v\n", message.ToString())
+	if len(messages) == 0 {
+		fmt.Printf("Unknown message format\n")
+	} else {
+		for i, message := range messages {
+			if i > 0 {
+				fmt.Printf("-------------------------------\n")
+			}
+			fmt.Printf("%v\n", message.ToString())
+		}
+	}
 }
