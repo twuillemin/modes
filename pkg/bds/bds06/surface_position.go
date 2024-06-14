@@ -9,7 +9,8 @@ import (
 // SurfacePosition is a message at the format BDS 0,6
 type SurfacePosition struct {
 	FormatTypeCode    byte
-	Movement          fields.Movement
+	MovementStatus    fields.MovementStatus
+	MovementSpeed     float32
 	GroundTrackStatus bool
 	GroundTrack       float32
 	Time              fields.Time
@@ -32,7 +33,8 @@ func (message SurfacePosition) ToString() string {
 	return fmt.Sprintf(""+
 		"Message:                           %v\n"+
 		"Format Type Code:                  %v\n"+
-		"Mevement:                          %v\n"+
+		"Movement Status:                   %v\n"+
+		"Movement Speed (knots):            %v\n"+
 		"Ground Track Status:               %v\n"+
 		"Ground Track (degrees):            %v\n"+
 		"Time:                              %v\n"+
@@ -41,7 +43,8 @@ func (message SurfacePosition) ToString() string {
 		"Encoded Longitude:                 %v",
 		message.GetRegister().ToString(),
 		message.FormatTypeCode,
-		message.Movement.ToString(),
+		message.MovementStatus.ToString(),
+		message.MovementSpeed,
 		message.GroundTrackStatus,
 		message.GroundTrack,
 		message.Time.ToString(),
@@ -50,7 +53,7 @@ func (message SurfacePosition) ToString() string {
 		message.EncodedLongitude)
 }
 
-// ReadSurfacePosition reads a message at the format Format09V1
+// ReadSurfacePosition reads a message at the format SurfacePosition
 func ReadSurfacePosition(data []byte) (*SurfacePosition, error) {
 
 	if len(data) != 7 {
@@ -63,11 +66,13 @@ func ReadSurfacePosition(data []byte) (*SurfacePosition, error) {
 		return nil, fmt.Errorf("the field FormatTypeCode must be comprised between 5 and 8 included, got %v", formatTypeCode)
 	}
 
+	speed, movementStatus := fields.ReadMovement(data)
 	groundTrack, groundTrackStatus := fields.ReadGroundTrack(data)
 
 	return &SurfacePosition{
 		FormatTypeCode:    formatTypeCode,
-		Movement:          fields.ReadMovement(data),
+		MovementStatus:    movementStatus,
+		MovementSpeed:     speed,
 		GroundTrackStatus: groundTrackStatus,
 		GroundTrack:       groundTrack,
 		Time:              fields.ReadTime(data),

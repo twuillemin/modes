@@ -22,7 +22,7 @@
 |-----|-------------------------------------|----|
 | 0,0 | No message available                | ✓  |
 | 0,5 | (ADSB) Airborne position            |    | 
-| 0,6 | (ADSB) Surface position             |    |
+| 0,6 | (ADSB) Surface position             | ✓  |
 | 0,7 | Status                              |    |
 | 0,8 | (ADSB) Aircraft identification      | ✓  |
 | 0,9 | (ADSB) Airborne velocity            | ✓  |
