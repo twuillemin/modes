@@ -32,7 +32,6 @@ func (bit MagneticHeadingStatus) ToString() string {
 
 // ReadMagneticHeading reads the MagneticHeading from a 56 bits data field
 func ReadMagneticHeading(data []byte) (float32, MagneticHeadingStatus) {
-
 	status := MagneticHeadingStatus((data[1] & 0x04) >> 2)
 
 	byte1 := data[1] & 0x03

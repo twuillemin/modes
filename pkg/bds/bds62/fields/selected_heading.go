@@ -32,7 +32,6 @@ func (status SelectedHeadingStatus) ToString() string {
 
 // ReadSelectedHeading reads the SelectedHeading from a 56 bits data field
 func ReadSelectedHeading(data []byte) (float32, SelectedHeadingStatus) {
-
 	status := SelectedHeadingStatus((data[3] & 0x04) >> 2)
 
 	negative := data[3]&0x02 != 0

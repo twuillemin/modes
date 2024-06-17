@@ -69,6 +69,21 @@ func (message SelectedVerticalIntention) CheckCoherency() error {
 		return errors.New("the message does not convey any information")
 	}
 
+	// If no data available, it is probably not coherent
+	if !message.MCPFCUSelectedAltitudeAvailable && message.MCPFCUSelectedAltitude != 0 {
+		return errors.New("the MCP/FCU SelectedAltitude status is set to false, but a MCP/FCU SelectedAltitude value is given")
+	}
+
+	// If no data available, it is probably not coherent
+	if !message.FMSSelectedAltitudeAvailable && message.FMSSelectedAltitude != 0 {
+		return errors.New("the FMS SelectedAltitude status is set to false, but a FMS SelectedAltitude value is given")
+	}
+
+	// If no data available, it is probably not coherent
+	if !message.BarometricPressureSettingAvailable && message.BarometricPressureSetting != 0 {
+		return errors.New("the BarometricPressureSetting status is set to false, but a BarometricPressureSetting value is given")
+	}
+
 	return nil
 }
 

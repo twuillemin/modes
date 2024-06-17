@@ -13,7 +13,6 @@ type DTESubAddressStatuses uint16
 
 // ToString returns a basic, but readable, representation of the field
 func (dss DTESubAddressStatuses) ToString() string {
-
 	statuses := make([]string, 16)
 
 	for i := uint(0); i < 16; i++ {
