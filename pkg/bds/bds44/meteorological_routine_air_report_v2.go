@@ -117,11 +117,11 @@ func ReadMeteorologicalRoutineAirReportV2(data []byte) (*MeteorologicalRoutineAi
 	}
 
 	windSpeedStatus, windSpeed := fields.ReadWindSpeed(data)
-	windDirectionStatus, windDirection := fields.ReadWindDirectionV1(data)
-	staticAirTemperatureStatus, staticAirTemperature := fields.ReadStaticAirTemperatureV1(data)
-	averageStaticPressureStatus, averageStaticPressure := fields.ReadAverageStaticPressureV1(data)
+	windDirectionStatus, windDirection := fields.ReadWindDirectionV1AndV2(data)
+	staticAirTemperatureStatus, staticAirTemperature := fields.ReadStaticAirTemperatureV1AndV2(data)
+	averageStaticPressureStatus, averageStaticPressure := fields.ReadAverageStaticPressureV1AndV2(data)
 	turbulenceFlag := fields.ReadTurbulenceFlag(data)
-	humidityStatus, humidity := fields.ReadHumidityV1(data)
+	humidityStatus, humidity := fields.ReadHumidityV1AndV2(data)
 
 	return &MeteorologicalRoutineAirReportV2{
 		Source:                      fields.ReadSource(data),

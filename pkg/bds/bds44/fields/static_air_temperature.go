@@ -17,8 +17,8 @@ func ReadStaticAirTemperatureV0(data []byte) float32 {
 	return temperature
 }
 
-// ReadStaticAirTemperatureV1 as given by Table E-2-68
-func ReadStaticAirTemperatureV1(data []byte) (bool, float32) {
+// ReadStaticAirTemperatureV1AndV2 as given by Table E-2-68
+func ReadStaticAirTemperatureV1AndV2(data []byte) (bool, float32) {
 	status := (data[2] & 0x01) != 0
 
 	byte1 := data[3] & 0x7F

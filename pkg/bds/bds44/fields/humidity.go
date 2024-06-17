@@ -7,7 +7,7 @@ func ReadHumidityV0(data []byte) (bool, float32) {
 	return status, humidity
 }
 
-func ReadHumidityV1(data []byte) (bool, float32) {
+func ReadHumidityV1AndV2(data []byte) (bool, float32) {
 	status := (data[6] & 0x80) != 0
 	humidity := float32(data[6] & 0x7F)
 

@@ -14,8 +14,8 @@ func ReadWindDirectionV0(data []byte) (bool, float32) {
 	return status, direction
 }
 
-// ReadWindDirectionV1 as given by Table E-2-68
-func ReadWindDirectionV1(data []byte) (bool, float32) {
+// ReadWindDirectionV1AndV2 as given by Table E-2-68
+func ReadWindDirectionV1AndV2(data []byte) (bool, float32) {
 	status := (data[1] & 0x02) != 0
 
 	byte1 := data[1] & 0x01

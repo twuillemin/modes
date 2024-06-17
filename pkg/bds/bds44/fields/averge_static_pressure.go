@@ -14,8 +14,8 @@ func ReadAverageStaticPressureV0(data []byte) (bool, uint32) {
 	return status, pressure
 }
 
-// ReadAverageStaticPressureV1 as given by Table E-2-68
-func ReadAverageStaticPressureV1(data []byte) (bool, uint32) {
+// ReadAverageStaticPressureV1AndV2 as given by Table E-2-68
+func ReadAverageStaticPressureV1AndV2(data []byte) (bool, uint32) {
 	status := (data[4] & 0x10) != 0
 
 	byte1 := data[4] & 0x0F
