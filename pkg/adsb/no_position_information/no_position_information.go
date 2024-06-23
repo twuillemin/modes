@@ -9,7 +9,7 @@ import (
 type NoPositionInformation struct {
 	adsbVersion                 adsb.ADSBVersion
 	FormatTypeCode              byte
-	AltitudeBarometric          int
+	AltitudeBarometric          int32
 	NavigationIntegrityCategory byte
 }
 

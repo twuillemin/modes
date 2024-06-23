@@ -13,7 +13,7 @@ type AirbornePosition struct {
 	SingleAntennaFlag    fields.SingleAntennaFlag
 	AltitudeSource       fields.AltitudeSource
 	AltitudeReportMethod fields.AltitudeReportMethod
-	AltitudeInFeet       int
+	AltitudeInFeet       int32
 	Time                 fields.Time
 	CPRFormat            fields.CompactPositionReportingFormat
 	EncodedLatitude      fields.EncodedLatitude
@@ -69,7 +69,10 @@ func ReadAirbornePosition(data []byte) (*AirbornePosition, error) {
 		return nil, fmt.Errorf("the field FormatTypeCode must be comprised between 9 and 18 included or 20 and 22 included, got %v", formatTypeCode)
 	}
 
-	altitude, altitudeSource, altitudeReportMethod := fields.ReadAltitude(data)
+	altitude, altitudeSource, altitudeReportMethod, err := fields.ReadAltitude(data)
+	if err != nil {
+		return nil, fmt.Errorf("the field Altitude is malformed")
+	}
 
 	return &AirbornePosition{
 		FormatTypeCode:       formatTypeCode,

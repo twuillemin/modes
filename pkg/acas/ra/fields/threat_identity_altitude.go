@@ -1,6 +1,7 @@
 package fields
 
 import (
+	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
@@ -18,11 +19,11 @@ const (
 // ThreatIdentityAltitude is the altitude of the threat. It is given in 100 feet increment
 type ThreatIdentityAltitude struct {
 	AltitudeStatus AltitudeStatus
-	AltitudeInFeet int
+	AltitudeInFeet int32
 }
 
 // ReadThreatIdentityAltitude reads the altitude code from a message
-func ReadThreatIdentityAltitude(data []byte) ThreatIdentityAltitude {
+func ReadThreatIdentityAltitude(data []byte) (ThreatIdentityAltitude, error) {
 
 	// Altitude code is a 13 bits fields, so read a uint16
 	// byte         data[2]    |        data[3]        |   data[4]
@@ -43,7 +44,7 @@ func ReadThreatIdentityAltitude(data []byte) ThreatIdentityAltitude {
 		return ThreatIdentityAltitude{
 			AltitudeInvalid,
 			0,
-		}
+		}, nil
 	}
 
 	c1 := (altitudeCode & 0x0800) != 0
@@ -59,24 +60,15 @@ func ReadThreatIdentityAltitude(data []byte) ThreatIdentityAltitude {
 	b4 := (altitudeCode & 0x0002) != 0
 	d4 := (altitudeCode & 0x0001) != 0
 
-	increment500Gray := bitutils.Pack16Bits(false, false, false, false, false, false, false, d1, d2, d4, a1, a2, a4, b1, b2, b4)
-	increment500 := bitutils.GrayToBinary16(increment500Gray)
-	// subIncrement is given from 1 to 5 (so there is always one bit in c1,c2,c4), but it is from 0 to 4
-	subIncrementGray := bitutils.Pack8Bits(false, false, false, false, false, c1, c2, c4)
-	subIncrement := bitutils.GrayToBinary8(subIncrementGray)
-	increment100 := subIncrement - 1
-	// And increment is reversed alternatively
-	if increment500%2 != 0 {
-		increment100 = 4 - increment100
+	altitudeFeet, err := bitutils.GillhamToAltitude(d1, d2, d4, a1, a2, a4, b1, b2, b4, c1, c2, c4)
+	if err != nil {
+		return ThreatIdentityAltitude{
+			AltitudeInvalid,
+			0,
+		}, errors.New("the Altitude field is malformed")
 	}
 
-	// Compute the altitude
-	altitudeFeet := -1200 + int(increment500)*500 + int(increment100)*100
-
-	return ThreatIdentityAltitude{
-		AltitudeValid,
-		altitudeFeet,
-	}
+	return ThreatIdentityAltitude{AltitudeValid, altitudeFeet}, nil
 }
 
 // ToString returns a basic, but readable, representation of the field

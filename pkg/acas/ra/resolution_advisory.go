@@ -97,12 +97,16 @@ func ReadResolutionAdvisory(data []byte) (*ResolutionAdvisory, error) {
 		var address = fields.ReadThreatIdentityAddress(data)
 		threatIdentityAddress = &address
 	} else if threatTypeIndicator == fields.ThreatTypeAltitudeRangeBearing {
-		var threatAltitude = fields.ReadThreatIdentityAltitude(data)
+		var threatAltitude, err = fields.ReadThreatIdentityAltitude(data)
 		var threatRange = fields.ReadThreatIdentityRange(data)
 		var threatBearing = fields.ReadThreatIdentityBearing(data)
 		threatIdentityAltitude = &threatAltitude
 		threatIdentityRange = &threatRange
 		threatIdentityBearing = &threatBearing
+
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &ResolutionAdvisory{

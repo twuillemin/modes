@@ -11,7 +11,7 @@ func TestAltitudeInvalid(t *testing.T) {
 		data[i] = 0
 	}
 
-	altitude := ReadThreatIdentityAltitude(data)
+	altitude, _ := ReadThreatIdentityAltitude(data)
 
 	if altitude.AltitudeStatus != AltitudeInvalid {
 		t.Errorf("Expected Altitude Status \"%v\", got \"%v\"",
@@ -38,7 +38,7 @@ func TestAltitudeLow(t *testing.T) {
 	// Set C4 to 1
 	data[3] = data[3] | 0x20
 
-	altitude := ReadThreatIdentityAltitude(data)
+	altitude, _ := ReadThreatIdentityAltitude(data)
 
 	if altitude.AltitudeStatus != AltitudeValid {
 		t.Errorf("Expected Altitude Status \"%v\", got \"%v\"",
@@ -75,7 +75,7 @@ func TestAltitudeZero(t *testing.T) {
 	// Set C2
 	data[3] = data[3] | 0x80
 
-	altitude := ReadThreatIdentityAltitude(data)
+	altitude, _ := ReadThreatIdentityAltitude(data)
 
 	if altitude.AltitudeStatus != AltitudeValid {
 		t.Errorf("Expected Altitude Status \"%v\", got \"%v\"",
@@ -108,7 +108,7 @@ func TestAltitudeHigh(t *testing.T) {
 	// Set D2
 	data[4] = data[4] | 0x80
 
-	altitude := ReadThreatIdentityAltitude(data)
+	altitude, _ := ReadThreatIdentityAltitude(data)
 
 	if altitude.AltitudeStatus != AltitudeValid {
 		t.Errorf("Expected Altitude Status \"%v\", got \"%v\"",

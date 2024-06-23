@@ -35,15 +35,15 @@ func TestReadFormatDF4Valid(t *testing.T) {
 			msg.UtilityMessage.IdentifierDesignator.ToString())
 	}
 
-	if msg.AltitudeCode.AltitudeInFeet != 33125 {
+	if msg.Altitude != 33125 {
 		t.Errorf("Expected Altitude In Feet \"33125\", got \"%v\"",
-			msg.AltitudeCode.AltitudeInFeet)
+			msg.Altitude)
 	}
 
-	if msg.AltitudeCode.ReportMethod != fields.AltitudeCodeReport25FootIncrements {
+	if msg.AltitudeReportMethod != fields.AltitudeCodeReport25FootIncrements {
 		t.Errorf("Expected Reply Information \"%v\", got \"%v\"",
 			fields.AltitudeCodeReport25FootIncrements.ToString(),
-			msg.AltitudeCode.ReportMethod.ToString())
+			msg.AltitudeReportMethod.ToString())
 	}
 
 	if len(msg.ToString()) <= 0 {

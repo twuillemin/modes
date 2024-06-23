@@ -1,6 +1,7 @@
 package fields
 
 import (
+	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bitutils"
 )
@@ -50,7 +51,7 @@ func (altitudeReportMethod AltitudeReportMethod) ToString() string {
 }
 
 // ReadAltitude reads the altitude code from a message.
-func ReadAltitude(data []byte) (int, AltitudeSource, AltitudeReportMethod) {
+func ReadAltitude(data []byte) (int32, AltitudeSource, AltitudeReportMethod, error) {
 
 	// Determines the source of the altitude. Only format 20 to 22 are using GNSS altitude
 	source := AltitudeBarometric
@@ -80,7 +81,7 @@ func ReadAltitude(data []byte) (int, AltitudeSource, AltitudeReportMethod) {
 		n |= uint16(data[1]&0xFE) << 3
 		n |= uint16(data[2]&0xF0) >> 4
 
-		return 25*int(n) - 1000, source, AltitudeReport25FootIncrements
+		return 25*int32(n) - 1000, source, AltitudeReport25FootIncrements, nil
 	}
 
 	// Otherwise, altitude is reported in 100 foot increment
@@ -99,19 +100,10 @@ func ReadAltitude(data []byte) (int, AltitudeSource, AltitudeReportMethod) {
 	b4 := (data[2] & 0x20) != 0
 	d4 := (data[2] & 0x10) != 0
 
-	increment500Gray := bitutils.Pack8Bits(d2, d4, a1, a2, a4, b1, b2, b4)
-	increment500 := bitutils.GrayToBinary8(increment500Gray)
-	// subIncrement is given from 1 to 5 (so there is always one bit in c1,c2,c4), but it is from 0 to 4
-	subIncrementGray := bitutils.Pack8Bits(false, false, false, false, false, c1, c2, c4)
-	subIncrement := bitutils.GrayToBinary8(subIncrementGray)
-	increment100 := subIncrement - 1
-	// And increment is reversed alternatively
-	if increment500%2 != 0 {
-		increment100 = 4 - increment100
+	altitudeFeet, err := bitutils.GillhamToAltitude(false, d2, d4, a1, a2, a4, b1, b2, b4, c1, c2, c4)
+	if err != nil {
+		return 0, 0, 0, errors.New("the Altitude field is malformed")
 	}
 
-	// Compute the altitude
-	altitudeFeet := -1200 + int(increment500)*500 + int(increment100)*100
-
-	return altitudeFeet, source, AltitudeReport100FootIncrements
+	return altitudeFeet, source, AltitudeReport100FootIncrements, nil
 }

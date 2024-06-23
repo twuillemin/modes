@@ -16,11 +16,12 @@ import (
 // Specified in Annex 10, Volume IV, 3.1.2.8.2
 type MessageDF0 struct {
 	common.MessageData
-	VerticalStatus      fields.VerticalStatus
-	CrossLinkCapability fields.CrossLinkCompatibility
-	SensitivityLevel    fields.SensitivityLevelReport
-	ReplyInformation    fields.ReplyInformationAirAir
-	AltitudeCode        fields.AltitudeCode
+	VerticalStatus       fields.VerticalStatus
+	CrossLinkCapability  fields.CrossLinkCompatibility
+	SensitivityLevel     fields.SensitivityLevelReport
+	ReplyInformation     fields.ReplyInformationAirAir
+	AltitudeReportMethod fields.AltitudeReportMethod
+	Altitude             int32
 }
 
 // GetName returns the name of the message
@@ -49,29 +50,38 @@ func ParseDF0(message common.MessageData) (*MessageDF0, error) {
 		return nil, errors.New("DF0 message must be 7 bytes long")
 	}
 
+	altitude, altitudeReportMethod, err := fields.ReadAltitude(message)
+	if err != nil {
+		return nil, errors.New("the field Altitude is not readable")
+	}
+
 	return &MessageDF0{
-		MessageData:         message,
-		VerticalStatus:      fields.ReadVerticalStatus(message),
-		CrossLinkCapability: fields.ReadCrossLinkCompatibility(message),
-		SensitivityLevel:    fields.ReadSensitivityLevelReport(message),
-		ReplyInformation:    fields.ReadReplyInformationAirAir(message),
-		AltitudeCode:        fields.ReadAltitudeCode(message),
+		MessageData:          message,
+		VerticalStatus:       fields.ReadVerticalStatus(message),
+		CrossLinkCapability:  fields.ReadCrossLinkCompatibility(message),
+		SensitivityLevel:     fields.ReadSensitivityLevelReport(message),
+		ReplyInformation:     fields.ReadReplyInformationAirAir(message),
+		AltitudeReportMethod: altitudeReportMethod,
+		Altitude:             altitude,
 	}, nil
 }
 
 // ToString returns a basic, but readable, representation of the field
 func (message *MessageDF0) ToString() string {
-	return fmt.Sprintf("Downlink format:     %v - %v\n"+
-		"VerticalStatus:      %v\n"+
-		"CrossLinkCapability: %v\n"+
-		"SensitivityLevel:    %v\n"+
-		"ReplyInformation:    %v\n"+
-		"AltitudeCode:        %v",
+	return fmt.Sprintf(""+
+		"Downlink format:      %v - %v\n"+
+		"VerticalStatus:       %v\n"+
+		"CrossLinkCapability:  %v\n"+
+		"SensitivityLevel:     %v\n"+
+		"ReplyInformation:     %v\n"+
+		"AltitudeReportMethod: %v\n"+
+		"Altitude:             %v",
 		message.GetDownLinkFormat(),
 		message.GetName(),
 		message.VerticalStatus.ToString(),
 		message.CrossLinkCapability.ToString(),
 		message.SensitivityLevel.ToString(),
 		message.ReplyInformation.ToString(),
-		message.AltitudeCode.ToString())
+		message.AltitudeReportMethod.ToString(),
+		message.Altitude)
 }

@@ -1,6 +1,7 @@
 package fields
 
 import (
+	"errors"
 	"fmt"
 	"github.com/twuillemin/modes/pkg/bitutils"
 	"github.com/twuillemin/modes/pkg/modes/common"
@@ -12,7 +13,7 @@ import (
 //
 // -----------------------------------------------------------------------------------------
 
-// AltitudeCodeReportMethod details how the altitude of the AltitudeCode (AC) field is reported. It corresponds to AC
+// AltitudeReportMethod details how the altitude of the AltitudeCode (AC) field is reported. It corresponds to AC
 // fields bit 26 (M-bit) and bit 28 (Q-bit):
 //   - M = 0 and Q = 0 => 100 foot increments
 //   - M = 0 and Q = 1 => 25 foot increments. For this method, the coding method is only able to provide values between
@@ -20,31 +21,22 @@ import (
 //   - M = 1 => metric units
 //
 // Defined at 3.1.2.6.5.4
-type AltitudeCodeReportMethod int
+type AltitudeReportMethod int
 
 const (
 	// AltitudeCodeReportNotAvailable signifies that altitude information is not available or that the altitude
 	// has been determined invalid.
-	AltitudeCodeReportNotAvailable AltitudeCodeReportMethod = 1
+	AltitudeCodeReportNotAvailable AltitudeReportMethod = 1
 	// AltitudeCodeReportMetricUnits signifies that altitude is reported in metric units.
-	AltitudeCodeReportMetricUnits AltitudeCodeReportMethod = 2
+	AltitudeCodeReportMetricUnits AltitudeReportMethod = 2
 	// AltitudeCodeReport100FootIncrements signifies that altitude is reported in 100-foot increments.
-	AltitudeCodeReport100FootIncrements AltitudeCodeReportMethod = 3
+	AltitudeCodeReport100FootIncrements AltitudeReportMethod = 3
 	// AltitudeCodeReport25FootIncrements signifies that altitude is reported in 25-foot increments.
-	AltitudeCodeReport25FootIncrements AltitudeCodeReportMethod = 4
+	AltitudeCodeReport25FootIncrements AltitudeReportMethod = 4
 )
 
-// AltitudeCode (AC) field shall contain altitude coded in feet or metric units.
-//
-// Defined at 3.1.2.6.5.4
-type AltitudeCode struct {
-	ReportMethod AltitudeCodeReportMethod
-
-	AltitudeInFeet int
-}
-
-// ReadAltitudeCode reads the altitude code from a message
-func ReadAltitudeCode(message common.MessageData) AltitudeCode {
+// ReadAltitude reads the altitude code from a message
+func ReadAltitude(message common.MessageData) (int32, AltitudeReportMethod, error) {
 
 	// Altitude code is a 13 bits fields, so read a uint16
 	// bit         |17 18 19 20 21 22 23 24|25 26 27 28 29 30 31 32
@@ -55,10 +47,7 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	altitudeCode := uint16(message.Payload[1]&0x1f)<<8 + uint16(message.Payload[2])
 
 	if altitudeCode == 0 {
-		return AltitudeCode{
-			AltitudeCodeReportNotAvailable,
-			-1,
-		}
+		return 0, AltitudeCodeReportNotAvailable, nil
 	}
 
 	// Get the M bit
@@ -66,12 +55,8 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 
 	// If altitude reported in metric units
 	if mBit {
-
 		// Not specified for now
-		return AltitudeCode{
-			AltitudeCodeReportMetricUnits,
-			0,
-		}
+		return 0, AltitudeCodeReportMetricUnits, nil
 	}
 
 	// Get the Q bit
@@ -90,10 +75,9 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 		n |= (altitudeCode & 0x0020) >> 1
 		n |= altitudeCode & 0x000F
 
-		return AltitudeCode{
-			AltitudeCodeReport25FootIncrements,
-			25*int(n) - 1000,
-		}
+		altitude := 25*int32(n) - 1000
+
+		return altitude, AltitudeCodeReport25FootIncrements, nil
 	}
 
 	// Otherwise, altitude is reported in 100 foot increment
@@ -111,28 +95,16 @@ func ReadAltitudeCode(message common.MessageData) AltitudeCode {
 	b4 := (altitudeCode & 0x0002) != 0
 	d4 := (altitudeCode & 0x0001) != 0
 
-	increment500Gray := bitutils.Pack8Bits(d2, d4, a1, a2, a4, b1, b2, b4)
-	increment500 := bitutils.GrayToBinary8(increment500Gray)
-	// subIncrement is given from 1 to 5 (so there is always one bit in c1,c2,c4), but it is from 0 to 4
-	subIncrementGray := bitutils.Pack8Bits(false, false, false, false, false, c1, c2, c4)
-	subIncrement := bitutils.GrayToBinary8(subIncrementGray)
-	increment100 := subIncrement - 1
-	// And increment is reversed alternatively
-	if increment500%2 != 0 {
-		increment100 = 4 - increment100
+	altitude, err := bitutils.GillhamToAltitude(false, d2, d4, a1, a2, a4, b1, b2, b4, c1, c2, c4)
+	if err != nil {
+		return 0, AltitudeCodeReportNotAvailable, errors.New("the Altitude field is malformed")
 	}
 
-	// Compute the altitude
-	altitudeFeet := -1200 + int(increment500)*500 + int(increment100)*100
-
-	return AltitudeCode{
-		AltitudeCodeReport100FootIncrements,
-		altitudeFeet,
-	}
+	return altitude, AltitudeCodeReport100FootIncrements, nil
 }
 
 // ToString returns a basic, but readable, representation of the field
-func (altitudeReportMethod AltitudeCodeReportMethod) ToString() string {
+func (altitudeReportMethod AltitudeReportMethod) ToString() string {
 	switch altitudeReportMethod {
 	case AltitudeCodeReportNotAvailable:
 		return "1 - Not Available"
@@ -145,9 +117,4 @@ func (altitudeReportMethod AltitudeCodeReportMethod) ToString() string {
 	default:
 		return fmt.Sprintf("%v - Unknown code", altitudeReportMethod)
 	}
-}
-
-// ToString returns a basic, but readable, representation of the field
-func (altitudeCode AltitudeCode) ToString() string {
-	return fmt.Sprintf("%v ft / Report method: %v", altitudeCode.AltitudeInFeet, altitudeCode.ReportMethod.ToString())
 }
