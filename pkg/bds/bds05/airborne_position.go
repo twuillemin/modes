@@ -16,8 +16,8 @@ type AirbornePosition struct {
 	AltitudeInFeet       int32
 	Time                 fields.Time
 	CPRFormat            fields.CompactPositionReportingFormat
-	EncodedLatitude      fields.EncodedLatitude
-	EncodedLongitude     fields.EncodedLongitude
+	EncodedLatitude      uint32
+	EncodedLongitude     uint32
 }
 
 // GetRegister returns the Register the message
