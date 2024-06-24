@@ -103,32 +103,32 @@ A simple workflow can be:
 package main
 
 import (
-	"encoding/hex"
-	"fmt"
-	
-	"github.com/twuillemin/modes/pkg/bds/adsb"
-	adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
-	modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
-	modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
+  "encoding/hex"
+  "fmt"
+
+  adsbReader "github.com/twuillemin/modes/pkg/adsb/reader"
+  "github.com/twuillemin/modes/pkg/bds/adsb"
+  modeSMessages "github.com/twuillemin/modes/pkg/modes/messages"
+  modeSReader "github.com/twuillemin/modes/pkg/modes/reader"
 )
 
 func main() {
-	// Convert the string to its hexadecimal value
-	binaryData, _ := hex.DecodeString("8D40768DEA3AB864013C088209CA")
-	// Read to a Mode-S message if possible
-	messageModeS, _ := modeSReader.ReadMessage(binaryData)
-	// If the message has ADSB data
-	if messageModeS.GetDownLinkFormat() == 17 {
-		// Convert the message to its real type
-		messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
-		// Read the ADSB content
-		messageADSB, _ := adsbReader.ReadADSBMessage(
-			adsb.ReaderLevel2,
-			false,
-			false,
-			messageDF17.MessageExtendedSquitter)
-		fmt.Print(messageADSB.ToString())
-	}
+  // Convert the string to its hexadecimal value
+  binaryData, _ := hex.DecodeString("8D40768DEA3AB864013C088209CA")
+  // Read to a Mode-S message if possible
+  messageModeS, _ := modeSReader.ReadMessage(binaryData)
+  // If the message has ADSB data
+  if messageModeS.GetDownLinkFormat() == 17 {
+    // Convert the message to its real type
+    messageDF17 := messageModeS.(*modeSMessages.MessageDF17)
+    // Read the ADSB content
+    messageADSB, _ := adsbReader.ReadADSBMessage(
+      adsb.ReaderLevel2,
+      false,
+      false,
+      messageDF17.MessageExtendedSquitter)
+    fmt.Print(messageADSB.ToString())
+  }
 }
 ```
 
@@ -189,12 +189,13 @@ I am always open to add new valid sources of information. In particular, informa
 # Versions
 
 * v0.6.0:
-  * Fix: Computation of position (CPR odd/even)
-  * Add Computation of position from a reference point
-  * Add support for Comm-B: 0,7; 1.7; 2,0; 4,0; 4,4; 4,5; 5.0 and 6.0
-  * Cleaner reading of altitude data
-  * The inference has been limited. The current Mode-S parser will now return all the possible message, leaving high-level inference to the client.
-  * A lot of unitary tests and relative fixes
+    * Fix: Computation of position (CPR odd/even)
+    * Add Computation of position from a reference point
+    * Add support for Comm-B: 0,7; 1.7; 2,0; 4,0; 4,4; 4,5; 5.0 and 6.0
+    * Cleaner reading of altitude data
+    * The inference has been limited. The current Mode-S parser will now return all the possible message, leaving
+      high-level inference to the client.
+    * A lot of unitary tests and relative fixes
 
 * v0.5.0:
     * Fix: Decoding of HCR and NIC for BDS 0,6
