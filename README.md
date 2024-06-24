@@ -188,6 +188,14 @@ I am always open to add new valid sources of information. In particular, informa
 
 # Versions
 
+* v0.6.0:
+  * Fix: Computation of position (CPR odd/even)
+  * Add Computation of position from a reference point
+  * Add support for Comm-B: 0,7; 1.7; 2,0; 4,0; 4,4; 4,5; 5.0 and 6.0
+  * Cleaner reading of altitude data
+  * The inference has been limited. The current Mode-S parser will now return all the possible message, leaving high-level inference to the client.
+  * A lot of unitary tests and relative fixes
+
 * v0.5.0:
     * Fix: Decoding of HCR and NIC for BDS 0,6
     * The ADSB reader level is no more inferred when possible, but always respect the given value
