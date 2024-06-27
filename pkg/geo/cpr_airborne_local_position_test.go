@@ -2,12 +2,12 @@ package geo
 
 import "testing"
 
-func TestReferencePosition(t *testing.T) {
+func TestGetCPRGetCPRAirborneLocalPosition(t *testing.T) {
 	// even message: 8D40621D58C382D690C8AC2863A7 => BDS 0,5
 	// Encoded Latitude:                  93000
 	// Encoded Longitude:                 51372
 
-	lat, lon := GetCPRPositionWithReference(
+	lat, lon := GetCPRAirborneLocalPosition(
 		93000,
 		51372,
 		52.258,

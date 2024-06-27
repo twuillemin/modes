@@ -2,7 +2,7 @@ package geo
 
 import "testing"
 
-func TestExactPosition1(t *testing.T) {
+func TestGetCPRAirborneGlobalPosition1(t *testing.T) {
 	// even message: 8D40058B58C901375147EFD09357 => BDS 0,5
 	// Encoded Latitude:                  39848
 	// Encoded Longitude:                 83951
@@ -10,7 +10,7 @@ func TestExactPosition1(t *testing.T) {
 	// Encoded Latitude:                  21567
 	// Encoded Longitude:                 81965
 
-	lat, lon, err := GetCPRExactPosition(
+	lat, lon, err := GetCPRAirborneGlobalPosition(
 		39848,
 		83951,
 		21567,
@@ -30,7 +30,7 @@ func TestExactPosition1(t *testing.T) {
 	}
 }
 
-func TestExactPosition2(t *testing.T) {
+func TestGetCPRAirborneGlobalPosition2(t *testing.T) {
 	// even message: 8D40621D58C382D690C8AC2863A7 => BDS 0,5
 	// Encoded Latitude:                  93000
 	// Encoded Longitude:                 51372
@@ -38,7 +38,7 @@ func TestExactPosition2(t *testing.T) {
 	// Encoded Latitude:                  74158
 	// Encoded Longitude:                 50194
 
-	lat, lon, err := GetCPRExactPosition(
+	lat, lon, err := GetCPRAirborneGlobalPosition(
 		93000,
 		51372,
 		74158,
